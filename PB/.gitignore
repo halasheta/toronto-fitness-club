@@ -1,0 +1,14 @@
+venv
+project/accounts/__pycache__/
+project/accounts/migrations/
+project/classes/__pycache__/
+project/classes/migrations/
+project/db.sqlite3
+project/project/__pycache__/
+project/studios/__pycache__/
+project/studios/migrations/
+project/subscriptions/__pycache__/
+project/subscriptions/migrations/
+project/payments/__pycache__
+project/payments/migrations/
+project/project/__pycache__/
