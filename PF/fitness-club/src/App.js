@@ -19,6 +19,8 @@ function App() {
                   <Route path="classes" element={<Classes/>}/>
                   <Route path="subscriptions" element={<Subscriptions/>}/>
                   <Route path="profile" element={<Profile/>}/>
+                  <Route path="login" element={<Login/>}/>
+                  <Route path="signup" element={<SignUp/>}/>
               </Route>
           </Routes>
       </BrowserRouter>
