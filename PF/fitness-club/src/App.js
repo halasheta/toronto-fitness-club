@@ -8,6 +8,8 @@ import Studios from "./pages/studios";
 import Classes from "./pages/classes";
 import Subscriptions from "./pages/subscriptions";
 import Profile from "./pages/profile";
+import SignUp from './pages/signup';
+import Login from './pages/login';
 
 function App() {
   return (
