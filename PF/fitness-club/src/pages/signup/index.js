@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 import {Button, TextField} from "@mui/material"
 
+
+// display file name
+// move errors to each box
+// only check errors on signup
+
 const SignUp = () => {
     const [first, setFirst] = useState('');
     const [last, setLast] = useState('');
@@ -8,6 +13,7 @@ const SignUp = () => {
     const [phone, setPhone] = useState('');
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
+    const [avatar, setAvatar] = useState(null);
     const [errors, setErrors] = useState({});
 
     function validate (e){
@@ -77,20 +83,39 @@ const SignUp = () => {
         setErrors(currErrors);
     }
 
+    function uploadAvatar (e) {
+        // const img = new File([e.target.files[0]], e.target.files[0].name, {
+        //     type: 'image/*'
+        // });
+        // setAvatar(img)
+        setAvatar(e.target.files[0])
+    }
+
     const submitReq = () => {
+        let form_data = new FormData();
+        form_data.append('email', email);
+        form_data.append('password', password1);
+        form_data.append('password2', password2);
+        form_data.append('first_name', first);
+        form_data.append('last_name', last);
+        form_data.append('phone', phone);
+        form_data.append('avatar', avatar);
+
         fetch("http://localhost:8000/accounts/signup/", {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "email": email,
-                "password": password1,
-                "password2": password2,
-                "first_name": first,
-                "last_name": last,
-                "phone": phone
-            })
+            // headers: {
+            //     'Content-Type': 'multipart/form-data',
+            // },
+            // body: JSON.stringify({
+            //     "email": email,
+            //     "password": password1,
+            //     "password2": password2,
+            //     "first_name": first,
+            //     "last_name": last,
+            //     "phone": phone,
+            //     "avatar": avatar,
+            // })
+            body: form_data,
         }).then(response => response.json())
             .then(response => {
 
@@ -121,18 +146,18 @@ const SignUp = () => {
                 <TextField id="phone" label="Phone" variant="outlined" required onChange={validate}/>
                 <TextField id="password" label="Password" type="password" variant="outlined" required onChange={validate}/>
                 <TextField id="password2" label="Confirm Password" variant="outlined" type="password" required  onChange={validate}/>
-                {/*<input*/}
-                {/*    accept="image/*"*/}
-                {/*    style={{ display: 'none' }}*/}
-                {/*    id="raised-button-file"*/}
-                {/*    multiple*/}
-                {/*    type="file"*/}
-                {/*/>*/}
-                {/*<label htmlFor="raised-button-file">*/}
-                {/*    <Button variant="raised" component="span">*/}
-                {/*        Upload*/}
-                {/*    </Button>*/}
-                {/*</label>*/}
+                <input
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    id="avatar-button-file"
+                    type="file"
+                    onChange={uploadAvatar}
+                />
+                <label htmlFor="avatar-button-file">
+                    <Button variant="contained" component="span">
+                        Upload Avatar
+                    </Button>
+                </label>
 
                 <Button id="submit-button" variant="contained" onClick={submitReq} disabled={!required_fields}>Sign Up</Button>
             </form>
@@ -142,6 +167,9 @@ const SignUp = () => {
     )
 }
 
+// CREATE TERMINAL
+// node cors.js
+// create proxy for localhost and call apis with this??????
 
 
 export default SignUp;
