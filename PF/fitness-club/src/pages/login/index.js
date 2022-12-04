@@ -19,7 +19,13 @@ const Login = () => {
                 "email": email,
                 "password": password,
             })
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if (!response.ok){
+                setValid(false);
+                return Promise.reject(response);
+            }
+            return response.json()
+        }).then(data => {
             if (data.access === undefined){
                 setValid(false);
             } else {
@@ -28,8 +34,7 @@ const Login = () => {
                 navigate('/');
             }
         }).catch(error => {
-            console.log(error);
-            setValid(false);
+            console.log(error.status, error.statusText);
         })
     }
 
@@ -47,3 +52,99 @@ const Login = () => {
 }
 
 export default Login;
+
+export async function checkValidToken() {
+    let valid = false;
+    await fetch("http://localhost:8000/accounts/token/verify/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            "token": localStorage.getItem("token"),
+        })
+    }).then(response => {
+        console.log(response.ok);
+        if (response.ok === true) {
+            // token is valid
+            valid = true;
+        } else {
+            return Promise.reject(response);
+        }
+    }).catch(response => {
+        console.log(response.status, response.statusText);
+        valid = false;
+    })
+    return valid;
+}
+
+// export async function tokenHandle() {
+//     await fetch("http://localhost:8000/accounts/token/verify/", {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//             "token": localStorage.getItem("token"),
+//         })
+//     }).then(response => {
+//         console.log(response.ok);
+//         if (response.ok === true) {
+//             // token is valid
+//             return true;
+//         } else {
+//             return Promise.reject(response);
+//         }
+//     }).catch(async response => {
+//         console.log(response.status, response.statusText);
+//         return await fetch("http://localhost:8000/accounts/token/refresh/", {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//                 "refresh": localStorage.getItem("refresh"),
+//             })
+//         }).then(response => {
+//             console.log(response.ok);
+//             if (!response.ok) {
+//                 // token refresh didn't work
+//                 return Promise.reject(response);
+//             } else {
+//                 return response.json();
+//             }
+//         }).then(data => {
+//             localStorage.setItem("token", data.access);
+//             return true;
+//         }).catch(response => {
+//             console.log(response.status, response.statusText);
+//             return false;
+//         })
+//     })
+// }
+
+export async function tokenHandle() {
+    return await fetch("http://localhost:8000/accounts/token/refresh/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "refresh": localStorage.getItem("refresh"),
+            })
+        }).then(response => {
+            console.log(response.ok);
+            if (!response.ok) {
+                // token refresh didn't work
+                return Promise.reject(response);
+            } else {
+                return response.json();
+            }
+        }).then(data => {
+            localStorage.setItem("token", data.access);
+            return true;
+        }).catch(response => {
+            console.log(response.status, response.statusText);
+            return false;
+        })
+}

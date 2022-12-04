@@ -17,23 +17,7 @@ const SignUp = () => {
     const [errors, setErrors] = useState({});
 
     function validate_all(){
-        let currErrors = {};
-        if (first === ''){
-            currErrors["first"] = "Please enter a first name."
-        }
-        if (last === ''){
-            currErrors["last"] = "Please enter a last name."
-        }
-
-        let valid_email = /^((\w|[!#$%&'*+\-\/=?^`{|}~])(\.\w|\.[!#$%&'*+\-\/=?^`{|}~])?){1,64}@([A-Za-z0-9](-?[A-Za-z0-9]|\.?[A-Za-z0-9])*)+$/
-        if (email === ''|| !valid_email.test(email)){
-            currErrors["email"] = "Please enter a valid email."
-        }
-
-        let valid_phone = /^\d{10}$/
-        if (phone === '' || !valid_phone.test(phone)){
-            currErrors["phone"] = "Please enter a valid phone number."
-        }
+        let currErrors = validateEditable(first, last, email, phone);
 
         if (password1 === ''){
             currErrors["password1"] = "Please enter a password."
@@ -49,10 +33,6 @@ const SignUp = () => {
 
 
     function uploadAvatar (e) {
-        // const img = new File([e.target.files[0]], e.target.files[0].name, {
-        //     type: 'image/*'
-        // });
-        // setAvatar(img)
         setAvatar(e.target.files[0])
     }
 
@@ -70,18 +50,6 @@ const SignUp = () => {
 
             fetch("http://localhost:8000/accounts/signup/", {
                 method: 'POST',
-                // headers: {
-                //     'Content-Type': 'multipart/form-data',
-                // },
-                // body: JSON.stringify({
-                //     "email": email,
-                //     "password": password1,
-                //     "password2": password2,
-                //     "first_name": first,
-                //     "last_name": last,
-                //     "phone": phone,
-                //     "avatar": avatar,
-                // })
                 body: form_data,
             }).then(response => response.json())
                 .then(response => {
@@ -135,3 +103,24 @@ const SignUp = () => {
 
 
 export default SignUp;
+
+export function validateEditable(first, last, email, phone) {
+    let currErrors = {};
+    if (first === '') {
+        currErrors["first"] = "Please enter a first name."
+    }
+    if (last === '') {
+        currErrors["last"] = "Please enter a last name."
+    }
+
+    let valid_email = /^((\w|[!#$%&'*+\-\/=?^`{|}~])(\.\w|\.[!#$%&'*+\-\/=?^`{|}~])?){1,64}@([A-Za-z0-9](-?[A-Za-z0-9]|\.?[A-Za-z0-9])*)+$/
+    if (email === '' || !valid_email.test(email)) {
+        currErrors["email"] = "Please enter a valid email."
+    }
+
+    let valid_phone = /^\d{10}$/
+    if (phone === '' || !valid_phone.test(phone)) {
+        currErrors["phone"] = "Please enter a valid phone number."
+    }
+    return currErrors
+}
