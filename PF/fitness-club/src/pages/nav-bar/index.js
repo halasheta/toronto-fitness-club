@@ -1,17 +1,23 @@
 import React from 'react';
-import {Link, Outlet} from "react-router-dom";
+import {Outlet} from "react-router-dom";
+import {NavLink, Navbar, NavbarBrand, Nav} from "react-bootstrap";
 
 const Layout = () => {
+
     return (
-        <>
-            <nav>
-                <Link to="/studios">Studios</Link>
-                <Link to="/classes">Classes</Link>
-                <Link to="/subscriptions">Subscriptions</Link>
-                <Link to="/profile">Profile</Link>
-            </nav>
+        <div>
+            <Navbar bg="dark" variant="dark">
+                <NavbarBrand href="/">Toronto Fitness Club</NavbarBrand>
+                <Nav className="ml-auto" horizontal>
+                    <NavLink href="/studios">Studios</NavLink>
+
+                    <NavLink href="/classes">Classes</NavLink>
+                    <NavLink href="/subscriptions">Subscriptions</NavLink>
+                    <NavLink href="/profile">Profile</NavLink>
+                </Nav>
+            </Navbar>
             <Outlet/>
-        </>
+        </div>
     )
 }
 
