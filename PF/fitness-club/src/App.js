@@ -12,6 +12,7 @@ import SignUp from './pages/signup';
 import Login from './pages/login';
 import StudiosAPIContext, { useStudioAPIContext } from "./contexts/StudiosAPIContext";
 import Studio from "./components/Studio";
+import UserAPIContext, {useUserAPIContext} from "./contexts/UserAPIContext";
 
 function App() {
     const studios = (
@@ -21,31 +22,32 @@ function App() {
     )
 
   return (
-      <BrowserRouter>
-          <Routes>
-              <Route path="/" element={<Layout/>}>
-                  <Route index element={<Home/>}/>
+      <UserAPIContext.Provider value={ useUserAPIContext() }>
+          <BrowserRouter>
+              <Routes>
+                  <Route path="/" element={<Layout/>}>
+                      <Route index element={<Home/>}/>
 
-                  {/* studios paths */}
-                  <Route path="studios/" element={ studios }/>
-                  <Route path="studios/add/" element={<Studio/>}/>
+                      {/* studios paths */}
+                      <Route path="studios/" element={ studios }/>
+                      <Route path="studios/add/" element={<Studio/>}/>
 
-                  {/* classes paths */}
-                  <Route path="classes/" element={<Classes/>}/>
+                      {/* classes paths */}
+                      <Route path="classes/" element={<Classes/>}/>
 
-                  {/* subscriptions paths */}
-                  <Route path="subscriptions/" element={<Subscriptions/>}/>
+                      {/* subscriptions paths */}
+                      <Route path="subscriptions/" element={<Subscriptions/>}/>
 
-                  {/* accounts paths */}
-                  <Route path="profile/" element={<Profile/>}/>
-                  <Route path="login/" element={<Login/>}/>
-                  <Route path="signup/" element={<SignUp/>}/>
+                      {/* accounts paths */}
+                      <Route path="profile/" element={<Profile/>}/>
+                      <Route path="login/" element={<Login/>}/>
+                      <Route path="signup/" element={<SignUp/>}/>
 
-                  {/* payments paths */}
-              </Route>
-          </Routes>
-      </BrowserRouter>
-
+                      {/* payments paths */}
+                  </Route>
+              </Routes>
+          </BrowserRouter>
+      </UserAPIContext.Provider>
   );
 }
 

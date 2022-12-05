@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, TextField} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {tokenHandle} from "../login";
 import {validateEditable} from "../signup";
+import UserAPIContext from "../../contexts/UserAPIContext";
 
 const Profile = () => {
     const [first, setFirst] = useState('');
@@ -36,7 +37,6 @@ const Profile = () => {
 
     const getData = () => {
         tokenHandle().then(success => {
-            console.log(success);
                 if (!success){
                     localStorage.setItem("lastPage", "/profile")
                     navigate("/login");
@@ -57,7 +57,6 @@ const Profile = () => {
                         setEmail(data.email)
                         setAvatar(data.avatar)
                         setPhone(data.phone)
-                        console.log(localStorage.getItem("token"))
                     }).catch(err => {
                         console.log(err);
                     })
@@ -84,7 +83,6 @@ const Profile = () => {
             }).then(response => {
                 return response.json();
             }).then(data => {
-                console.log(data);
                 setFirst(data.first_name);
                 setLast(data.last_name);
                 setEmail(data.email);
@@ -122,7 +120,7 @@ const Profile = () => {
                    error={errors.email !== undefined} helperText={errors.email} value={email}/>
         <TextField id="phone" label="Phone (Numbers only)" variant="outlined" required onChange={e => setPhone(e.target.value)}
                    error={errors.phone !== undefined} helperText={errors.phone} value={phone}/>
-        <Button id="toggle-edit-button" variant="contained" onClick={updateData}>edit profile</Button>
+        <Button id="toggle-edit-button" variant="contained" onClick={updateData}>Save Changes</Button>
     </>
 
 

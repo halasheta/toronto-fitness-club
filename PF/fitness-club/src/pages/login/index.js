@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button } from "@mui/material";
+import StudiosAPIContext from "../../contexts/StudiosAPIContext";
+import UserAPIContext from "../../contexts/UserAPIContext";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [validLogin, setValid] = useState(true);
+    const { setIsAdmin, setSubscription } = useContext(UserAPIContext);
 
     let navigate = useNavigate();
 
@@ -31,7 +34,23 @@ const Login = () => {
             } else {
                 localStorage.setItem("token", data.access);
                 localStorage.setItem("refresh", data.refresh);
-                navigate('/');
+                fetch("http://localhost:8000/accounts/user/profile/", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                    }
+                }) .then(response => {
+                    if (!response.ok){
+                        return Promise.reject(response);
+                    }
+                    return response.json()
+                }).then(data => {
+                    setIsAdmin(data.is_superuser);
+                    setSubscription(data.subscription);
+                    navigate("/");
+                }).catch(err => {
+                    console.log(err);
+                })
             }
         }).catch(error => {
             console.log(error.status, error.statusText);
@@ -53,76 +72,6 @@ const Login = () => {
 
 export default Login;
 
-export async function checkValidToken() {
-    let valid = false;
-    await fetch("http://localhost:8000/accounts/token/verify/", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            "token": localStorage.getItem("token"),
-        })
-    }).then(response => {
-        console.log(response.ok);
-        if (response.ok === true) {
-            // token is valid
-            valid = true;
-        } else {
-            return Promise.reject(response);
-        }
-    }).catch(response => {
-        console.log(response.status, response.statusText);
-        valid = false;
-    })
-    return valid;
-}
-
-// export async function tokenHandle() {
-//     await fetch("http://localhost:8000/accounts/token/verify/", {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//             "token": localStorage.getItem("token"),
-//         })
-//     }).then(response => {
-//         console.log(response.ok);
-//         if (response.ok === true) {
-//             // token is valid
-//             return true;
-//         } else {
-//             return Promise.reject(response);
-//         }
-//     }).catch(async response => {
-//         console.log(response.status, response.statusText);
-//         return await fetch("http://localhost:8000/accounts/token/refresh/", {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 "refresh": localStorage.getItem("refresh"),
-//             })
-//         }).then(response => {
-//             console.log(response.ok);
-//             if (!response.ok) {
-//                 // token refresh didn't work
-//                 return Promise.reject(response);
-//             } else {
-//                 return response.json();
-//             }
-//         }).then(data => {
-//             localStorage.setItem("token", data.access);
-//             return true;
-//         }).catch(response => {
-//             console.log(response.status, response.statusText);
-//             return false;
-//         })
-//     })
-// }
-
 export async function tokenHandle() {
     return await fetch("http://localhost:8000/accounts/token/refresh/", {
             method: 'POST',
@@ -133,7 +82,6 @@ export async function tokenHandle() {
                 "refresh": localStorage.getItem("refresh"),
             })
         }).then(response => {
-            console.log(response.ok);
             if (!response.ok) {
                 // token refresh didn't work
                 return Promise.reject(response);
@@ -148,3 +96,5 @@ export async function tokenHandle() {
             return false;
         })
 }
+
+
