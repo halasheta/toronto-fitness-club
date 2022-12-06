@@ -9,7 +9,7 @@ class Studio(models.Model):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
 
-    pc_regex = RegexValidator(regex=r'^\w{6}$')
+    pc_regex = RegexValidator(regex=r'^[a-zA-z0-9]{6}$')
     postal_code = models.CharField(validators=[pc_regex], max_length=6)
 
     longitude = models.FloatField()
