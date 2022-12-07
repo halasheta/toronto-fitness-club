@@ -84,6 +84,11 @@ const Subscriptions = () => {
     return (
         <>
             <h1>Subscriptions</h1>
+            {isAdmin && <Button
+                variant="outlined">
+                +
+            </Button>}
+
             {/*<Modal*/}
             {/*    open={open}*/}
             {/*    onClose={handleClose}*/}
