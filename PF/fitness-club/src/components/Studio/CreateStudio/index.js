@@ -1,12 +1,12 @@
 import React, {useContext, useState} from 'react';
 import {Autocomplete, Button, Input, TextField} from "@mui/material";
-import { tokenHandle } from "../../pages/login";
+import { tokenHandle } from "../../../pages/login";
 import { useNavigate } from "react-router-dom";
 import $ from 'jquery';
-import UserAPIContext from "../../contexts/UserAPIContext";
-import Status404 from "../Common/Errors/Status404";
+import UserAPIContext from "../../../contexts/UserAPIContext";
+import Status404 from "../../Common/Errors/Status404";
 
-const Studio = () => {
+const CreateStudio = () => {
     let apiKey = "9SkGRa52CMqNXGZI4xjATR8cogEMAruY";
     let navigate = useNavigate();
 
@@ -31,12 +31,39 @@ const Studio = () => {
 
     const { isAdmin } = useContext(UserAPIContext);
 
+    const requestBody = () => {
+        return JSON.stringify({
+            name: name,
+            address: address,
+            postal_code: postalCode,
+            phone: phone,
+            amenities: amenities,
+            images: images
+        })
+        // const form_data = new FormData();
+        // form_data.append('name', name);
+        // form_data.append('address', address);
+        // form_data.append('longitude', long);
+        // form_data.append('latitude', lat);
+        // form_data.append('postal_code', postalCode);
+        // form_data.append('phone', phone);
+        //
+        // for (let i = 0; i < amenities.length; i++) {
+        //     form_data.append(`amenities[${i}]`, amenities[i]);
+        // }
+        // for (let i = 0; i < images.length; i++) {
+        //     form_data.append(`images[${i}]`, images[i]);
+        // }
+        //
+        // return form_data;
+    }
+
     const submitReq = () => {
         tokenHandle()
             .then(success => {
                 if (!success) {
                     // TODO: deal with unauthorized access (when a (non-admin) tries to access it)
-                    localStorage.setItem("lastPage", "/studios/add")
+                    localStorage.setItem("lastPage", "/studios/add");
                     navigate("/login");
                 } else {
                     fetch('http://localhost:8000/studios/new/', {
@@ -45,16 +72,7 @@ const Studio = () => {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${localStorage.getItem("token")}`,
                         },
-                        body: JSON.stringify({
-                            name: name,
-                            address: address,
-                            longitude: long,
-                            latitude: lat,
-                            postal_code: postalCode,
-                            phone: phone,
-                            amenities: amenities,
-                            images: images
-                        })
+                        body: requestBody()
                     })
                         .then(r => {
                             if (r.ok) {
@@ -109,13 +127,29 @@ const Studio = () => {
         }
 
         setAmenities(amenities => [...amenities, amty]);
-        console.log(amenities);
         $('#amenity-type').val('');
         $('#amenity-qty').val('');
 
 
     }
 
+    const uploadImages = (e) => {
+        const img_arr = [...e.target.files];
+
+        for (let i = 0; i < img_arr.length; i++){
+            // setImages(images => [...images, {
+            //     'lastModified' : img_arr[i].lastModified,
+            //     'lastModifiedDate' :img_arr[i].lastModifiedDate,
+            //     'name' :img_arr[i].name,
+            //     'size' :img_arr[i].size,
+            //     'type' :img_arr[i].type,
+            //     'webkitRelativePath' :img_arr[i].webkitRelativePath
+            // }]);
+            setImages(images => [...images, e.target.files[i]]);
+            console.log(images);
+        }
+
+    }
 
      return(
         <>
@@ -136,7 +170,7 @@ const Studio = () => {
 
                             renderInput={ (params) =>
                                 <TextField {...params} id="address" label={"Address"}/>}
-                            sx={{ width: 300 }}
+                            sx={{ width: 200 }}
 
                             input={inputValue}
                             value={value || null}
@@ -173,15 +207,20 @@ const Studio = () => {
 
                         <br/>
 
-                        Images
 
                         <br/>
-                        <input accept="image/*" type="file" multiple
-                               onChange={e => {
-                                   setImages(images => [...images, e.target.files]);
-                                   console.log(e.target.files)
-                               }}/>
+                        <input accept="image/*"
+                               type="file"
+                               multiple
+                               style={{ display: 'none' }}
+                               id="images-button"
+                               onChange={uploadImages}/>
 
+                        <label htmlFor="images-button">
+                            <Button variant="contained" component="span">
+                                UPLOAD IMAGES
+                            </Button>
+                        </label>
                         <br/>
 
                         <br/>
@@ -196,4 +235,4 @@ const Studio = () => {
 }
 
 
-export default Studio;
+export default CreateStudio;

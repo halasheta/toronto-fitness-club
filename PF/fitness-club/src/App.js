@@ -11,8 +11,9 @@ import Profile from "./pages/profile";
 import SignUp from './pages/signup';
 import Login from './pages/login';
 import StudiosAPIContext, { useStudioAPIContext } from "./contexts/StudiosAPIContext";
-import Studio from "./components/Studio";
+import CreateStudio from "./components/Studio/CreateStudio";
 import UserAPIContext, {useUserAPIContext} from "./contexts/UserAPIContext";
+import StudioProfile from "./components/Studio/StudioProfile";
 
 function App() {
     const studios = (
@@ -30,7 +31,8 @@ function App() {
 
                       {/* studios paths */}
                       <Route path="studios/" element={ studios }/>
-                      <Route path="studios/add/" element={<Studio/>}/>
+                      <Route path="studios/add/" element={<CreateStudio/>}/>
+                      <Route path="studios/:id/" element={<StudioProfile/>}/>
 
                       {/* classes paths */}
                       <Route path="classes/" element={<Classes/>}/>

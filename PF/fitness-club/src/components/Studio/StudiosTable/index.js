@@ -1,7 +1,8 @@
 import React from 'react';
 import { useContext } from "react";
 import StudiosAPIContext from "../../../contexts/StudiosAPIContext";
-import {Table, Paper, TableContainer, TableHead, TableRow, TableCell, TableBody} from "@mui/material";
+import {Table, Paper, TableContainer, TableHead, TableRow, TableCell, TableBody, Link} from "@mui/material";
+import { generatePath } from "react-router-dom";
 
 const StudiosTable = ({ perPage, params }) => {
     const { studios } = useContext(StudiosAPIContext);
@@ -22,7 +23,13 @@ const StudiosTable = ({ perPage, params }) => {
             {studios.map((studio, index) => (
                 <TableRow key={studio.id}>
                     <TableCell>{ (params.page - 1) * perPage + index + 1 }</TableCell>
-                    <TableCell>{ studio.name }</TableCell>
+                    <TableCell>
+                        <Link href={generatePath("/studios/:id", {id : studio.id })}
+                              underline={"hover"}>
+                            { studio.name }
+                        </Link>
+
+                    </TableCell>
                     <TableCell>{ studio.address }</TableCell>
                     <TableCell>{ studio.postal_code }</TableCell>
                     <TableCell>{ studio.phone }</TableCell>
