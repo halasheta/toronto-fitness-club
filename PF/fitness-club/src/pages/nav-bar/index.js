@@ -1,6 +1,8 @@
 import React from 'react';
 import {Outlet} from "react-router-dom";
-import {NavLink, Navbar, NavbarBrand, Nav} from "react-bootstrap";
+import {NavLink,Navbar, NavbarBrand, Nav} from "react-bootstrap";
+import {LinkContainer} from 'react-router-bootstrap';
+
 
 const Layout = () => {
 
@@ -9,13 +11,21 @@ const Layout = () => {
             <Navbar bg="dark" variant="dark">
                 <NavbarBrand href="/">Toronto Fitness Club</NavbarBrand>
                 <Nav className="ml-auto" horizontal>
-                    <NavLink href="/studios">Studios</NavLink>
+                    <LinkContainer to="/studios"><NavLink>Studios</NavLink></LinkContainer>
 
-                    <NavLink href="/classes">Classes</NavLink>
-                    <NavLink href="/subscriptions">Subscriptions</NavLink>
-                    <NavLink href="/profile">Profile</NavLink>
+                    <LinkContainer to="/classes"><NavLink>Classes</NavLink></LinkContainer>
+                    <LinkContainer to="/subscriptions"><NavLink>Subscriptions</NavLink></LinkContainer>
+                    <LinkContainer to="/profile"><NavLink>Profile</NavLink></LinkContainer>
                 </Nav>
             </Navbar>
+
+
+
+                    {/*<Link to="/studios">Studios</Link>*/}
+
+                    {/*<Link to="/classes">Classes</Link>*/}
+                    {/*<Link to="/subscriptions">Subscriptions</Link>*/}
+                    {/*<Link to="/profile">Profile</Link>*/}
             <Outlet/>
         </div>
     )

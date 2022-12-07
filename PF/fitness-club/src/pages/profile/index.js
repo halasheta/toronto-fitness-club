@@ -13,6 +13,8 @@ const Profile = () => {
     const [avatar, setAvatar] = useState(null);
     const [errors, setErrors] = useState({});
 
+    const { isAdmin } = useContext(UserAPIContext);
+
     let navigate = useNavigate();
 
     function uploadAvatar (e) {
@@ -36,6 +38,7 @@ const Profile = () => {
     }
 
     const getData = () => {
+        console.log(isAdmin);
         tokenHandle().then(success => {
                 if (!success){
                     localStorage.setItem("lastPage", "/profile")
@@ -95,6 +98,13 @@ const Profile = () => {
         }
     }
 
+    const logOut = () => {
+        localStorage.setItem("token", null);
+        localStorage.setItem("refresh", null);
+        navigate("/login")
+
+    }
+
     useEffect(() => {
         getData();
     }, []);
@@ -112,6 +122,7 @@ const Profile = () => {
                 Upload Avatar
             </Button>
         </label>
+        <form>
         <TextField id="first_name" label="First Name" variant="outlined" required onChange={e => setFirst(e.target.value)}
             error={errors.first !== undefined} helperText={errors.first} value={first}/>
         <TextField id="last_name" label="Last Name" variant="outlined" required onChange={e => setLast(e.target.value)}
@@ -121,6 +132,9 @@ const Profile = () => {
         <TextField id="phone" label="Phone (Numbers only)" variant="outlined" required onChange={e => setPhone(e.target.value)}
                    error={errors.phone !== undefined} helperText={errors.phone} value={phone}/>
         <Button id="toggle-edit-button" variant="contained" onClick={updateData}>Save Changes</Button>
+        </form>
+        <br/>
+        <Button id="toggle-edit-button" variant="contained" onClick={logOut}>Log Out</Button>
     </>
 
 

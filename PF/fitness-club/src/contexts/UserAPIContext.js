@@ -1,14 +1,14 @@
 import {createContext, useState} from "react";
 
 const UserContext = createContext({
-    isAdmin: false,
+    isAdmin: null,
     setIsAdmin: () => {},
     subscription: null,
     setSubscription: () => {}
 });
 
 export const useUserAPIContext = () => {
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(null);
     const [subscription, setSubscription] = useState(null);
 
     return {
