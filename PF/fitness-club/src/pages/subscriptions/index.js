@@ -1,18 +1,35 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {tokenHandle} from "../login";
 import {useNavigate} from "react-router-dom";
-import {Button, Modal} from "@mui/material";
+import {Box, Button, Modal, Typography} from "@mui/material";
 import UserAPIContext from "../../contexts/UserAPIContext";
 
 const Subscriptions = () => {
     let navigate = useNavigate();
     let open = false;
     const [subscriptions, setSubscriptions] = useState({results: {}});
-    const [modalMessage, setModalMessage] = useState("");
+    const [nextPage, setNextPage] = useState(null);
+    const [previousPage, setPreviousPage] = useState(null);
+    const [modalHeader, setModalHeader] = useState("Success");
+    const [modalMessage, setModalMessage] = useState("You have been successfully subscribed.");
 
-    const { isAdmin, subscription } = useContext(UserAPIContext);
+    const [modalOpen, setModalOpen] = useState(false);
+    const openModal = () => setModalOpen(true);
+    const closeModal = () => setModalOpen(false);
 
-    console.log(isAdmin, subscription);
+    const { isAdmin, subscription, setSubscription} = useContext(UserAPIContext);
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
 
     const getData = () => {
         tokenHandle().then(success => {
@@ -29,9 +46,11 @@ const Subscriptions = () => {
                         if (!response.ok){
                             return Promise.reject(response);
                         }
-                        console.log(response)
                         return response.json()
                     }).then(data => {
+                        console.log(data)
+                        setNextPage(data.next);
+                        setPreviousPage(data.previous);
                         setSubscriptions(data);
                     }).catch(err => {
                         console.log(err);
@@ -61,10 +80,16 @@ const Subscriptions = () => {
                         console.log(response)
                         return response.json()
                     }).then(data => {
-                        console.log("successfully subscribed!")
+                        setSubscription(pk);
+                        setModalHeader("Success");
+                        setModalMessage("You have been successfully subscribed.")
+                        openModal();
                     }).catch(err => {
                         if (err.status === 400){
                             // bring up error box showing that
+                            setModalHeader("Error");
+                            setModalMessage("You do not have an existing payment method saved.")
+                            openModal();
                         }
                         // check if 400 because then redirect them to make a payment method
                         console.log(err);
@@ -74,6 +99,9 @@ const Subscriptions = () => {
         )
     }
 
+    const createSubscription = () => {
+        navigate('/subscriptions/add');
+    }
 
     useEffect(() => {
         getData();
@@ -81,39 +109,40 @@ const Subscriptions = () => {
 
 
 
+    // TODO: add subscriptions/new route to router
     return (
         <>
             <h1>Subscriptions</h1>
             {isAdmin && <Button
-                variant="outlined">
+                variant="outlined"
+                onClick={createSubscription}>
                 +
             </Button>}
 
-            {/*<Modal*/}
-            {/*    open={open}*/}
-            {/*    onClose={handleClose}*/}
-            {/*    aria-labelledby="modal-modal-title"*/}
-            {/*    aria-describedby="modal-modal-description"*/}
-            {/*>*/}
-            {/*    <Box sx={style}>*/}
-            {/*        <Typography id="modal-modal-title" variant="h6" component="h2">*/}
-            {/*            Text in a modal*/}
-            {/*        </Typography>*/}
-            {/*        <Typography id="modal-modal-description" sx={{ mt: 2 }}>*/}
-            {/*            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.*/}
-            {/*        </Typography>*/}
-            {/*    </Box>*/}
-            {/*</Modal>*/}
+            <Modal
+                open={modalOpen}
+                onClose={closeModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        {modalHeader}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {modalMessage}
+                    </Typography>
+                </Box>
+            </Modal>
             <div>
                 {Object.entries(subscriptions.results).map(([prop, value]) => {
-                    console.log(value);
                     return (
                         <>
                             <div>
                                 <div className='subscription' key={prop}>
                                     <h2>{value.duration}</h2>
                                     <h2>{"$" + String(value.price)}</h2>
-                                    <Button id="subscribe-button" name={value.pk} variant="contained" onClick={subscribe} disabled={value.pk === subscription}>Subscribe</Button>
+                                    <Button id="subscribe-button" name={value.pk} variant="contained" onClick={subscribe} disabled={String(value.pk) === subscription}>Subscribe</Button>
                                 </div>
                             </div>
                         </>

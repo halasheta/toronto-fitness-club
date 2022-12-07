@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Button, TextField} from "@mui/material"
+import {Link} from "react-router-dom";
 
 
 // display file name
@@ -62,8 +63,8 @@ const SignUp = () => {
 
     return (
         <>
+            <h1>Sign Up</h1>
             <form>
-                <h1>Sign Up</h1>
                 <TextField id="first_name" label="First Name" variant="outlined" required onChange={e => setFirst(e.target.value)}
                            error={errors.first !== undefined} helperText={errors.first}/>
                 <TextField id="last_name" label="Last Name" variant="outlined" required onChange={e => setLast(e.target.value)}
@@ -91,6 +92,9 @@ const SignUp = () => {
 
                 <Button id="submit-button" variant="contained" onClick={submitReq}>Sign Up</Button>
             </form>
+
+            <br/>
+            <Link to="/login">Already have an account? <u>Log in here!</u></Link>
 
         </>
 

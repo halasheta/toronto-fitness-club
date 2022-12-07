@@ -13,7 +13,7 @@ const Profile = () => {
     const [avatar, setAvatar] = useState(null);
     const [errors, setErrors] = useState({});
 
-    const { isAdmin } = useContext(UserAPIContext);
+    const { isAdmin, subscription } = useContext(UserAPIContext);
 
     let navigate = useNavigate();
 
@@ -39,6 +39,7 @@ const Profile = () => {
 
     const getData = () => {
         console.log(isAdmin);
+        console.log(subscription)
         tokenHandle().then(success => {
                 if (!success){
                     localStorage.setItem("lastPage", "/profile")
@@ -98,12 +99,6 @@ const Profile = () => {
         }
     }
 
-    const logOut = () => {
-        localStorage.setItem("token", null);
-        localStorage.setItem("refresh", null);
-        navigate("/login")
-
-    }
 
     useEffect(() => {
         getData();
@@ -134,7 +129,6 @@ const Profile = () => {
         <Button id="toggle-edit-button" variant="contained" onClick={updateData}>Save Changes</Button>
         </form>
         <br/>
-        <Button id="toggle-edit-button" variant="contained" onClick={logOut}>Log Out</Button>
     </>
 
 

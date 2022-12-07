@@ -1,14 +1,13 @@
-import React, {useContext, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button } from "@mui/material";
-import StudiosAPIContext from "../../contexts/StudiosAPIContext";
 import UserAPIContext from "../../contexts/UserAPIContext";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [validLogin, setValid] = useState(true);
-    const { setIsAdmin, setSubscription } = useContext(UserAPIContext);
+    const { isAdmin, subscription, setIsAdmin, setSubscription } = useContext(UserAPIContext);
 
     let navigate = useNavigate();
 
@@ -28,8 +27,8 @@ const Login = () => {
                 return Promise.reject(response);
             }
             return response.json()
-        }).then(data => {
-            if (data.access === undefined){
+        }).then(async data => {
+            if (data.access === undefined) {
                 setValid(false);
             } else {
                 localStorage.setItem("token", data.access);
@@ -37,16 +36,16 @@ const Login = () => {
                 fetch("http://localhost:8000/accounts/user/profile/", {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                        'Authorization': `Bearer ${data.access}`,
                     }
-                }) .then(response => {
-                    if (!response.ok){
+                }).then(response => {
+                    if (!response.ok) {
                         return Promise.reject(response);
                     }
                     return response.json()
                 }).then(data => {
                     setIsAdmin(data.is_superuser);
-                    setSubscription(data.subscription);
+                    setSubscription(String(data.subscription));
                     navigate("/");
                 }).catch(err => {
                     console.log(err);
@@ -57,16 +56,21 @@ const Login = () => {
         })
     }
 
-
     return <>
-        <TextField id="email" label="Email" variant="outlined" type="email" 
-        onChange={e => setEmail(e.target.value)}/>
+
+        <h1>Log In</h1>
+        <form>
+            <TextField id="email" label="Email" variant="outlined" type="email" error={!validLogin} required
+            onChange={e => setEmail(e.target.value)}/>
+            <br/>
+            <TextField id="password" label="Password" variant="outlined" type="password" required
+            onChange={e => setPassword(e.target.value)} error={!validLogin}
+                       helperText={!validLogin ? 'Invalid email or password.' : ' '}/>
+            <br/>
+            <Button id="login-button" variant="contained" onClick={submitReq}>Log in</Button>
+        </form>
         <br/>
-        <TextField id="password" label="Password" variant="outlined" type="password"
-        onChange={e => setPassword(e.target.value)} error={!validLogin}
-                   helperText={!validLogin ? 'Invalid email or password.' : ' '}/>
-        <br/>
-        <Button id="login-button" variant="contained" onClick={submitReq}>Log in</Button>
+        <Link to="/signup">Don't have an account? <u>Sign up here!</u></Link>
     </>
 }
 
