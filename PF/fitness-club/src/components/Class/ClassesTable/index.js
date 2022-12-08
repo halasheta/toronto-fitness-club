@@ -1,11 +1,50 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useContext } from "react";
-import {Table, Paper, TableContainer, TableHead, TableRow, TableCell, TableBody, Button} from "@mui/material";
-import { Link } from "react-router-dom";
+import {
+    Table,
+    Paper,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    Button,
+    Dialog,
+    DialogTitle, DialogContent, RadioGroup, FormControlLabel, Radio
+} from "@mui/material";
+import $ from 'jquery';
 import ClassesAPIContext from "../../../contexts/ClassesAPIContext";
 
 const ClassesTable = ({ perPage, page }) => {
     const { classes } = useContext(ClassesAPIContext);
+    const [open, setOpen] = useState(false);
+    const [collapseOpen, setCollapseOpen] = useState(false);
+    const [value, setValue] = useState('');
+    const [currClass, setCurrClass] = useState(0);
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+
+    const handleSubmit = (e) => {
+        let modelId = currClass.id;
+        if (value === "class") {
+            modelId = currClass.class_model
+        }
+
+        fetch(`http://localhost:8000/classes/enrol/?${value}=${modelId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            }})
+            .then(r => r.json())
+            .catch(err => console.log(err))
+
+        $(`enrol-button-${currClass.id}`).attr("disabled", true);
+        handleClose();
+    }
 
     return (
         <TableContainer component={Paper}>
@@ -34,7 +73,30 @@ const ClassesTable = ({ perPage, page }) => {
                     <TableCell>{ clss.capacity }</TableCell>
                     <TableCell>{ clss.start_time }</TableCell>
                     <TableCell>{ clss.end_time }</TableCell>
-                    <TableCell><Button>ENROL</Button></TableCell>
+                    <TableCell>
+                        <Button id={`enrol-button-${clss.id}`}
+                                onClick={e => {
+                                        setOpen(true);
+                                        setCurrClass(clss);}
+                        }>
+                            ENROL</Button>
+                        <Dialog open={open} onClose={handleClose}>
+                            <DialogTitle>Enrol in...</DialogTitle>
+                            <DialogContent>
+                                <RadioGroup
+                                onChange={e => setValue(e.target.value)}>
+                                    <FormControlLabel value="occurrence" control={<Radio />}
+                                                      label="This class only" />
+                                    <FormControlLabel value="class" control={<Radio />}
+                                                      label="This and all future occurrences" />
+
+                                </RadioGroup>
+                                <Button type={"submit"} variant={"contained"}
+                                onClick={handleSubmit}>SUBMIT</Button>
+                            </DialogContent>
+                        </Dialog>
+
+                    </TableCell>
 
                 </TableRow>
         ))}
