@@ -56,7 +56,7 @@ const Payments = () => {
                         }).then(data => {
                             console.log(data);
                             setNextPage(data.next);
-                            setPreviousPage(data.previous)
+                            setPreviousPage(data.previous);
                             setPayments(data);
                         }).catch(err => {
                             console.log(err);

@@ -25,12 +25,13 @@ const CreateClass = () => {
     const [ endTime, setEndTime ] = useState("");
     const [ frequency, setFrequency ] = useState(null);
     const [ frequencyText, setFrequencyText ] = useState("");
-    const [ endRecurrence, setEndRecurrence ]  = useState(dayjs().add(1, 'hour'));
+    const [ endRecurrence, setEndRecurrence ]  = useState(dayjs().add(-4, 'hour'));
     const [startDate, setStartDate]  = useState(dayjs().add(1, 'hour'));
 
     const [errors, setErrors] = useState({});
 
     const requestBody = () => {
+        console.log(endRecurrence.toString());
         return JSON.stringify({
             studio: id,
             name: name,

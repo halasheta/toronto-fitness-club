@@ -20,6 +20,7 @@ import StudioMap from "./components/Studio/StudioMap";
 import CreateClass from "./components/Class/CreateClass";
 import Payments from "./pages/payments";
 import ClassesAPIContext, {useClassesAPIContext} from "./contexts/ClassesAPIContext";
+import ClassSchedule from "./components/Class/ClassSchedule";
 
 function App() {
     const studios = (
@@ -53,6 +54,7 @@ function App() {
                       {/* classes paths */}
                       <Route path="classes/" element={ classes }/>
                       <Route path="studios/:id/classes/add/" element={<CreateClass/>}/>
+                      <Route path="classes/schedule/" element={<ClassSchedule/>}/>
 
                       {/* subscriptions paths */}
                       <Route path="subscriptions/" element={<Subscriptions/>}/>
