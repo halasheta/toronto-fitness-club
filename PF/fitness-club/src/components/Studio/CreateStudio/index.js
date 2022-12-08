@@ -28,6 +28,8 @@ const CreateStudio = () => {
     const [type, setType] = useState('');
     const [quantity, setQuantity] = useState(0);
 
+    const apiKey = "9SkGRa52CMqNXGZI4xjATR8cogEMAruY";
+
     const { isAdmin } = useContext(UserAPIContext);
 
     const requestBody = () => {
@@ -237,4 +239,3 @@ const CreateStudio = () => {
 
 
 export default CreateStudio;
-export const { apiKey } = "9SkGRa52CMqNXGZI4xjATR8cogEMAruY";

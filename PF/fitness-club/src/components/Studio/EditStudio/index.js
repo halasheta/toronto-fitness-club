@@ -4,7 +4,6 @@ import { tokenHandle } from "../../../pages/login";
 import {useNavigate, useParams} from "react-router-dom";
 import $ from 'jquery';
 import UserAPIContext from "../../../contexts/UserAPIContext";
-import {apiKey} from "../CreateStudio";
 import {DataGrid} from "@mui/x-data-grid";
 
 const EditStudio = () => {
@@ -33,6 +32,9 @@ const EditStudio = () => {
     const [rows, setRows] = useState([]);
 
     const { isAdmin } = useContext(UserAPIContext);
+
+    const apiKey = "9SkGRa52CMqNXGZI4xjATR8cogEMAruY";
+
 
     const requestBody = () => {
         return JSON.stringify({
