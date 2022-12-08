@@ -19,12 +19,19 @@ import EditStudio from "./components/Studio/EditStudio";
 import StudioMap from "./components/Studio/StudioMap";
 import CreateClass from "./components/Class/CreateClass";
 import Payments from "./pages/payments";
+import ClassesAPIContext, {useClassesAPIContext} from "./contexts/ClassesAPIContext";
 
 function App() {
     const studios = (
         <StudiosAPIContext.Provider value={ useStudioAPIContext() }>
             <Studios/>
         </StudiosAPIContext.Provider>
+    )
+
+    const classes = (
+        <ClassesAPIContext.Provider value={ useClassesAPIContext() }>
+            <Classes/>
+        </ClassesAPIContext.Provider>
     )
 
   return (
@@ -44,7 +51,7 @@ function App() {
 
 
                       {/* classes paths */}
-                      <Route path="classes/" element={<Classes/>}/>
+                      <Route path="classes/" element={ classes }/>
                       <Route path="studios/:id/classes/add/" element={<CreateClass/>}/>
 
                       {/* subscriptions paths */}

@@ -3,34 +3,51 @@ import {useNavigate} from "react-router-dom";
 import StudiosTable from "../../components/Studio/StudiosTable";
 import StudiosAPIContext from "../../contexts/StudiosAPIContext";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
+import UserAPIContext from "../../contexts/UserAPIContext";
+import {tokenHandle} from "../login";
 
 const Studios = () => {
     const perPage = 5;
     const [page, setPage] = useState(1);
     const [open, setOpen] = useState(false);
+    const [total, setTotal] = useState(0);
+    const [applied, setApplied] = useState(true);
+
     const [filter, setFilter] = useState({});
 
     const [offset, setOffset] = useState(0);
 
-
+    const { isAdmin } = useContext(UserAPIContext);
     const { setStudios } = useContext(StudiosAPIContext);
 
     let navigate = useNavigate();
 
 
     useEffect(() => {
-        fetch(`http://localhost:8000/studios/search?offset=${offset}&limit=${perPage}&`
-            + new URLSearchParams(filter), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem("token")}`,
-            },
-        })
-            .then(response => response.json())
-            .then(json => setStudios(json.results))
-            .catch(err => console.log(err))
-    }, [filter, page, offset])
+        tokenHandle().then(success => {
+            if (!success) {
+                localStorage.setItem("lastPage", "/studios/");
+                navigate("/login");
+            } else if (applied) {
+                fetch(`http://localhost:8000/studios/search?offset=${offset}&limit=${perPage}&`
+                    + new URLSearchParams(filter), {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(json => {
+                        setStudios(json.results);
+                        setApplied(false);
+                        setTotal(json.count);
+                    })
+                    .catch(err => console.log(err))
+            }
+        }).catch(err => console.log(err))
+
+    }, [applied, page, offset])
 
 
     const createStudios = () => {
@@ -51,13 +68,13 @@ const Studios = () => {
     return (
         <>
             <h1> Studios </h1>
-            {/*{ isAdmin &&*/}
+            { isAdmin &&
             <Button
                 variant="outlined"
                 onClick={createStudios}>
                 +
             </Button>
-            {/*}*/}
+            }
             <Button variant={"outlined"} onClick={handleOpen}>FILTER</Button>
             <Button variant={"outlined"} onClick={e => setFilter({})}>CLEAR FILTER</Button>
             <Dialog open={open} onClose={handleClose}>
@@ -97,7 +114,10 @@ const Studios = () => {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>APPLY</Button>
+                    <Button onClick={() => {
+                    handleClose();
+                    setApplied(true);}
+                    }>APPLY</Button>
                 </DialogActions>
 
             </Dialog>
@@ -106,8 +126,9 @@ const Studios = () => {
                 variant={"contained"}
                 onClick={() => {
                     setPage(Math.max(1, page - 1));
+                    setApplied(true);
                     setOffset(offset => offset - perPage);
-                }}>
+                }} disabled={page === 1}>
                 {`<`}
             </Button>
             <Button disabled={true}>{page}</Button>
@@ -115,8 +136,9 @@ const Studios = () => {
                 variant={"contained"}
                 onClick={() => {
                     setPage(page + 1);
+                    setApplied(true);
                     setOffset(offset => offset + perPage);
-                }}>
+                }} disabled={offset + perPage >= total}>
                 {`>`}
             </Button>
 

@@ -20,7 +20,7 @@ const StudiosTable = ({ perPage, page }) => {
             </TableRow>
         </TableHead>
         <TableBody>
-            {studios.map((studio, index) => (
+            {studios !== undefined && studios.map((studio, index) => (
                 <TableRow key={studio.id}>
                     <TableCell>{ (page - 1) * perPage + index + 1 }</TableCell>
                     <TableCell>
