@@ -38,7 +38,7 @@ const Profile = () => {
     }
 
     const getData = () => {
-        console.log(isAdmin);
+        
         console.log(subscription)
         tokenHandle().then(success => {
                 if (!success){

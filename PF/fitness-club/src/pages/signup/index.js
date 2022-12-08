@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button, TextField} from "@mui/material"
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 
 // display file name
@@ -16,6 +16,7 @@ const SignUp = () => {
     const [password2, setPassword2] = useState('');
     const [avatar, setAvatar] = useState(null);
     const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
 
     function validate_all(){
         let currErrors = validateEditable(first, last, email, phone);
@@ -54,10 +55,17 @@ const SignUp = () => {
                 body: form_data,
             }).then(response => response.json())
                 .then(response => {
+                    if (!response.ok){
+                        return Promise.reject(response);
+                    }
 
                     console.log(response)
+                    navigate("/");
 
-                }).catch(error => console.log(error));
+                }).catch(error => {
+                    error.email = "Email is already taken.";
+                    setErrors(error);
+                });
         }
     }
 

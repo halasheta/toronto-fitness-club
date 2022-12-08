@@ -43,6 +43,7 @@ function App() {
 
                       {/* classes paths */}
                       <Route path="classes/" element={<Classes/>}/>
+                      <Route path="studios/:id/classes/add/" element={<CreateClass/>}/>
 
                       {/* subscriptions paths */}
                       <Route path="subscriptions/" element={<Subscriptions/>}/>

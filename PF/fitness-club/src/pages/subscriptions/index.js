@@ -8,8 +8,6 @@ const Subscriptions = () => {
     let navigate = useNavigate();
     let open = false;
     const [subscriptions, setSubscriptions] = useState({results: {}});
-    const [nextPage, setNextPage] = useState(null);
-    const [previousPage, setPreviousPage] = useState(null);
     const [modalHeader, setModalHeader] = useState("Success");
     const [modalMessage, setModalMessage] = useState("You have been successfully subscribed.");
 
@@ -49,8 +47,6 @@ const Subscriptions = () => {
                         return response.json()
                     }).then(data => {
                         console.log(data)
-                        setNextPage(data.next);
-                        setPreviousPage(data.previous);
                         setSubscriptions(data);
                     }).catch(err => {
                         console.log(err);

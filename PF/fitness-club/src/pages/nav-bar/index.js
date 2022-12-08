@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Outlet, useNavigate, Link} from "react-router-dom";
-import {NavLink, Navbar, NavbarBrand, Nav, NavDropdown} from "react-bootstrap";
+import {NavLink, Navbar, NavbarBrand, Nav, NavDropdown, NavItem} from "react-bootstrap";
 import {LinkContainer} from 'react-router-bootstrap';
 import {tokenHandle} from "../login";
 
@@ -26,7 +26,6 @@ const Layout = () => {
             }}
         )
     })
-    // TODO: toggle log in/sign up when all else is log-out is hidden and vice versa
 
     return (
         <div>
@@ -39,7 +38,7 @@ const Layout = () => {
                     <LinkContainer to="/subscriptions"><NavLink>Subscriptions</NavLink></LinkContainer>
 
                     {loggedIn &&
-                        <NavDropdown title="Accounts" id="basic-nav-dropdown">
+                        <NavDropdown title="Accounts" id="nav-dropdown-logged-in">
                         <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/payments">Payments</NavDropdown.Item>
                         {/*<LinkContainer to="/payments"><NavDropdown.Item>Payments</NavDropdown.Item></LinkContainer>*/}
@@ -48,21 +47,13 @@ const Layout = () => {
                     </NavDropdown>}
 
                     {!loggedIn &&
-                        <NavDropdown title="Accounts" id="basic-nav-dropdown">
+                        <NavDropdown title="Accounts" id="nav-dropdown-not-logged-in">
                             <NavDropdown.Item as={Link} to="/login">Log In</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/signup">Sign Up</NavDropdown.Item>
                         </NavDropdown>}
 
                 </Nav>
             </Navbar>
-
-
-
-                    {/*<Link to="/studios">Studios</Link>*/}
-
-                    {/*<Link to="/classes">Classes</Link>*/}
-                    {/*<Link to="/subscriptions">Subscriptions</Link>*/}
-                    {/*<Link to="/profile">Profile</Link>*/}
             <Outlet/>
         </div>
     )
