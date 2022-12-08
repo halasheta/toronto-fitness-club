@@ -15,6 +15,8 @@ import CreateStudio from "./components/Studio/CreateStudio";
 import UserAPIContext, {useUserAPIContext} from "./contexts/UserAPIContext";
 import StudioProfile from "./components/Studio/StudioProfile";
 import Subscription from "./components/Subscription";
+import EditStudio from "./components/Studio/EditStudio";
+import StudioMap from "./components/Studio/StudioMap";
 
 function App() {
     const studios = (
@@ -33,7 +35,11 @@ function App() {
                       {/* studios paths */}
                       <Route path="studios/" element={ studios }/>
                       <Route path="studios/add/" element={<CreateStudio/>}/>
-                      <Route path="studios/:id/" element={<StudioProfile/>}/>
+                      <Route path="studios/:id/profile/" element={<StudioProfile/>}/>
+                      <Route path="studios/:id/edit/" element={<EditStudio/>}/>
+                      <Route path="studios/map/" element={<StudioMap/>}/>
+
+
 
                       {/* classes paths */}
                       <Route path="classes/" element={<Classes/>}/>

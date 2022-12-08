@@ -1,17 +1,18 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Autocomplete, Button, Input, TextField} from "@mui/material";
 import { tokenHandle } from "../../../pages/login";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import $ from 'jquery';
 import UserAPIContext from "../../../contexts/UserAPIContext";
-import Status404 from "../../Common/Errors/Status404";
+import {apiKey} from "../CreateStudio";
+import {DataGrid} from "@mui/x-data-grid";
 
-const CreateStudio = () => {
-    let apiKey = "9SkGRa52CMqNXGZI4xjATR8cogEMAruY";
+const EditStudio = () => {
     let navigate = useNavigate();
+    const { id } = useParams();
+    const [studio, setStudio] = useState({});
 
     const [name, setName] = useState('');
-
     const [address, setAddress] = useState('');
     const [long, setLong] = useState(0);
     const [lat, setLat] = useState(0);
@@ -29,6 +30,8 @@ const CreateStudio = () => {
     const [type, setType] = useState('');
     const [quantity, setQuantity] = useState(0);
 
+    const [rows, setRows] = useState([]);
+
     const { isAdmin } = useContext(UserAPIContext);
 
     const requestBody = () => {
@@ -36,26 +39,12 @@ const CreateStudio = () => {
             name: name,
             address: address,
             postal_code: postalCode,
+            longitude: long,
+            latitude: lat,
             phone: phone,
             amenities: amenities,
             images: images
         })
-        // const form_data = new FormData();
-        // form_data.append('name', name);
-        // form_data.append('address', address);
-        // form_data.append('longitude', long);
-        // form_data.append('latitude', lat);
-        // form_data.append('postal_code', postalCode);
-        // form_data.append('phone', phone);
-        //
-        // for (let i = 0; i < amenities.length; i++) {
-        //     form_data.append(`amenities[${i}]`, amenities[i]);
-        // }
-        // for (let i = 0; i < images.length; i++) {
-        //     form_data.append(`images[${i}]`, images[i]);
-        // }
-        //
-        // return form_data;
     }
 
     const submitReq = () => {
@@ -66,8 +55,8 @@ const CreateStudio = () => {
                     localStorage.setItem("lastPage", "/studios/add");
                     navigate("/login");
                 } else {
-                    fetch('http://localhost:8000/studios/new/', {
-                        method: 'POST',
+                    fetch(`http://localhost:8000/studios/${id}/edit/`, {
+                        method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${localStorage.getItem("token")}`,
@@ -76,7 +65,7 @@ const CreateStudio = () => {
                     })
                         .then(r => {
                             if (r.ok) {
-                                navigate('/studios');
+                                navigate(`/studios/${id}/profile/`);
                             } else {
                                 return r.json();
                             }
@@ -120,6 +109,7 @@ const CreateStudio = () => {
         setLat(val.position.lat);
     }
 
+
     const addAmenity = () => {
         const amty = {
             type: type,
@@ -131,34 +121,69 @@ const CreateStudio = () => {
         $('#amenity-qty').val('');
 
 
+
     }
 
-    const uploadImages = (e) => {
-        const img_arr = [...e.target.files];
 
-        for (let i = 0; i < img_arr.length; i++){
-            // setImages(images => [...images, {
-            //     'lastModified' : img_arr[i].lastModified,
-            //     'lastModifiedDate' :img_arr[i].lastModifiedDate,
-            //     'name' :img_arr[i].name,
-            //     'size' :img_arr[i].size,
-            //     'type' :img_arr[i].type,
-            //     'webkitRelativePath' :img_arr[i].webkitRelativePath
-            // }]);
-            setImages(images => [...images, e.target.files[i]]);
-            console.log(images);
+    const processRowUpdate = (newRow) => {
+        const updatedRow = { ...newRow, isNew: false };
+        const amty = {
+            type: newRow.type,
+            quantity: newRow.quantity
         }
-
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+        return updatedRow;
     }
+
+
+    useEffect(() => {
+        tokenHandle().then(success => {
+            if (!success) {
+                localStorage.setItem("lastPage", `/studios/${id}/edit`);
+                navigate("/login");
+            } else {
+                fetch(`http://localhost:8000/studios/${id}/edit`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                    }
+                })
+                    .then(r => r.json())
+                    .then(json => {
+                        setStudio(json);
+                        if (json.amenities !== undefined) {
+                            // TODO: check if row exists before appending
+                            json.amenities.map( (amenity, i) => {
+                                setAmenities(amenities => [...amenities, amenity]);
+                                setRows(rows => [...rows, {...amenity, id: i}]);
+                            })
+                        }
+                    })
+                    .catch(err => console.log(err))
+            }
+        })
+    }, [])
 
      return(
         <>
             {/*{ isAdmin ? <>*/}
-                    <h1>Add a studio</h1>
+                    <h1>Edit Studio</h1>
                     <form>
                         <TextField id="name" label="Name" variant="outlined"
                                    required onChange={e => setName(e.target.value)}
-                                   error={errors.name !== undefined} helperText={errors.name}/>
+                                   value={studio.name}
+                                   error={errors.name !== undefined} helperText={errors.name}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}/>
+
+                        <br/>
+                        <TextField id="prev-address" label="Previous Address" variant="outlined"
+                                   value={studio.address} editable={false}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}/>
 
                         <br/>
                         <Autocomplete
@@ -169,7 +194,9 @@ const CreateStudio = () => {
                             }
 
                             renderInput={ (params) =>
-                                <TextField {...params} id="address" label={"Address"}/>}
+                                <TextField {...params} id="address" label={"New Address"}
+                                         />}
+
                             sx={{ width: 200 }}
 
                             input={inputValue}
@@ -178,22 +205,57 @@ const CreateStudio = () => {
                             open={inputValue.length > 2}
                             onInputChange={onSearchChange}
                             onChange={onAddressSelection}
+
                             />
                         <br/>
 
                         <TextField id="postal_code" label="Postal Code" variant="outlined"
                                    required onChange={e => setPostalCode(e.target.value)}
-                                   error={errors.postal_code !== undefined} helperText={errors.postal_code}/>
+                                   value={studio.postal_code}
+                                   error={errors.postal_code !== undefined} helperText={errors.postal_code}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}/>
                         <br/>
 
                         <TextField id="phone" label="Phone Number" variant="outlined"
                                    required onChange={e => setPhone(e.target.value)}
-                                   error={errors.phone !== undefined} helperText={errors.phone}/>
+                                   value={studio.phone}
+                                   error={errors.phone !== undefined} helperText={errors.phone}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}/>
 
                         <br/>
 
-                        <div id="amenity">
-                            Amenities
+                        <h3>Amenities</h3>
+                        { studio.amenities !== undefined &&
+                        <div id="amenities" style={{ height: 300, width: 400 }}>
+                            <DataGrid
+                                columns={[
+                                {field: 'type', headerName: 'Type', width: 200, editable: true},
+                                {field: 'quantity', headerName: 'Quantity', type: 'number', editable: true},
+
+                                ]}
+
+                                rows={rows}
+
+                                editMode={"row"}
+
+
+                                // onRowEditStop={updateAmenities}
+
+                                processRowUpdate={processRowUpdate}
+                                experimentalFeatures={{ newEditingApi: true }}
+
+
+
+
+                            />
+                        </div>
+                        }
+
+                        <div id="add-amenities">
                             <br/>
                             <TextField id='amenity-type' label="Type" variant="outlined"
                                        onChange={e => setType(e.target.value)}/>
@@ -202,11 +264,15 @@ const CreateStudio = () => {
                                        InputProps={{ inputProps: { min: 0 } }}
                                        onChange={e => setQuantity(e.target.value)}/>
                             <br/>
-                            <Button id="create-button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
+                            <Button id="button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
                         </div>
+
+
+
 
                         <br/>
 
+                        <h3>Images</h3>
 
                         <br/>
                         <input accept="image/*"
@@ -214,7 +280,7 @@ const CreateStudio = () => {
                                multiple
                                style={{ display: 'none' }}
                                id="images-button"
-                               onChange={uploadImages}/>
+                               />
 
                         <label htmlFor="images-button">
                             <Button variant="contained" component="span">
@@ -225,7 +291,7 @@ const CreateStudio = () => {
 
                         <br/>
 
-                        <Button id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
+                        <Button id="submit-button" variant="outlined" onClick={submitReq}>SUBMIT</Button>
                     </form>
             {/*    </>*/}
             {/*    : <Status404/>*/}
@@ -235,4 +301,42 @@ const CreateStudio = () => {
 }
 
 
-export default CreateStudio;
+export default EditStudio;
+
+{/*{studio.amenities !== undefined ?*/}
+
+
+{/*<div id="edit-amenities">*/}
+{/*    <AmenityTable amenities={studio.amenities}></AmenityTable>*/}
+{/*    {studio.amenities.map((amty, i) =>*/}
+{/*        <>*/}
+{/*            <TextField id={`amenity-type-${i}`} label="Type" variant="outlined"*/}
+{/*                       value={amty.type}*/}
+{/*                       InputLabelProps={{*/}
+{/*                           shrink: true,*/}
+{/*                       }}*/}
+{/*                       onChange={e => setType(e.target.value)}/>*/}
+
+{/*            <TextField id={`amenity-qty-${i}`} type="number" variant="outlined"*/}
+{/*                       label={"Quantity"}*/}
+{/*                       InputProps={{ inputProps: { min: 0 } }}*/}
+{/*                       value={amty.quantity}*/}
+{/*                       InputLabelProps={{*/}
+{/*                           shrink: true,*/}
+{/*                       }}*/}
+{/*                       onChange={e => setQuantity(e.target.value)}/>*/}
+{/*            <br/>*/}
+{/*            <Button id={`amenity-delete-button-${i}`} variant="outlined"*/}
+{/*                    onClick={updateAmenities}>REMOVE</Button>*/}
+{/*            <Button id={`amenity-button-${i}`} variant="outlined"*/}
+{/*                    onClick={updateAmenities}>SUBMIT CHANGE</Button>*/}
+{/*            <br/>*/}
+{/*        </>*/}
+
+{/*    )}*/}
+{/*    <br/>*/}
+{/*    </div>*/}
+{/*: <></>}*/}
+
+
+{/*</div>*/}

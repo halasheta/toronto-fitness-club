@@ -1,21 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import {Box, Button, Grid, ImageList, ImageListItem, Paper} from "@mui/material";
+import {Button, Grid, ImageList, ImageListItem, Paper} from "@mui/material";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import {tokenHandle} from "../../../pages/login";
-import * as PropTypes from "prop-types";
 
-function Item(props) {
-    return null;
-}
-
-Item.propTypes = {children: PropTypes.node};
 const StudioProfile = () => {
     let navigate = useNavigate();
     const { id } = useParams();
     const { isAdmin } = useContext(UserAPIContext);
     const [studio, setStudio] = useState({});
 
+    const redirectEdit = () => {
+        navigate(`/studios/${id}/edit`);
+    }
     const submitDel = () => {
         fetch(`http://localhost:8000/studios/${id}/delete`, {
             method: 'DELETE',
@@ -32,6 +29,7 @@ const StudioProfile = () => {
             })
             .catch(err => console.log(err))
     }
+
 
     useEffect(() => {
         tokenHandle().then(success => {
@@ -50,6 +48,8 @@ const StudioProfile = () => {
                     .then(json => {
                         setStudio(json);
                         console.log(json);
+                        console.log(isAdmin);
+
                     })
                     .catch(err => console.log(err))
             }
@@ -59,6 +59,9 @@ const StudioProfile = () => {
     return(
         <>
             <h2> { studio.name }</h2>
+            {/*{ isAdmin &&*/}
+            <Button id="edit-button" variant="outlined" onClick={redirectEdit}>EDIT</Button>
+             {/*}*/}
             {studio.images !== undefined ?
                 <ImageList
                     sx={{ width: 500, height: 450 }}
@@ -96,9 +99,9 @@ const StudioProfile = () => {
             }
 
             <br/>
-            {/*{ isAdmin ? */}
+            {/*{ isAdmin && */}
                 <Button id="delete-button" variant="outlined" onClick={submitDel}>DELETE</Button>
-            {/*: <></> }*/}
+            {/* }*/}
         </>
     )
 

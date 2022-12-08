@@ -24,7 +24,7 @@ const StudiosTable = ({ perPage, params }) => {
                 <TableRow key={studio.id}>
                     <TableCell>{ (params.page - 1) * perPage + index + 1 }</TableCell>
                     <TableCell>
-                        <Link href={generatePath("/studios/:id", {id : studio.id })}
+                        <Link href={generatePath("/studios/:id/profile", {id : studio.id })}
                               underline={"hover"}>
                             { studio.name }
                         </Link>

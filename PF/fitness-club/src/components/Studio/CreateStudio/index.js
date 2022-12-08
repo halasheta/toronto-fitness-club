@@ -7,7 +7,6 @@ import UserAPIContext from "../../../contexts/UserAPIContext";
 import Status404 from "../../Common/Errors/Status404";
 
 const CreateStudio = () => {
-    let apiKey = "9SkGRa52CMqNXGZI4xjATR8cogEMAruY";
     let navigate = useNavigate();
 
     const [name, setName] = useState('');
@@ -35,6 +34,8 @@ const CreateStudio = () => {
         return JSON.stringify({
             name: name,
             address: address,
+            longitude: long,
+            latitude: lat,
             postal_code: postalCode,
             phone: phone,
             amenities: amenities,
@@ -154,7 +155,7 @@ const CreateStudio = () => {
      return(
         <>
             {/*{ isAdmin ? <>*/}
-                    <h1>Add a studio</h1>
+                    <h1>Add a Studio</h1>
                     <form>
                         <TextField id="name" label="Name" variant="outlined"
                                    required onChange={e => setName(e.target.value)}
@@ -236,3 +237,4 @@ const CreateStudio = () => {
 
 
 export default CreateStudio;
+export const { apiKey } = "9SkGRa52CMqNXGZI4xjATR8cogEMAruY";
