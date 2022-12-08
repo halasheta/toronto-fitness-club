@@ -33,6 +33,7 @@ const CreateStudio = () => {
     const { isAdmin } = useContext(UserAPIContext);
 
     const requestBody = () => {
+        console.log(images);
         return JSON.stringify({
             name: name,
             address: address,
@@ -143,26 +144,31 @@ const CreateStudio = () => {
     }
 
     const uploadImages = (e) => {
-        const img_arr = [...e.target.files];
+        console.log(e.target.files);
+        Array.from(e.target.files).map((image) => {
+            setImages(images => [...images, image]);
+        })
 
-        for (let i = 0; i < img_arr.length; i++){
-            // setImages(images => [...images, {
-            //     'lastModified' : img_arr[i].lastModified,
-            //     'lastModifiedDate' :img_arr[i].lastModifiedDate,
-            //     'name' :img_arr[i].name,
-            //     'size' :img_arr[i].size,
-            //     'type' :img_arr[i].type,
-            //     'webkitRelativePath' :img_arr[i].webkitRelativePath
-            // }]);
-            setImages(images => [...images, e.target.files[i]]);
-            console.log(images);
-        }
+        // const img_arr = [...e.target.files];
+        //
+        // for (let i = 0; i < img_arr.length; i++){
+        //     // setImages(images => [...images, {
+        //     //     'lastModified' : img_arr[i].lastModified,
+        //     //     'lastModifiedDate' :img_arr[i].lastModifiedDate,
+        //     //     'name' :img_arr[i].name,
+        //     //     'size' :img_arr[i].size,
+        //     //     'type' :img_arr[i].type,
+        //     //     'webkitRelativePath' :img_arr[i].webkitRelativePath
+        //     // }]);
+        //
+        //     console.log(images);
+        // }
 
     }
 
      return(
         <>
-            {/*{ isAdmin ? <>*/}
+            { isAdmin ? <>
                     <h1>Add a Studio</h1>
                     <form>
                         <TextField id="name" label="Name" variant="outlined"
@@ -218,7 +224,7 @@ const CreateStudio = () => {
 
 
                         <br/>
-                        <input accept="image/*"
+                        <input accept="image/jpeg, image/png, image/jpg"
                                type="file"
                                multiple
                                style={{ display: 'none' }}
@@ -236,9 +242,9 @@ const CreateStudio = () => {
 
                         <Button id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
                     </form>
-            {/*    </>*/}
-            {/*    : <Status404/>*/}
-            {/*}*/}
+                </>
+                : <Status404/>
+            }
         </>
         );
 }

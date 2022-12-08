@@ -4,7 +4,9 @@ import { tokenHandle } from "../../../pages/login";
 import {useNavigate, useParams} from "react-router-dom";
 import $ from 'jquery';
 import UserAPIContext from "../../../contexts/UserAPIContext";
-import {DataGrid} from "@mui/x-data-grid";
+import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import Status404 from "../../Common/Errors/Status404";
 
 const EditStudio = () => {
     let navigate = useNavigate();
@@ -106,9 +108,15 @@ const EditStudio = () => {
 
     const onAddressSelection = (e, val) => {
         setValue(val);
-        setAddress(val.address.freeformAddress);
-        setLong(val.position.lon);
-        setLat(val.position.lat);
+        if (val != null){
+            setAddress(val.address.freeformAddress);
+            setLong(val.position.lon);
+            setLat(val.position.lat);
+        } else {
+            setAddress('');
+            setLong(0);
+            setLat(0);
+        }
     }
 
 
@@ -118,10 +126,16 @@ const EditStudio = () => {
             quantity: parseInt(quantity)
         }
 
-        setAmenities(amenities => [...amenities, amty]);
+        if (amenities.indexOf(amty) === -1) {
+            setAmenities(amenities => [...amenities, amty]);
+        }
+
         $('#amenity-type').val('');
         $('#amenity-qty').val('');
 
+        if (rows.indexOf({...amty, id: rows.length}) === -1) {
+            setRows(rows => [...rows, {...amty, id: rows.length}]);
+        }
 
 
     }
@@ -129,13 +143,17 @@ const EditStudio = () => {
 
     const processRowUpdate = (newRow) => {
         const updatedRow = { ...newRow, isNew: false };
-        const amty = {
-            type: newRow.type,
-            quantity: newRow.quantity
-        }
+
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
         return updatedRow;
     }
+
+    const handleDeleteClick = (id) => () => {
+        setRows(rows.filter((row) => row.id !== id));
+        amenities.splice(id, 1);
+        console.log(amenities);
+    }
+
 
 
     useEffect(() => {
@@ -154,12 +172,27 @@ const EditStudio = () => {
                     .then(r => r.json())
                     .then(json => {
                         setStudio(json);
+
+                        setName(json.name);
+                        setPostalCode(json.postal_code);
+                        setPhone(json.phone);
+
+
                         if (json.amenities !== undefined) {
-                            // TODO: check if row exists before appending
+                            let rws = [];
+                            let amtys = [];
                             json.amenities.map( (amenity, i) => {
-                                setAmenities(amenities => [...amenities, amenity]);
-                                setRows(rows => [...rows, {...amenity, id: i}]);
+                                if (amtys.indexOf(amenity) === -1) {
+                                    amtys.push(amenity)
+                                }
+
+                                let row = {...amenity, id: i};
+                                if (rws.indexOf(row) === -1){
+                                    rws.push(row);
+                                }
                             })
+                            setRows(rws);
+                            setAmenities(amtys);
                         }
                     })
                     .catch(err => console.log(err))
@@ -167,14 +200,15 @@ const EditStudio = () => {
         })
     }, [])
 
-     return(
+
+    return(
         <>
-            {/*{ isAdmin ? <>*/}
+            { isAdmin ? <>
                     <h1>Edit Studio</h1>
                     <form>
                         <TextField id="name" label="Name" variant="outlined"
                                    required onChange={e => setName(e.target.value)}
-                                   value={studio.name}
+                                   value={name}
                                    error={errors.name !== undefined} helperText={errors.name}
                                    InputLabelProps={{
                                        shrink: true,
@@ -182,7 +216,7 @@ const EditStudio = () => {
 
                         <br/>
                         <TextField id="prev-address" label="Previous Address" variant="outlined"
-                                   value={studio.address} editable={false}
+                                   value={studio.address} editable="false"
                                    InputLabelProps={{
                                        shrink: true,
                                    }}/>
@@ -213,7 +247,7 @@ const EditStudio = () => {
 
                         <TextField id="postal_code" label="Postal Code" variant="outlined"
                                    required onChange={e => setPostalCode(e.target.value)}
-                                   value={studio.postal_code}
+                                   value={postalCode}
                                    error={errors.postal_code !== undefined} helperText={errors.postal_code}
                                    InputLabelProps={{
                                        shrink: true,
@@ -222,7 +256,7 @@ const EditStudio = () => {
 
                         <TextField id="phone" label="Phone Number" variant="outlined"
                                    required onChange={e => setPhone(e.target.value)}
-                                   value={studio.phone}
+                                   value={phone}
                                    error={errors.phone !== undefined} helperText={errors.phone}
                                    InputLabelProps={{
                                        shrink: true,
@@ -237,6 +271,15 @@ const EditStudio = () => {
                                 columns={[
                                 {field: 'type', headerName: 'Type', width: 200, editable: true},
                                 {field: 'quantity', headerName: 'Quantity', type: 'number', editable: true},
+                                {field: 'action', headerName: 'Action', type: 'actions',
+                                getActions: ({ id }) => {
+                                    return [<GridActionsCellItem
+                                        icon={<DeleteIcon />}
+                                        label="Delete"
+                                        onClick={handleDeleteClick(id)}
+                                        color="inherit"
+                                    />]
+                                }}
 
                                 ]}
 
@@ -244,15 +287,8 @@ const EditStudio = () => {
 
                                 editMode={"row"}
 
-
-                                // onRowEditStop={updateAmenities}
-
                                 processRowUpdate={processRowUpdate}
                                 experimentalFeatures={{ newEditingApi: true }}
-
-
-
-
                             />
                         </div>
                         }
@@ -295,9 +331,9 @@ const EditStudio = () => {
 
                         <Button id="submit-button" variant="outlined" onClick={submitReq}>SUBMIT</Button>
                     </form>
-            {/*    </>*/}
-            {/*    : <Status404/>*/}
-            {/*}*/}
+                </>
+                : <Status404/>
+            }
         </>
         );
 }
