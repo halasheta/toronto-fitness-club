@@ -21,6 +21,7 @@ const Profile = () => {
         let form_data = new FormData();
         form_data.append('email', email);
         form_data.append('avatar', e.target.files[0]);
+        form_data.append('is_superuser', isAdmin);
 
         fetch("http://localhost:8000/accounts/user/profile/", {
             method: 'PUT',
@@ -78,6 +79,7 @@ const Profile = () => {
             form_data.append('first_name', first);
             form_data.append('last_name', last);
             form_data.append('phone', phone);
+            form_data.append('is_superuser', isAdmin);
             fetch("http://localhost:8000/accounts/user/profile/", {
                 method: 'PUT',
                 headers: {
