@@ -118,9 +118,15 @@ const CreateStudio = () => {
 
     const onAddressSelection = (e, val) => {
         setValue(val);
-        setAddress(val.address.freeformAddress);
-        setLong(val.position.lon);
-        setLat(val.position.lat);
+        if (val != null){
+            setAddress(val.address.freeformAddress);
+            setLong(val.position.lon);
+            setLat(val.position.lat);
+        } else {
+            setAddress('');
+            setLong(0);
+            setLat(0);
+        }
     }
 
     const addAmenity = () => {
@@ -178,7 +184,7 @@ const CreateStudio = () => {
                             input={inputValue}
                             value={value || null}
 
-                            open={inputValue.length > 2}
+                            open={  inputValue !== undefined && inputValue.length > 2}
                             onInputChange={onSearchChange}
                             onChange={onAddressSelection}
                             />
