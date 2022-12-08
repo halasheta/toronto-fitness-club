@@ -46,7 +46,6 @@ const Subscriptions = () => {
                         }
                         return response.json()
                     }).then(data => {
-                        console.log(data)
                         setSubscriptions(data);
                     }).catch(err => {
                         console.log(err);
@@ -58,41 +57,69 @@ const Subscriptions = () => {
 
     const subscribe = (e) => {
         let pk = e.target.name;
-        console.log(pk);
-        tokenHandle().then(success => {
-                if (!success){
-                    localStorage.setItem("lastPage", "/subscriptions")
-                    navigate("/login");
-                } else {
-                    fetch("http://localhost:8000/subscriptions/"+ pk + "/subscribe/", {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem("token")}`,
-                        }
-                    }) .then(response => {
-                        if (!response.ok){
-                            return Promise.reject(response);
-                        }
-                        console.log(response)
-                        return response.json()
-                    }).then(data => {
-                        setSubscription(pk);
-                        setModalHeader("Success");
-                        setModalMessage("You have been successfully subscribed.")
-                        openModal();
-                    }).catch(err => {
-                        if (err.status === 400){
-                            // bring up error box showing that
-                            setModalHeader("Error");
-                            setModalMessage("You do not have an existing payment method saved.")
+        if (pk === subscription){
+            // unsubscribe user
+            tokenHandle().then(success => {
+                    if (!success){
+                        localStorage.setItem("lastPage", "/subscriptions")
+                        navigate("/login");
+                    } else {
+                        fetch("http://localhost:8000/subscriptions/"+ pk + "/unsubscribe/", {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                            }
+                        }).then(response => {
+                            if (!response.ok){
+                                return Promise.reject(response);
+                            }
+                            return response.json()
+                        }).then(data => {
+                            setSubscription(undefined);
+                            setModalHeader("Success");
+                            setModalMessage("You have been successfully unsubscribed.")
                             openModal();
-                        }
-                        // check if 400 because then redirect them to make a payment method
-                        console.log(err);
-                    })
+                        }).catch(err => {
+                            console.log(err);
+                        })
+                    }
                 }
-            }
-        )
+            )
+        } else {
+            tokenHandle().then(success => {
+                    if (!success){
+                        localStorage.setItem("lastPage", "/subscriptions")
+                        navigate("/login");
+                    } else {
+                        fetch("http://localhost:8000/subscriptions/"+ pk + "/subscribe/", {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                            }
+                        }) .then(response => {
+                            if (!response.ok){
+                                return Promise.reject(response);
+                            }
+                            return response.json()
+                        }).then(data => {
+                            setSubscription(pk);
+                            setModalHeader("Success");
+                            setModalMessage("You have been successfully subscribed.")
+                            openModal();
+                        }).catch(err => {
+                            if (err.status === 400){
+                                setModalHeader("Error");
+                                setModalMessage("You do not have an existing payment method saved.")
+                                openModal();
+                            }
+                            // check if 400 because then redirect them to make a payment method
+                            console.log(err);
+                        })
+                    }
+                }
+            )
+        }
+
     }
 
     const createSubscription = () => {
@@ -103,9 +130,6 @@ const Subscriptions = () => {
         getData();
     }, []);
 
-
-
-    // TODO: add subscriptions/new route to router
     return (
         <>
             <h1>Subscriptions</h1>
@@ -138,7 +162,7 @@ const Subscriptions = () => {
                                 <div className='subscription' key={prop}>
                                     <h2>{value.duration}</h2>
                                     <h2>{"$" + String(value.price)}</h2>
-                                    <Button id="subscribe-button" name={value.pk} variant="contained" onClick={subscribe} disabled={String(value.pk) === subscription}>Subscribe</Button>
+                                    <Button id="subscribe-button" name={value.pk} variant={String(value.pk) === subscription ? "contained" : "outlined"} onClick={subscribe} >{String(value.pk) === subscription ? "Unsubscribe" : "Subscribe"}</Button>
                                 </div>
                             </div>
                         </>

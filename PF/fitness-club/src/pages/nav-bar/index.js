@@ -31,7 +31,7 @@ const Layout = () => {
         <div>
             <Navbar bg="dark" variant="dark">
                 <NavbarBrand href="/">Toronto Fitness Club</NavbarBrand>
-                <Nav className="ml-auto" horizontal>
+                <Nav className="ml-auto">
                     <LinkContainer to="/studios"><NavLink>Studios</NavLink></LinkContainer>
 
                     <LinkContainer to="/classes"><NavLink>Classes</NavLink></LinkContainer>

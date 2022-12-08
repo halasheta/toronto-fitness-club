@@ -17,6 +17,8 @@ import StudioProfile from "./components/Studio/StudioProfile";
 import Subscription from "./components/Subscription";
 import EditStudio from "./components/Studio/EditStudio";
 import StudioMap from "./components/Studio/StudioMap";
+import CreateClass from "./components/Class/CreateClass";
+import Payments from "./pages/payments";
 
 function App() {
     const studios = (
@@ -55,6 +57,7 @@ function App() {
                       <Route path="signup/" element={<SignUp/>}/>
 
                       {/* payments paths */}
+                      <Route path="payments/" element={<Payments/>}/>
                   </Route>
               </Routes>
           </BrowserRouter>

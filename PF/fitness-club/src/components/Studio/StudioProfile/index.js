@@ -13,6 +13,10 @@ const StudioProfile = () => {
     const redirectEdit = () => {
         navigate(`/studios/${id}/edit`);
     }
+
+    const redirectClass = () => {
+        navigate(`/studios/${id}/classes/add`);
+    }
     const submitDel = () => {
         fetch(`http://localhost:8000/studios/${id}/delete`, {
             method: 'DELETE',
@@ -47,8 +51,6 @@ const StudioProfile = () => {
                     .then(r => r.json())
                     .then(json => {
                         setStudio(json);
-                        console.log(json);
-                        console.log(isAdmin);
 
                     })
                     .catch(err => console.log(err))
@@ -61,6 +63,8 @@ const StudioProfile = () => {
             <h2> { studio.name }</h2>
             {/*{ isAdmin &&*/}
             <Button id="edit-button" variant="outlined" onClick={redirectEdit}>EDIT</Button>
+
+            <Button id="class-button" variant="outlined" onClick={redirectClass}>ADD CLASS</Button>
              {/*}*/}
             {studio.images !== undefined ?
                 <ImageList

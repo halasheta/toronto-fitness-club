@@ -1,5 +1,16 @@
 import React, {useContext, useState} from 'react';
-import {Autocomplete, Box, Button, FormControl, Input, InputLabel, MenuItem, Select, TextField} from "@mui/material";
+import {
+    Autocomplete,
+    Box,
+    Button,
+    FormControl,
+    Input,
+    InputAdornment,
+    InputLabel,
+    MenuItem, OutlinedInput,
+    Select,
+    TextField
+} from "@mui/material";
 import { tokenHandle } from "../../pages/login";
 import { useNavigate } from "react-router-dom";
 import $ from 'jquery';
@@ -11,45 +22,57 @@ const Subscription = () => {
 
     const [duration, setDuration] = useState("");
     const [price, setPrice] = useState(0.00);
+    const [errors, setErrors] = useState({});
 
     const { isAdmin } = useContext(UserAPIContext);
 
     
 
     const submitReq = () => {
-        tokenHandle()
-            .then(success => {
-                if (!success) {
-                    // TODO: deal with unauthorized access (when a (non-admin) tries to access it)
-                    localStorage.setItem("lastPage", "/subscriptions/add")
-                    navigate("/login");
-                } else {
-                    fetch('http://localhost:8000/subscriptions/new/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${localStorage.getItem("token")}`,
-                        },
-                        body: JSON.stringify({
-                            duration: duration,
-                            price: price
-                        })
-                    })
-                        .then(r => {
-                            if (r.ok) {
-                                navigate('/subscriptions');
-                            } else {
-                                return r.json();
-                            }
-                        })
-                        .then(r => {
-                            let res = r.valueOf();
-                            console.log(res);
-                        })
-                        .catch(err => console.log(err))
-                }
-            })
+        let currErrors = {};
+        if (price < 1){
+            currErrors.price = "Please input a valid price."
+        }
 
+        if (duration === ""){
+            currErrors.duration = "Please select a duration."
+        }
+        setErrors(currErrors);
+
+        if (Object.entries(currErrors).length === 0){
+            tokenHandle()
+                .then(success => {
+                    if (!success) {
+                        // TODO: deal with unauthorized access (when a (non-admin) tries to access it)
+                        localStorage.setItem("lastPage", "/subscriptions/add")
+                        navigate("/login");
+                    } else {
+                        fetch('http://localhost:8000/subscriptions/new/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                            },
+                            body: JSON.stringify({
+                                duration: duration,
+                                price: price
+                            })
+                        })
+                            .then(r => {
+                                if (r.ok) {
+                                    navigate('/subscriptions');
+                                } else {
+                                    return r.json();
+                                }
+                            })
+                            .then(r => {
+                                let res = r.valueOf();
+                                console.log(res);
+                            })
+                            .catch(err => console.log(err))
+                    }
+                })
+        }
     }
 
 
@@ -64,14 +87,14 @@ const Subscription = () => {
     // TODO: fix dollar sign https://bytutorial.com/blogs/css3/how-to-add-a-currency-sign-inside-a-textbox-field
     return (
         <Box sx={{ minWidth: 120 }}>
-            <FormControl>
-                <InputLabel id="select-duration-label">Duration</InputLabel>
-                <Select
-                    labelId="select-duration-label"
+            <FormControl sx={{ minWidth: 120 }}  helperText={errors.duration}>
+                <TextField
                     id="select-duration"
                     value={duration}
                     label="Duration"
                     onChange={durationChange}
+                    error={errors.duration !== undefined}
+                    select
                 >
                     <MenuItem value={"ANNUAL"}>Annual</MenuItem>
                     <MenuItem value={"BIANNUAL"}>Biannual</MenuItem>
@@ -79,16 +102,24 @@ const Subscription = () => {
                     <MenuItem value={"BIWEEKLY"}>Biweekly</MenuItem>
                     <MenuItem value={"WEEKLY"}>Weekly</MenuItem>
                     <MenuItem value={"DAILY"}>Daily</MenuItem>
-                </Select>
-                <TextField
-                    id="filled-number"
-                    label="Price"
-                    type="Number"
-                    variant="outlined"
-                    onChange={priceChange}
-                />
+                </TextField>
             </FormControl>
             <br/>
+            <FormControl sx={{ minWidth: 120 }}  >
+                <TextField startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                           id="filled-number"
+                           label="Price"
+                           type="Number"
+                           variant="outlined"
+                           onChange={priceChange}
+                           InputProps={{
+                               startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                           }}
+                           error={errors.price !== undefined}
+                           helperText={errors.price}>
+                </TextField>
+                <br/>
+            </FormControl>
             <Button id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
         </Box>
     );

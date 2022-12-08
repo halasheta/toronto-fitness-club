@@ -206,11 +206,13 @@ class UnsubscribeView(generics.UpdateAPIView):
                                    charged=True).order_by('date__year', 'date__month',
                                                           'date__day', 'date__hour',
                                                           'date__minute').last()
-            last_date = last_payment.date.replace(tzinfo=timezone.get_current_timezone()) + last_payment.subscription.duration_num
 
-            invalid_classes = ClassOccurrence.objects.filter(start_time__gte=last_date, attendees__id=request.user.pk)
-            for invalid in invalid_classes:
-                invalid.attendees.remove(request.user)
+            if last_payment is not None:
+                last_date = last_payment.date.replace(tzinfo=timezone.get_current_timezone()) + last_payment.subscription.duration_num
+
+                invalid_classes = ClassOccurrence.objects.filter(start_time__gte=last_date, attendees__id=request.user.pk)
+                for invalid in invalid_classes:
+                    invalid.attendees.remove(request.user)
 
             return Response(status=status.HTTP_200_OK, data={"message": "User has been unsubscribed."})
         except ObjectDoesNotExist:
