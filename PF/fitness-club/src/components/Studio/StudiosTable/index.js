@@ -4,7 +4,7 @@ import StudiosAPIContext from "../../../contexts/StudiosAPIContext";
 import {Table, Paper, TableContainer, TableHead, TableRow, TableCell, TableBody, Link} from "@mui/material";
 import { generatePath } from "react-router-dom";
 
-const StudiosTable = ({ perPage, params }) => {
+const StudiosTable = ({ perPage, page }) => {
     const { studios } = useContext(StudiosAPIContext);
 
     return (
@@ -22,7 +22,7 @@ const StudiosTable = ({ perPage, params }) => {
         <TableBody>
             {studios.map((studio, index) => (
                 <TableRow key={studio.id}>
-                    <TableCell>{ (params.page - 1) * perPage + index + 1 }</TableCell>
+                    <TableCell>{ (page - 1) * perPage + index + 1 }</TableCell>
                     <TableCell>
                         <Link href={generatePath("/studios/:id/profile", {id : studio.id })}
                               underline={"hover"}>
