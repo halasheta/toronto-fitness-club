@@ -14,7 +14,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=200, default="placeholder", verbose_name="First Name")
     last_name = models.CharField(max_length=200, default="placeholder", verbose_name="Last Name")
     email = models.EmailField(unique=True, verbose_name="Email")
-    avatar = models.ImageField(upload_to=f"avatars", verbose_name="Avatar", blank=True, null=True)
+    avatar = models.ImageField(upload_to="avatars", verbose_name="Avatar", blank=True, null=True, default="avatars/orange_a8mlPZJ.png")
     phone_regex = RegexValidator(regex=r'^\d{10}$')
     phone = models.CharField(validators=[phone_regex], max_length=20, verbose_name="Phone", blank=True, null=True)
     is_staff = models.BooleanField(default=False)

@@ -80,21 +80,20 @@ const StudioProfile = () => {
                     <Button id="class-button" variant="outlined" onClick={redirectClass}>ADD CLASS</Button>
                 </>
              }
-            {studio.images !== undefined ?
-                <ImageList
-                    sx={{ width: 500, height: 450 }}
-                    variant="quilted"
-                    cols={4}
-                    rowHeight={121}>
-                    {studio.images.map((img) => (
-                        <>
-                            <ImageListItem key={img.image} cols={1} rows={1}>
-                                <img src={img.image} loading="lazy"/>
-                            </ImageListItem>
-                        </>
-                        ))}
-                </ImageList>
-                : <></>
+            {studio.image1 !== undefined && studio.image1 != null &&
+                <img alt='profile' src={studio.image1} width="250"/>
+            }
+            {studio.image2 !== undefined  && studio.image2 != null &&
+                <img alt='profile' src={studio.image2} width="250"/>
+            }
+            {studio.image3 !== undefined && studio.image3 != null &&
+                <img alt='profile' src={studio.image3} width="250"/>
+            }
+            {studio.image4 !== undefined && studio.image4 != null &&
+                <img alt='profile' src={studio.image4} width="250"/>
+            }
+            {studio.image5 !== undefined && studio.image5 != null &&
+                <img alt='profile' src={studio.image5} width="250"/>
             }
             <p> Address: { studio.address }</p>
             <p> Postal Code: { studio.postal_code }</p>

@@ -31,24 +31,63 @@ const EditStudio = () => {
     const [type, setType] = useState('');
     const [quantity, setQuantity] = useState(0);
 
+    const [image1, setImage1] = useState(null);
+    const [image2, setImage2] = useState(null);
+    const [image3, setImage3] = useState(null);
+    const [image4, setImage4] = useState(null);
+    const [image5, setImage5] = useState(null);
+
+    const [image1New, setImage1New] = useState(null);
+    const [image2New, setImage2New] = useState(null);
+    const [image3New, setImage3New] = useState(null);
+    const [image4New, setImage4New] = useState(null);
+    const [image5New, setImage5New] = useState(null);
+
     const [rows, setRows] = useState([]);
 
     const { isAdmin } = useContext(UserAPIContext);
 
     const apiKey = "9SkGRa52CMqNXGZI4xjATR8cogEMAruY";
 
-
     const requestBody = () => {
-        return JSON.stringify({
-            name: name,
-            address: address,
-            postal_code: postalCode,
-            longitude: long,
-            latitude: lat,
-            phone: phone,
-            amenities: amenities,
-            images: images
-        })
+        // return JSON.stringify({
+        //     name: name,
+        //     address: address,
+        //     postal_code: postalCode,
+        //     longitude: long,
+        //     latitude: lat,
+        //     phone: phone,
+        //     amenities: amenities
+        // })
+        const form_data = new FormData();
+        form_data.append('name', name);
+        form_data.append('address', address);
+        form_data.append('longitude', long);
+        form_data.append('latitude', lat);
+        form_data.append('postal_code', postalCode);
+        form_data.append('phone', phone);
+        // form_data.append("amenities", amenities);
+
+        // for (let i = 0; i < amenities.length; i++) {
+        //     form_data.append(`amenities[${i}]`, amenities[i]);
+        // }
+        if (image1New !== null){
+            form_data.append('image1', image1New)
+        }
+        if (image2New !== null){
+            form_data.append('image2', image2New)
+        }
+        if (image3New !== null){
+            form_data.append('image3', image3New)
+        }
+        if (image4New !== null){
+            form_data.append('image4', image4New)
+        }
+        if (image5New !== null){
+            form_data.append('image5', image5New)
+        }
+
+        return form_data;
     }
 
     const submitReq = () => {
@@ -84,7 +123,6 @@ const EditStudio = () => {
             })
 
     }
-
 
     const onSearchChange = async (e) => {
         setInputValue(e.target.value);
@@ -174,6 +212,12 @@ const EditStudio = () => {
                         setPostalCode(json.postal_code);
                         setPhone(json.phone);
                         setAddress(json.address);
+                        setImage1(json.image1);
+                        setImage2(json.image2);
+                        setImage3(json.image3);
+                        setImage4(json.image4);
+                        setImage5(json.image5);
+
 
 
                         if (json.amenities !== undefined) {
@@ -197,6 +241,25 @@ const EditStudio = () => {
             }
         })
     }, [])
+
+    const uploadImage = (e) => {
+        if (e.target.name === "image1"){
+            setImage1(URL.createObjectURL(e.target.files[0]));
+            setImage1New(e.target.files[0]);
+        } else if (e.target.name === "image2"){
+            setImage2(URL.createObjectURL(e.target.files[0]));
+            setImage2New(e.target.files[0]);
+        } else if (e.target.name === "image3"){
+            setImage3(URL.createObjectURL(e.target.files[0]));
+            setImage3New(e.target.files[0]);
+        } else if (e.target.name === "image4"){
+            setImage4(URL.createObjectURL(e.target.files[0]));
+            setImage4New(e.target.files[0]);
+        } else if (e.target.name === "image5"){
+            setImage5(URL.createObjectURL(e.target.files[0]));
+            setImage5New(e.target.files[0]);
+        }
+    }
 
 
     return(
@@ -309,20 +372,41 @@ const EditStudio = () => {
                         <br/>
 
                         <h3>Images</h3>
+                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-1"
+                                                        type="file" name="image1" onChange={uploadImage}/>
+                            <label htmlFor="img-button-file-1">
+                                <Button variant="contained" component="span"> Choose Image </Button>
+                            </label> </div>
+                        {image1 != null && <img alt='new-img-1' src={image1} width="100"/>}
 
-                        <br/>
-                        <input accept="image/*"
-                               type="file"
-                               multiple
-                               style={{ display: 'none' }}
-                               id="images-button"
-                               />
+                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-2"
+                                     type="file" name="image2" onChange={uploadImage}/>
+                            <label htmlFor="img-button-file-2">
+                                <Button variant="contained" component="span"> Choose Image </Button>
+                            </label> </div>
+                        {image2 != null && <img alt='new-img-2' src={image2} width="100"/>}
 
-                        <label htmlFor="images-button">
-                            <Button variant="contained" component="span">
-                                UPLOAD IMAGES
-                            </Button>
-                        </label>
+                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-3"
+                                     type="file" name="image3" onChange={uploadImage}/>
+                            <label htmlFor="img-button-file-3">
+                                <Button variant="contained" component="span"> Choose Image </Button>
+                            </label> </div>
+                        {image3 != null && <img alt='new-img-3' src={image3} width="100"/>}
+
+                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-4"
+                                     type="file" name="image4" onChange={uploadImage}/>
+                            <label htmlFor="img-button-file-4">
+                                <Button variant="contained" component="span"> Choose Image </Button>
+                            </label> </div>
+                        {image4 != null && <img alt='new-img-4' src={image4} width="100"/>}
+
+
+                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-5"
+                                     type="file" name="image5" onChange={uploadImage}/>
+                            <label htmlFor="img-button-file-5">
+                                <Button variant="contained" component="span"> Choose Image </Button>
+                            </label> </div>
+                        {image5 != null && <img alt='new-img-5' src={image5} width="100"/>}
                         <br/>
 
                         <br/>

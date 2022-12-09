@@ -4,18 +4,23 @@ const UserContext = createContext({
     isAdmin: null,
     setIsAdmin: () => {},
     subscription: null,
-    setSubscription: () => {}
+    setSubscription: () => {},
+    classTypes: [],
+    setClassTypes: () => {}
 });
 
 export const useUserAPIContext = () => {
     const [isAdmin, setIsAdmin] = useState(null);
     const [subscription, setSubscription] = useState(null);
+    const [classTypes, setClassTypes] = useState([]);
 
     return {
         isAdmin,
         setIsAdmin,
         subscription,
         setSubscription,
+        classTypes,
+        setClassTypes
     }
 
 }

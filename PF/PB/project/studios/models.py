@@ -18,6 +18,12 @@ class Studio(models.Model):
     phone_regex = RegexValidator(regex=r'^\d{10}$')
     phone = models.CharField(validators=[phone_regex], max_length=20)
 
+    image1 = models.ImageField(upload_to="studios", verbose_name="Image1", blank=True, null=True)
+    image2 = models.ImageField(upload_to="studios", verbose_name="Image2", blank=True, null=True)
+    image3 = models.ImageField(upload_to="studios", verbose_name="Image3", blank=True, null=True)
+    image4 = models.ImageField(upload_to="studios", verbose_name="Image4", blank=True, null=True)
+    image5 = models.ImageField(upload_to="studios", verbose_name="Image5", blank=True, null=True)
+
 
 class StudioAmenity(models.Model):
     """

@@ -12,30 +12,35 @@ const Profile = () => {
     const [phone, setPhone] = useState('');
     const [avatar, setAvatar] = useState(null);
     const [errors, setErrors] = useState({});
+    const [newAvatarLink, setNewAvatarLink] = useState('');
+    const [newAvatar, setNewAvatar] = useState('');
 
     const { isAdmin, subscription } = useContext(UserAPIContext);
 
     let navigate = useNavigate();
 
     function uploadAvatar (e) {
-        let form_data = new FormData();
-        form_data.append('email', email);
-        form_data.append('avatar', e.target.files[0]);
-        form_data.append('is_superuser', isAdmin);
+        setNewAvatarLink(URL.createObjectURL(e.target.files[0]));
+        setNewAvatar(e.target.files[0]);
 
-        fetch("http://localhost:8000/accounts/user/profile/", {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: form_data,
-        }).then(response => {
-            return response.json();
-        }).then(data => {
-            setAvatar(data.avatar)
-        }).catch(err => {
-            console.log(err);
-        })
+        // let form_data = new FormData();
+        // form_data.append('email', email);
+        // form_data.append('avatar', e.target.files[0]);
+        // form_data.append('is_superuser', isAdmin);
+        //
+        // fetch("http://localhost:8000/accounts/user/profile/", {
+        //     method: 'PUT',
+        //     headers: {
+        //         'Authorization': `Bearer ${localStorage.getItem("token")}`,
+        //     },
+        //     body: form_data,
+        // }).then(response => {
+        //     return response.json();
+        // }).then(data => {
+        //     setAvatar(data.avatar)
+        // }).catch(err => {
+        //     console.log(err);
+        // })
     }
 
     const getData = () => {
@@ -55,11 +60,11 @@ const Profile = () => {
                         }
                         return response.json()
                     }).then(data => {
-                        setFirst(data.first_name)
-                        setLast(data.last_name)
-                        setEmail(data.email)
-                        setAvatar(data.avatar)
-                        setPhone(data.phone)
+                        setFirst(data.first_name);
+                        setLast(data.last_name);
+                        setEmail(data.email);
+                        setAvatar(data.avatar);
+                        setPhone(data.phone);
                     }).catch(err => {
                         console.log(err);
                     })
@@ -78,6 +83,9 @@ const Profile = () => {
             form_data.append('last_name', last);
             form_data.append('phone', phone);
             form_data.append('is_superuser', isAdmin);
+            if (newAvatar !== ""){
+                form_data.append('avatar', newAvatar);
+            }
             fetch("http://localhost:8000/accounts/user/profile/", {
                 method: 'PUT',
                 headers: {
@@ -92,7 +100,8 @@ const Profile = () => {
                 setEmail(data.email);
                 setPhone(data.phone);
                 setAvatar(data.avatar);
-
+                setNewAvatar("");
+                setNewAvatarLink("");
             }).catch(err => {
                 console.log(err);
             })
@@ -110,13 +119,13 @@ const Profile = () => {
         style={{ display: 'none' }}
         id="avatar-button-file"
         type="file"
-        onChange={uploadAvatar}
-    />
+        onChange={uploadAvatar}/>
         <label htmlFor="avatar-button-file">
             <Button variant="contained" component="span">
-                Upload Avatar
+                Choose Avatar
             </Button>
         </label>
+        {newAvatar !== "" && <img alt='new-profile' src={newAvatarLink} width="100"/>}
         <form>
         <TextField id="first_name" label="First Name" variant="outlined" required onChange={e => setFirst(e.target.value)}
             error={errors.first !== undefined} helperText={errors.first} value={first}/>

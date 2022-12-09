@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useContext } from "react";
 import {
     Table,
@@ -10,24 +10,47 @@ import {
     TableBody,
     Button,
     Dialog,
-    DialogTitle, DialogContent, RadioGroup, FormControlLabel, Radio
+    DialogTitle, DialogContent, RadioGroup, FormControlLabel, Radio, Box, Typography, Modal
 } from "@mui/material";
 import $ from 'jquery';
 import ClassesAPIContext from "../../../contexts/ClassesAPIContext";
 import {GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import UserAPIContext from "../../../contexts/UserAPIContext";
+import {useNavigate} from "react-router-dom";
 
 const ClassesTable = ({ perPage, page }) => {
     const { setClasses, classes } = useContext(ClassesAPIContext);
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState("occurrence");
     const [currClass, setCurrClass] = useState(0);
     const { isAdmin } = useContext(UserAPIContext);
+    const [modalHeader, setModalHeader] = useState("Success");
+    const [modalMessage, setModalMessage] = useState("You have been successfully subscribed.");
+    const navigate = useNavigate();
+    const [userClasses, setUserClasses] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const openModal = () => setModalOpen(true);
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate("/subscriptions");
+    };
 
     const handleClose = () => {
         setOpen(false);
     }
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
 
     const handleDelete = (clss) => {
         setClasses((prev) => prev.filter((c) => c.id !== clss.id));
@@ -42,6 +65,23 @@ const ClassesTable = ({ perPage, page }) => {
 
     }
 
+    const userEnrolled = () => {
+        fetch(`http://localhost:8000/classes/schedule/?limit=1000`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            }})
+            .then(r => r.json())
+            .then(data => {
+                let ids = [];
+                Object.entries(data.results).map((inst) => {
+                    ids.push(inst[1]["id"]);
+                })
+
+                setUserClasses(ids);
+            })
+            .catch(err => console.log(err))
+    }
 
     const handleSubmit = (e) => {
         let modelId = currClass.id;
@@ -59,16 +99,41 @@ const ClassesTable = ({ perPage, page }) => {
                 if (!r.ok){
                     return Promise.reject(r);
                 }
+                $("#"+`enrol-button-${currClass.id}`).attr("disabled", true);
+                userEnrolled();
+                handleClose();
             })
             .catch(err => {
-                console.log("User has no active subscription.");
+                setModalHeader("Error");
+                setModalMessage("User has no active subscription. Please choose a subscription plan.");
+                openModal();
             })
 
-        $(`enrol-button-${currClass.id}`).attr("disabled", true);
-        handleClose();
+
     }
 
+    useEffect(() => {
+        userEnrolled();
+    }, [])
+
     return (
+        <>
+            <Modal
+                open={modalOpen}
+                onClose={closeModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        {modalHeader}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {modalMessage}
+                    </Typography>
+                </Box>
+            </Modal>
+
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -99,6 +164,7 @@ const ClassesTable = ({ perPage, page }) => {
                     <TableCell>{ clss.end_time }</TableCell>
                     <TableCell>
                         <Button id={`enrol-button-${clss.id}`}
+                                disabled={userClasses.indexOf(clss.id) !== -1}
                                 onClick={e => {
                                         setOpen(true);
                                         setCurrClass(clss);}
@@ -108,6 +174,7 @@ const ClassesTable = ({ perPage, page }) => {
                             <DialogTitle>Enrol in...</DialogTitle>
                             <DialogContent>
                                 <RadioGroup
+                                    defaultValue="occurrence"
                                 onChange={e => setValue(e.target.value)}>
                                     <FormControlLabel value="occurrence" control={<Radio />}
                                                       label="This class only" />
@@ -134,6 +201,7 @@ const ClassesTable = ({ perPage, page }) => {
         </TableBody>
             </Table>
         </TableContainer>
+        </>
     )
 }
 

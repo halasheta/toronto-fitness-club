@@ -85,7 +85,7 @@ const SignUp = () => {
                 <TextField id="phone" label="Phone" variant="outlined" required onChange={e => setPhone(e.target.value)}
                            error={errors.phone !== undefined} helperText={errors.phone} type="number"/>
                 <TextField id="password" label="Password" type="password" variant="outlined" required onChange={e => setPassword1(e.target.value)}
-                           error={errors.password1 !== undefined} helperText={errors.password2}/>
+                           error={errors.password1 !== undefined} helperText={errors.password1}/>
                 <TextField id="password2" label="Confirm Password" variant="outlined" type="password" required  onChange={e => setPassword2(e.target.value)}
                            error={errors.password2 !== undefined} helperText={errors.password2}/>
                 <input

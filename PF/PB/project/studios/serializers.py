@@ -21,7 +21,7 @@ class StudioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Studio
         fields = ["id", "name", "address", "longitude", "latitude", "postal_code", "phone",
-                  "amenities"]
+                  "amenities", "image1", "image2", "image3", "image4", "image5"]
 
     amenities = StudioAmenitySerializer(many=True, required=False)
 
