@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
-import UserAPIContext from "../../contexts/UserAPIContext";
-import ClassesAPIContext from "../../contexts/ClassesAPIContext";
-import ClassesTable from "../../components/Class/ClassesTable";
-import {tokenHandle} from "../login";
+import UserAPIContext from "../../../contexts/UserAPIContext";
+import ClassesAPIContext from "../../../contexts/ClassesAPIContext";
+import {tokenHandle} from "../../../pages/login";
+import ClassInstanceTable from "../ClassInstanceTable";
 
-const Classes = () => {
+const ClassInstancePage = () => {
     const perPage = 5;
     const [page, setPage] = useState(1);
     const [open, setOpen] = useState(false);
@@ -26,10 +26,10 @@ const Classes = () => {
     useEffect(() => {
         tokenHandle().then(success => {
             if (!success) {
-                localStorage.setItem("lastPage", "/classes/");
+                localStorage.setItem("lastPage", "/classes/instances/");
                 navigate("/login");
             } else {
-                fetch(`http://localhost:8000/classes/search?offset=${offset}&limit=${perPage}&`
+                fetch(`http://localhost:8000/classes/instances?offset=${offset}&limit=${perPage}&`
                     + new URLSearchParams(filter), {
                     method: 'GET',
                     headers: {
@@ -63,7 +63,7 @@ const Classes = () => {
 
     return (
         <>
-            <h1> Classes by Occurrence </h1>
+            <h1> Classes by Type </h1>
             <Button variant={"outlined"} onClick={handleOpen}>FILTER</Button>
             <Button variant={"outlined"} onClick={e => setFilter({})}>CLEAR FILTER</Button>
             <Dialog open={open} onClose={handleClose}>
@@ -79,41 +79,11 @@ const Classes = () => {
                                    ...filter,
                                    coach__icontains: e.target.value})}/>
 
-                    <TextField autoFocus id="start-time-lte" type="time"
-                               label="Start time before..." variant="standard"
+                    <TextField autoFocus id="keywords" label="Keywords" variant="standard"
                                onChange={e => setFilter({
                                    ...filter,
-                                   start_time__lte: e.target.value})}/>
+                                   keywords__icontains: e.target.value})}/>
 
-                    <TextField autoFocus id="start-time" type="time"
-                               label="Exact Start Time" variant="standard"
-                               onChange={e => setFilter({
-                                   ...filter,
-                                   start_time__exact: e.target.value})}/>
-
-                    <TextField autoFocus id="start-time-gte" type="time"
-                               label="Start time after..." variant="standard"
-                               onChange={e => setFilter({
-                                   ...filter,
-                                   start_time__gte: e.target.value})}/>
-
-                    <TextField autoFocus id="end-time-lte" type="time"
-                               label="End time before..." variant="standard"
-                               onChange={e => setFilter({
-                                   ...filter,
-                                   end_time__lte: e.target.value})}/>
-
-                    <TextField autoFocus id="end-time" type="time"
-                               label="Exact End Time" variant="standard"
-                               onChange={e => setFilter({
-                                   ...filter,
-                                   end_time__exact: e.target.value})}/>
-
-                    <TextField autoFocus id="end-time-gte" type="time"
-                               label="End time after..." variant="standard"
-                               onChange={e => setFilter({
-                                   ...filter,
-                                   end_time__gte: e.target.value})}/>
 
                 </DialogContent>
                 <DialogActions>
@@ -124,7 +94,7 @@ const Classes = () => {
                 </DialogActions>
 
             </Dialog>
-            <ClassesTable perPage={perPage} page={page}></ClassesTable>
+            <ClassInstanceTable perPage={perPage} page={page}></ClassInstanceTable>
             <Button id={'prev-button'}
                     variant={"contained"}
                     onClick={() => {
@@ -151,4 +121,4 @@ const Classes = () => {
     )
 }
 
-export default Classes;
+export default ClassInstancePage;

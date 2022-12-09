@@ -39,8 +39,6 @@ const Profile = () => {
     }
 
     const getData = () => {
-        
-        console.log(subscription)
         tokenHandle().then(success => {
                 if (!success){
                     localStorage.setItem("lastPage", "/profile")

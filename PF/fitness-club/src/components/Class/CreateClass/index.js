@@ -31,7 +31,6 @@ const CreateClass = () => {
     const [errors, setErrors] = useState({});
 
     const requestBody = () => {
-        console.log(endRecurrence.toString());
         return JSON.stringify({
             studio: id,
             name: name,

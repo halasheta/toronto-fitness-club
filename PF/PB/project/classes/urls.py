@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import CreateClass, EditClass, DeleteClass, EnrolClass, DropClass, UserClassSchedule, SearchClasses
+from .views import CreateClass, EditClass, DeleteClass, EnrolClass, DropClass, \
+    SearchClassInstances, UserClassSchedule, SearchClasses
 
 app_name = "classes"
 
@@ -12,4 +13,5 @@ urlpatterns = [
     path("drop/", DropClass.as_view()),
     path("schedule/", UserClassSchedule.as_view()),
     path("search/", SearchClasses.as_view()),
+    path("instances/", SearchClassInstances.as_view()),
 ]

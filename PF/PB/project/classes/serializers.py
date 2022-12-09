@@ -4,6 +4,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from studios.serializers import StudioSerializer
 from .models import Class, ClassOccurrence
 
 
@@ -11,10 +12,13 @@ class ClassOccurrenceSerializer(serializers.ModelSerializer):
     """
         Serializer class for the ClassOccurrence model.
     """
+    studio = StudioSerializer(read_only=True)
+
     class Meta:
         model = ClassOccurrence
         fields = ['id', 'name', 'coach', 'description', 'keywords', 'capacity', 'start_time', 'end_time',
-                  'class_model', 'attendees']
+                  'class_model', 'attendees', 'studio']
+        read_only_fields = ['class_model', 'studio']
 
 
 class ClassSerializer(serializers.ModelSerializer):
@@ -22,11 +26,13 @@ class ClassSerializer(serializers.ModelSerializer):
         Serializer class for the Class model.
     """
     frequency = serializers.IntegerField(required=True)
+    occurrences = ClassOccurrenceSerializer(read_only=True, many=True)
 
     class Meta:
         model = Class
         fields = ['id', 'name', 'coach', 'description', 'keywords', 'capacity', 'studio',
-                  'start_date', 'start_time', 'end_time', 'frequency', 'end_recurrence']
+                  'start_date', 'start_time', 'end_time', 'frequency', 'end_recurrence', 'occurrences']
+        read_only_fields = ['occurrences', 'studio']
 
     def validate(self, attrs):
         try:

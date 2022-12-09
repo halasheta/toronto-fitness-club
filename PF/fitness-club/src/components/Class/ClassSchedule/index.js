@@ -24,7 +24,7 @@ import $ from "jquery";
 
 const ClassSchedule = () => {
     const [classes, setClasses] = useState({});
-    const [currMonthClasses, setCurrMonthClasses] = useState({});
+    const [currMonthClasses, setCurrMonthClasses] = useState(null);
     const [currDate, setCurrDate] = useState(dayjs().add(-5, 'hour'));
     const [viewKey, setViewKey] = useState(String(currDate.year()) + "/" + String(currDate.month() + 1));
     const [months, setMonths] = useState([]);
@@ -220,8 +220,12 @@ const ClassSchedule = () => {
                 <p id="current-month">{viewKey}</p>
                 <Button onClick={paginate} id="page-next" name="add" variant="contained">{">"}</Button>
             </div>
-            {(currMonthClasses == null || Object.entries(currMonthClasses).length === 0) &&
+            {(currMonthClasses != null && Object.entries(currMonthClasses).length === 0) &&
                 <p> You have no classes scheduled this month. </p>
+            }
+
+            {(currMonthClasses == null) &&
+                <p> Loading classes </p>
             }
 
             <Timeline
@@ -233,6 +237,7 @@ const ClassSchedule = () => {
             >
 
             {currMonthClasses != null && Object.entries(currMonthClasses).map(([prop, value]) => {
+                console.log(value);
                 if (Object.keys(currMonthClasses).indexOf(prop) !== Object.entries(currMonthClasses).length - 1){
                     return (
                         <>
@@ -249,9 +254,12 @@ const ClassSchedule = () => {
                                 <TimelineContent>
                                     <b>Name: </b>{value.name}
                                     <br/>
-                                    <b>Coach: </b>${value.coach}
+                                    <b>Coach: </b>{value.coach}
                                     <br/>
                                     <b>Description: </b>{value.description}
+                                    <br/>
+                                    <b>Studio: </b>{value.studio.name}
+                                    <p></p>
                                 </TimelineContent>
 
                                 <TimelineContent>
@@ -285,6 +293,8 @@ const ClassSchedule = () => {
                                     <b>Coach: </b>${value.coach}
                                     <br/>
                                     <b>Description: </b>{value.description}
+                                    <br/>
+                                    <b>Studio: </b>{value.studio.name}
                                 </TimelineContent>
 
                                 <TimelineContent>

@@ -32,20 +32,18 @@ const Layout = () => {
             <Navbar bg="dark" variant="dark">
                 <NavbarBrand href="/">Toronto Fitness Club</NavbarBrand>
                 <Nav className="ml-auto">
+                    <LinkContainer to="/subscriptions"><NavLink>Subscriptions</NavLink></LinkContainer>
 
                     <NavDropdown title="Studios" id="nav-dropdown-logged-in">
                         <NavDropdown.Item as={Link} to="/studios"> View All Studios</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/studios/map">Studios near me</NavDropdown.Item>
                     </NavDropdown>
 
-                    {/*// TODO: add /classes/schedule to router*/}
-
                     <NavDropdown title="Classes" id="nav-dropdown-logged-in">
-                        <NavDropdown.Item as={Link} to="/classes"> View All Classes</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/classes"> View Classes by Occurrence</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/classes/instances/"> View Classes by Type</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/classes/schedule">Class Schedule</NavDropdown.Item>
                     </NavDropdown>
-
-                    <LinkContainer to="/subscriptions"><NavLink>Subscriptions</NavLink></LinkContainer>
 
                     {loggedIn &&
                         <NavDropdown title="Accounts" id="nav-dropdown-logged-in">

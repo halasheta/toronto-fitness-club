@@ -98,6 +98,7 @@ class EditClass(RetrieveAPIView, UpdateAPIView):
                                   minute=instance.end_time.minute)
 
             c.save()
+            return Response(status=status.HTTP_200_OK, data={"Class occurrence updated."})
 
         # Update class model and all future occurrences
         all_flag = request.query_params.get('all')
@@ -147,6 +148,7 @@ class EditClass(RetrieveAPIView, UpdateAPIView):
 
             create_class_occurrences(instance, last_date)
             instance.save()
+            print("REACHED***************")
             return Response(serializer.data)
 
 
@@ -289,4 +291,21 @@ class SearchClasses(ListAPIView):
     }
 
     def get_queryset(self):
-        return ClassOccurrence.objects.all()
+        return ClassOccurrence.objects.filter(start_time__gte=timezone.now())
+
+
+class SearchClassInstances(ListAPIView):
+    """
+        Allows users to filter the class instances by name and coach.
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = ClassSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = {
+        'name': ['icontains'],
+        'coach': ['icontains'],
+        'keywords': ['icontains']
+    }
+
+    def get_queryset(self):
+        return Class.objects.filter(end_time__gte=timezone.now())

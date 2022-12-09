@@ -21,6 +21,8 @@ import CreateClass from "./components/Class/CreateClass";
 import Payments from "./pages/payments";
 import ClassesAPIContext, {useClassesAPIContext} from "./contexts/ClassesAPIContext";
 import ClassSchedule from "./components/Class/ClassSchedule";
+import EditClass from "./components/Class/EditClass";
+import ClassInstancePage from "./components/Class/ClassInstancePage";
 
 function App() {
     const studios = (
@@ -35,12 +37,18 @@ function App() {
         </ClassesAPIContext.Provider>
     )
 
+    const classInstances = (
+        <ClassesAPIContext.Provider value={ useClassesAPIContext() }>
+            <ClassInstancePage/>
+        </ClassesAPIContext.Provider>
+    )
+
   return (
       <UserAPIContext.Provider value={ useUserAPIContext() }>
           <BrowserRouter>
               <Routes>
                   <Route path="/" element={<Layout/>}>
-                      <Route index element={<Home/>}/>
+                      <Route index element={<ClassSchedule/>}/>
 
                       {/* studios paths */}
                       <Route path="studios/" element={ studios }/>
@@ -55,6 +63,8 @@ function App() {
                       <Route path="classes/" element={ classes }/>
                       <Route path="studios/:id/classes/add/" element={<CreateClass/>}/>
                       <Route path="classes/schedule/" element={<ClassSchedule/>}/>
+                      <Route path="classes/:id/edit/" element={<EditClass/>}/>
+                      <Route path="classes/instances/" element={ classInstances }/>
 
                       {/* subscriptions paths */}
                       <Route path="subscriptions/" element={<Subscriptions/>}/>

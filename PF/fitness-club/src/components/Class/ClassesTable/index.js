@@ -18,7 +18,6 @@ import ClassesAPIContext from "../../../contexts/ClassesAPIContext";
 const ClassesTable = ({ perPage, page }) => {
     const { classes } = useContext(ClassesAPIContext);
     const [open, setOpen] = useState(false);
-    const [collapseOpen, setCollapseOpen] = useState(false);
     const [value, setValue] = useState('');
     const [currClass, setCurrClass] = useState(0);
 
@@ -30,7 +29,7 @@ const ClassesTable = ({ perPage, page }) => {
     const handleSubmit = (e) => {
         let modelId = currClass.id;
         if (value === "class") {
-            modelId = currClass.class_model
+            modelId = currClass.class_model;
         }
 
         fetch(`http://localhost:8000/classes/enrol/?${value}=${modelId}`, {
@@ -39,8 +38,14 @@ const ClassesTable = ({ perPage, page }) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem("token")}`,
             }})
-            .then(r => r.json())
-            .catch(err => console.log(err))
+            .then(r => {
+                if (!r.ok){
+                    return Promise.reject(r);
+                }
+            })
+            .catch(err => {
+                console.log("User has no active subscription.");
+            })
 
         $(`enrol-button-${currClass.id}`).attr("disabled", true);
         handleClose();
@@ -55,6 +60,7 @@ const ClassesTable = ({ perPage, page }) => {
                 <TableCell> Name </TableCell>
                 <TableCell> Coach </TableCell>
                 <TableCell> Description </TableCell>
+                <TableCell> Studio </TableCell>
                 <TableCell> Keywords </TableCell>
                 <TableCell> Capacity </TableCell>
                 <TableCell> Start Time </TableCell>
@@ -69,6 +75,7 @@ const ClassesTable = ({ perPage, page }) => {
                     <TableCell>{ clss.name }</TableCell>
                     <TableCell>{ clss.coach }</TableCell>
                     <TableCell>{ clss.description }</TableCell>
+                    <TableCell>{ clss.studio.name }</TableCell>
                     <TableCell>{ clss.keywords }</TableCell>
                     <TableCell>{ clss.capacity }</TableCell>
                     <TableCell>{ clss.start_time }</TableCell>
@@ -89,7 +96,6 @@ const ClassesTable = ({ perPage, page }) => {
                                                       label="This class only" />
                                     <FormControlLabel value="class" control={<Radio />}
                                                       label="This and all future occurrences" />
-
                                 </RadioGroup>
                                 <Button type={"submit"} variant={"contained"}
                                 onClick={handleSubmit}>SUBMIT</Button>
