@@ -68,4 +68,29 @@ class StudioSerializer(serializers.ModelSerializer):
         studio.save()
         return studio
 
+    def update(self, instance, validated_data):
+
+        try:
+            img_data = validated_data.pop('images')
+        except KeyError:
+            pass
+
+        try:
+            amenities = validated_data.pop('amenities')
+        except KeyError:
+            pass
+
+        StudioImage.objects.filter(studio=instance).delete()
+        StudioAmenity.objects.filter(studio=instance).delete()
+
+        if img_data is not None:
+            for img in img_data:
+                StudioImage.objects.create(studio=instance, **img)
+
+        if amenities is not None:
+            for amenity in amenities:
+                StudioAmenity.objects.create(studio=instance, **amenity)
+
+        return super().update(instance, validated_data)
+
 

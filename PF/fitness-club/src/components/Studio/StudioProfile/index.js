@@ -3,12 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import {Button, Grid, ImageList, ImageListItem, Paper} from "@mui/material";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import {tokenHandle} from "../../../pages/login";
+import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 const StudioProfile = () => {
     let navigate = useNavigate();
     const { id } = useParams();
     const { isAdmin } = useContext(UserAPIContext);
     const [studio, setStudio] = useState({});
+    const [rows, setRows] = useState([]);
+
 
     const redirectEdit = () => {
         navigate(`/studios/${id}/edit`);
@@ -51,6 +55,15 @@ const StudioProfile = () => {
                     .then(r => r.json())
                     .then(json => {
                         setStudio(json);
+                        let rws = [];
+                        json.amenities.map( (amenity, i) => {
+
+                            let row = {...amenity, id: i};
+                            if (rws.indexOf(row) === -1){
+                                rws.push(row);
+                            }
+                        })
+                        setRows(rws);
 
                     })
                     .catch(err => console.log(err))
@@ -61,11 +74,12 @@ const StudioProfile = () => {
     return(
         <>
             <h2> { studio.name }</h2>
-            {/*{ isAdmin &&*/}
-            <Button id="edit-button" variant="outlined" onClick={redirectEdit}>EDIT</Button>
-
-            <Button id="class-button" variant="outlined" onClick={redirectClass}>ADD CLASS</Button>
-             {/*}*/}
+            { isAdmin &&
+                <>
+                    <Button id="edit-button" variant="outlined" onClick={redirectEdit}>EDIT</Button>
+                    <Button id="class-button" variant="outlined" onClick={redirectClass}>ADD CLASS</Button>
+                </>
+             }
             {studio.images !== undefined ?
                 <ImageList
                     sx={{ width: 500, height: 450 }}
@@ -86,26 +100,24 @@ const StudioProfile = () => {
             <p> Postal Code: { studio.postal_code }</p>
             <p> Phone: { studio.phone }</p>
 
-            {studio.amenities !== undefined ?
-                    <>
-                    <p> Amenities </p>
-                    <Grid container spacing={2} columns={16}
-                          alignItems="center">
-                    {studio.amenities.map((amty) => (
-                        <Grid item xs={12} sm={6} md={3}>
-                            <Paper> { amty.type } </Paper>
-                            <Paper> quantity = { amty.quantity } </Paper>
-                        </Grid>
-                    ))}
-                    </Grid>
-                    </>
-                : <></>
+            <h3>Amenities</h3>
+            { studio.amenities !== undefined &&
+
+                <div id="amenities" style={{ height: 300, width: 400 }}>
+                    <DataGrid
+                        columns={[
+                            {field: 'type', headerName: 'Type', width: 200, editable: false},
+                            {field: 'quantity', headerName: 'Quantity', type: 'number', editable: false}]}
+
+                        rows={rows}
+                    />
+                </div>
             }
 
             <br/>
-            {/*{ isAdmin && */}
+            { isAdmin &&
                 <Button id="delete-button" variant="outlined" onClick={submitDel}>DELETE</Button>
-            {/* }*/}
+             }
         </>
     )
 

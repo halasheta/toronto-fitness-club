@@ -86,9 +86,9 @@ class ListStudios(ListAPIView):
         if lng is None or lat is None:
             return qs
 
-        location = (lng, lat)
+        location = (lat, lng)
         for obj in qs:
-            obj.distance = geodesic((obj.longitude, obj.latitude), location)
+            obj.distance = geodesic((obj.latitude, obj.longitude), location)
         qs_ordered = sorted(qs, key=operator.attrgetter('distance'))
 
         return qs_ordered

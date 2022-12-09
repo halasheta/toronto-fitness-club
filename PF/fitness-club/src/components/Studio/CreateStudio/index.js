@@ -66,7 +66,6 @@ const CreateStudio = () => {
         tokenHandle()
             .then(success => {
                 if (!success) {
-                    // TODO: deal with unauthorized access (when a (non-admin) tries to access it)
                     localStorage.setItem("lastPage", "/studios/add");
                     navigate("/login");
                 } else {

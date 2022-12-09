@@ -55,7 +55,6 @@ const EditStudio = () => {
         tokenHandle()
             .then(success => {
                 if (!success) {
-                    // TODO: deal with unauthorized access (when a (non-admin) tries to access it)
                     localStorage.setItem("lastPage", "/studios/add");
                     navigate("/login");
                 } else {
@@ -76,7 +75,6 @@ const EditStudio = () => {
                         })
                         .then(r => {
                             let res = r.valueOf();
-                            console.log(res);
                             if (res !== {}){
                                 setErrors(res);
                             }
@@ -176,6 +174,7 @@ const EditStudio = () => {
                         setName(json.name);
                         setPostalCode(json.postal_code);
                         setPhone(json.phone);
+                        setAddress(json.address);
 
 
                         if (json.amenities !== undefined) {
