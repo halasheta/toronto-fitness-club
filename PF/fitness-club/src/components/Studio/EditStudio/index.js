@@ -149,7 +149,6 @@ const EditStudio = () => {
     const handleDeleteClick = (id) => () => {
         setRows(rows.filter((row) => row.id !== id));
         amenities.splice(id, 1);
-        console.log(amenities);
     }
 
 

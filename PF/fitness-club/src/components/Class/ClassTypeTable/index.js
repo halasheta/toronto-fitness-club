@@ -18,26 +18,37 @@ import dayjs from "dayjs";
 import {Link} from "react-router-dom";
 import {LinkContainer} from "react-router-bootstrap";
 import {NavDropdown, NavLink} from "react-bootstrap";
+import UserAPIContext from "../../../contexts/UserAPIContext";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import {GridActionsCellItem} from "@mui/x-data-grid";
 
-const ClassInstanceTable = ({ perPage, page }) => {
-    const { classes } = useContext(ClassesAPIContext);
+const ClassTypeTable = ({ perPage, page }) => {
+    const { setClasses, classes } = useContext(ClassesAPIContext);
     const [open, setOpen] = useState(false);
-    const [collapseOpen, setCollapseOpen] = useState(false);
     const [value, setValue] = useState('');
-    const [currClass, setCurrClass] = useState(0);
+    const { isAdmin } = useContext(UserAPIContext);
+
 
     const handleClose = () => {
         setOpen(false);
     }
 
+    const handleDelete = (id) => {
+        setClasses((prev) => prev.filter((c) => c.id !== id));
+        fetch(`http://localhost:8000/classes/${id}/delete?all=1`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            }})
+            .then(r => r.json())
+            .catch(err => console.log(err))
 
-    const handleSubmit = (e) => {
-        let modelId = currClass.id;
-        if (value === "class") {
-            modelId = currClass.class_model;
-        }
+    }
 
-        fetch(`http://localhost:8000/classes/enrol/?${value}=${modelId}`, {
+
+    const handleSubmit = (id) => {
+        fetch(`http://localhost:8000/classes/enrol/?class=${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -52,7 +63,7 @@ const ClassInstanceTable = ({ perPage, page }) => {
                 console.log("User has no active subscription.");
             })
 
-        $(`enrol-button-${currClass.id}`).attr("disabled", true);
+        $(`enrol-button-${id}`).attr("disabled", true);
         handleClose();
     }
 
@@ -97,25 +108,39 @@ const ClassInstanceTable = ({ perPage, page }) => {
                             <TableCell>{ dayjs(clss.end_recurrence ).format("DD/MM/YYYY") }</TableCell>
                             <TableCell>
                                 <Button id={`enrol-button-${clss.id}`}
-                                        onClick={e => {
-                                            setOpen(true);
-                                            setCurrClass(clss);}
-                                        }>
+                                        onClick={() => {
+                                            handleSubmit(clss.id);
+                                        }}>
                                     ENROL</Button>
-                                <Dialog open={open} onClose={handleClose}>
-                                    <DialogTitle>Enrol in...</DialogTitle>
-                                    <DialogContent>
-                                        <RadioGroup
-                                            onChange={e => setValue(e.target.value)}>
-                                            <FormControlLabel value="occurrence" control={<Radio />}
-                                                              label="This class only" />
-                                            <FormControlLabel value="class" control={<Radio />}
-                                                              label="This and all future occurrences" />
-                                        </RadioGroup>
-                                        <Button type={"submit"} variant={"contained"}
-                                                onClick={handleSubmit}>SUBMIT</Button>
-                                    </DialogContent>
-                                </Dialog>
+                                {/*<Dialog open={open} onClose={handleClose}>*/}
+                                {/*    <DialogTitle>Enrol in...</DialogTitle>*/}
+                                {/*    <DialogContent>*/}
+                                {/*        <RadioGroup*/}
+                                {/*            onChange={e => setValue(e.target.value)}>*/}
+                                {/*            <FormControlLabel value="occurrence" control={<Radio />}*/}
+                                {/*                              label="This class only" />*/}
+                                {/*            <FormControlLabel value="class" control={<Radio />}*/}
+                                {/*                              label="This and all future occurrences" />*/}
+                                {/*        </RadioGroup>*/}
+                                {/*        <Button type={"submit"} variant={"contained"}*/}
+                                {/*                onClick={handleSubmit}>SUBMIT</Button>*/}
+                                {/*    </DialogContent>*/}
+                                {/*</Dialog>*/}
+                                {isAdmin &&
+                                    <GridActionsCellItem
+                                        icon={<DeleteIcon />}
+                                        label="Delete"
+                                        onClick={() => {
+                                            handleDelete(clss.id)}}
+                                        color="inherit"
+                                    />}
+                                    {/*// <DeleteIconButton*/}
+                                    {/*// id={`delete-button-${clss.id}`}*/}
+                                    {/*// onClick={e => {*/}
+                                    {/*//     setCurrClass(clss);*/}
+                                    {/*//     handleDelete(index);*/}
+                                    {/*// }}/>}*/}
+
 
                             </TableCell>
 
@@ -127,4 +152,4 @@ const ClassInstanceTable = ({ perPage, page }) => {
     )
 }
 
-export default ClassInstanceTable;
+export default ClassTypeTable;

@@ -137,7 +137,7 @@ const EditClass = () => {
                         })
                             .then(r => {
                                 if (r.ok) {
-                                    navigate(`/classes/instances/`);
+                                    navigate(`/classes/types/`);
                                 } else {
                                     return r.json();
                                 }

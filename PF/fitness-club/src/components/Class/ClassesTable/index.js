@@ -14,15 +14,32 @@ import {
 } from "@mui/material";
 import $ from 'jquery';
 import ClassesAPIContext from "../../../contexts/ClassesAPIContext";
+import {GridActionsCellItem} from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import UserAPIContext from "../../../contexts/UserAPIContext";
 
 const ClassesTable = ({ perPage, page }) => {
-    const { classes } = useContext(ClassesAPIContext);
+    const { setClasses, classes } = useContext(ClassesAPIContext);
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState('');
     const [currClass, setCurrClass] = useState(0);
+    const { isAdmin } = useContext(UserAPIContext);
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    const handleDelete = (clss) => {
+        setClasses((prev) => prev.filter((c) => c.id !== clss.id));
+        fetch(`http://localhost:8000/classes/${clss.class_model}/delete/?occ_id=${clss.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            }})
+            .then(r => r.json())
+            .catch(err => console.log(err))
+
     }
 
 
@@ -101,6 +118,14 @@ const ClassesTable = ({ perPage, page }) => {
                                 onClick={handleSubmit}>SUBMIT</Button>
                             </DialogContent>
                         </Dialog>
+                        {isAdmin &&
+                            <GridActionsCellItem
+                                icon={<DeleteIcon />}
+                                label="Delete"
+                                onClick={() => {
+                                    handleDelete(clss)}}
+                                color="inherit"
+                            />}
 
                     </TableCell>
 

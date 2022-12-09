@@ -22,7 +22,7 @@ import Payments from "./pages/payments";
 import ClassesAPIContext, {useClassesAPIContext} from "./contexts/ClassesAPIContext";
 import ClassSchedule from "./components/Class/ClassSchedule";
 import EditClass from "./components/Class/EditClass";
-import ClassInstancePage from "./components/Class/ClassInstancePage";
+import ClassTypePage from "./pages/ClassTypePage";
 
 function App() {
     const studios = (
@@ -37,9 +37,9 @@ function App() {
         </ClassesAPIContext.Provider>
     )
 
-    const classInstances = (
+    const classTypes = (
         <ClassesAPIContext.Provider value={ useClassesAPIContext() }>
-            <ClassInstancePage/>
+            <ClassTypePage/>
         </ClassesAPIContext.Provider>
     )
 
@@ -64,7 +64,7 @@ function App() {
                       <Route path="studios/:id/classes/add/" element={<CreateClass/>}/>
                       <Route path="classes/schedule/" element={<ClassSchedule/>}/>
                       <Route path="classes/:id/edit/" element={<EditClass/>}/>
-                      <Route path="classes/instances/" element={ classInstances }/>
+                      <Route path="classes/types/" element={ classTypes }/>
 
                       {/* subscriptions paths */}
                       <Route path="subscriptions/" element={<Subscriptions/>}/>

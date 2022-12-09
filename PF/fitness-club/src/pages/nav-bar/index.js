@@ -41,7 +41,7 @@ const Layout = () => {
 
                     <NavDropdown title="Classes" id="nav-dropdown-logged-in">
                         <NavDropdown.Item as={Link} to="/classes"> View Classes by Occurrence</NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to="/classes/instances/"> View Classes by Type</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/classes/types/"> View Classes by Type</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/classes/schedule">Class Schedule</NavDropdown.Item>
                     </NavDropdown>
 

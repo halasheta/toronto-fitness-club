@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
-import UserAPIContext from "../../../contexts/UserAPIContext";
-import ClassesAPIContext from "../../../contexts/ClassesAPIContext";
-import {tokenHandle} from "../../../pages/login";
-import ClassInstanceTable from "../ClassInstanceTable";
+import UserAPIContext from "../../contexts/UserAPIContext";
+import ClassesAPIContext from "../../contexts/ClassesAPIContext";
+import {tokenHandle} from "../login";
+import ClassTypeTable from "../../components/Class/ClassTypeTable";
 
-const ClassInstancePage = () => {
+const ClassTypePage = () => {
     const perPage = 5;
     const [page, setPage] = useState(1);
     const [open, setOpen] = useState(false);
@@ -26,7 +26,7 @@ const ClassInstancePage = () => {
     useEffect(() => {
         tokenHandle().then(success => {
             if (!success) {
-                localStorage.setItem("lastPage", "/classes/instances/");
+                localStorage.setItem("lastPage", "/classes/types/");
                 navigate("/login");
             } else {
                 fetch(`http://localhost:8000/classes/instances?offset=${offset}&limit=${perPage}&`
@@ -94,7 +94,7 @@ const ClassInstancePage = () => {
                 </DialogActions>
 
             </Dialog>
-            <ClassInstanceTable perPage={perPage} page={page}></ClassInstanceTable>
+            <ClassTypeTable perPage={perPage} page={page}></ClassTypeTable>
             <Button id={'prev-button'}
                     variant={"contained"}
                     onClick={() => {
@@ -121,4 +121,4 @@ const ClassInstancePage = () => {
     )
 }
 
-export default ClassInstancePage;
+export default ClassTypePage;
