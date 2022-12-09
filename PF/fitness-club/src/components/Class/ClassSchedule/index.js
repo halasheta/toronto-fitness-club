@@ -1,8 +1,17 @@
 import React, {useContext, useEffect, useState} from "react";
 import {tokenHandle} from "../../../pages/login";
 import {useNavigate} from "react-router-dom";
-import {Button, IconButton} from "@mui/material";
-import {CancelIcon} from '@mui/icons-material/Cancel';
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    FormControlLabel,
+    IconButton,
+    Radio,
+    RadioGroup
+} from "@mui/material";
+import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
 import {
     Timeline, TimelineConnector, TimelineContent, TimelineDot,
@@ -11,19 +20,27 @@ import {
     timelineOppositeContentClasses,
     TimelineSeparator
 } from "@mui/lab";
+import $ from "jquery";
 
 const ClassSchedule = () => {
     const [classes, setClasses] = useState({});
     const [currMonthClasses, setCurrMonthClasses] = useState({});
     const [currDate, setCurrDate] = useState(dayjs().add(-5, 'hour'));
-    const [viewKey, setViewKey] = useState(String(currDate.year()) + "/" + String(currDate.month()));
+    const [viewKey, setViewKey] = useState(String(currDate.year()) + "/" + String(currDate.month() + 1));
     const [months, setMonths] = useState([]);
     const navigate = useNavigate();
-    const [pageNum, setPageNum] = useState(1);
+    const [choice, setChoice] = useState("");
     const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+    const [open, setOpen] = useState(false);
+    const [currOccurrence, setCurrOccurrence] = useState(null);
+    const [currClass, setCurrClass] = useState(null);
 
+    const handleClose = () => {
+        setOpen(false);
+    }
 
     const getData = () => {
+        console.log(viewKey);
         tokenHandle()
             .then(success => {
                 if (!success) {
@@ -169,6 +186,28 @@ const ClassSchedule = () => {
         setCurrMonthClasses(classes[newKey]);
     }
 
+    const handleSubmit = () => {
+        let modelId = currOccurrence;
+        if (choice === "class") {
+            modelId = currClass;
+        }
+
+        fetch(`http://localhost:8000/classes/drop/?${choice}=${modelId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            }})
+            .then(r => {
+                if (!r.ok){
+                    return Promise.reject(r);
+                }
+                console.log(r);
+                getData();
+            }).catch(err => console.log(err))
+        handleClose();
+    }
+
     useEffect(() => {
         getData();
     }, []);
@@ -176,15 +215,14 @@ const ClassSchedule = () => {
     return (
         <>
             <h2>Class Schedule</h2>
-            {(currMonthClasses == null || Object.entries(currMonthClasses).length === 0) &&
-                <p> You have no classes scheduled this month. </p>
-            }
-
             <div>
                 <Button onClick={paginate} id="page-prev" name="sub" variant="contained">{"<"}</Button>
                 <p id="current-month">{viewKey}</p>
                 <Button onClick={paginate} id="page-next" name="add" variant="contained">{">"}</Button>
             </div>
+            {(currMonthClasses == null || Object.entries(currMonthClasses).length === 0) &&
+                <p> You have no classes scheduled this month. </p>
+            }
 
             <Timeline
                 sx={{
@@ -198,7 +236,7 @@ const ClassSchedule = () => {
                 if (Object.keys(currMonthClasses).indexOf(prop) !== Object.entries(currMonthClasses).length - 1){
                     return (
                         <>
-                            <TimelineItem>
+                            <TimelineItem key={prop}>
                                 <TimelineOppositeContent color="textSecondary">
                                     {dayjs(value.start_time).format('MM/DD') + " " +
                                         dayjs(value.start_time).format('HH:mm') + "-" + dayjs(value.end_time).format('HH:mm')
@@ -214,6 +252,17 @@ const ClassSchedule = () => {
                                     <b>Coach: </b>${value.coach}
                                     <br/>
                                     <b>Description: </b>{value.description}
+                                </TimelineContent>
+
+                                <TimelineContent>
+                                    <IconButton id={value.id}
+                                                onClick={e => {
+                                                    setOpen(true);
+                                                    setCurrOccurrence(value.id);
+                                                    setCurrClass(value.class_model);
+                                                }}>
+                                        <CancelIcon/>
+                                    </IconButton>
                                 </TimelineContent>
                             </TimelineItem>
                         </>
@@ -237,8 +286,14 @@ const ClassSchedule = () => {
                                     <br/>
                                     <b>Description: </b>{value.description}
                                 </TimelineContent>
+
                                 <TimelineContent>
-                                    <IconButton class={value.class_model}>
+                                    <IconButton id={value.id}
+                                                onClick={e => {
+                                                    setOpen(true);
+                                                    setCurrOccurrence(value.id);
+                                                    setCurrClass(value.class_model);
+                                                }}>
                                         <CancelIcon/>
                                     </IconButton>
                                 </TimelineContent>
@@ -249,6 +304,22 @@ const ClassSchedule = () => {
             })}
 
             </Timeline>
+
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Drop ...</DialogTitle>
+                <DialogContent>
+                    <RadioGroup
+                        onChange={e => setChoice(e.target.value)}>
+                        <FormControlLabel value="occurrence" control={<Radio />}
+                                          label="This class only" />
+                        <FormControlLabel value="class" control={<Radio />}
+                                          label="This and all future occurrences" />
+
+                    </RadioGroup>
+                    <Button type={"submit"} variant={"contained"}
+                            onClick={handleSubmit}>SUBMIT</Button>
+                </DialogContent>
+            </Dialog>
 
         </>
     )

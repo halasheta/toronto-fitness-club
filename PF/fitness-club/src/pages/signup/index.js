@@ -48,18 +48,21 @@ const SignUp = () => {
             form_data.append('first_name', first);
             form_data.append('last_name', last);
             form_data.append('phone', phone);
-            form_data.append('avatar', avatar);
+            if (avatar != null){
+                form_data.append('avatar', avatar);
+            }
 
             fetch("http://localhost:8000/accounts/signup/", {
                 method: 'POST',
                 body: form_data,
-            }).then(response => response.json())
+            }).then(response => {
+                if (!response.ok){
+                    return Promise.reject(response);
+                }
+                return response.json()
+            })
                 .then(response => {
-                    if (!response.ok){
-                        return Promise.reject(response);
-                    }
-
-                    console.log(response)
+                    console.log(response);
                     navigate("/");
 
                 }).catch(error => {
@@ -79,8 +82,8 @@ const SignUp = () => {
                            error={errors.last !== undefined} helperText={errors.last}/>
                 <TextField id="email" label="Email" variant="outlined" type="email" required onChange={e => setEmail(e.target.value)}
                            error={errors.email !== undefined} helperText={errors.email}/>
-                <TextField id="phone" label="Phone (Numbers only)" variant="outlined" required onChange={e => setPhone(e.target.value)}
-                           error={errors.phone !== undefined} helperText={errors.phone}/>
+                <TextField id="phone" label="Phone" variant="outlined" required onChange={e => setPhone(e.target.value)}
+                           error={errors.phone !== undefined} helperText={errors.phone} type="number"/>
                 <TextField id="password" label="Password" type="password" variant="outlined" required onChange={e => setPassword1(e.target.value)}
                            error={errors.password1 !== undefined} helperText={errors.password2}/>
                 <TextField id="password2" label="Confirm Password" variant="outlined" type="password" required  onChange={e => setPassword2(e.target.value)}
@@ -119,20 +122,20 @@ export default SignUp;
 export function validateEditable(first, last, email, phone) {
     let currErrors = {};
     if (first === '') {
-        currErrors["first"] = "Please enter a first name."
+        currErrors["first"] = "Please enter a first name.";
     }
     if (last === '') {
-        currErrors["last"] = "Please enter a last name."
+        currErrors["last"] = "Please enter a last name.";
     }
 
     let valid_email = /^((\w|[!#$%&'*+\-\/=?^`{|}~])(\.\w|\.[!#$%&'*+\-\/=?^`{|}~])?){1,64}@([A-Za-z0-9](-?[A-Za-z0-9]|\.?[A-Za-z0-9])*)+$/
     if (email === '' || !valid_email.test(email)) {
-        currErrors["email"] = "Please enter a valid email."
+        currErrors["email"] = "Please enter a valid email.";
     }
 
     let valid_phone = /^\d{10}$/
     if (phone === '' || !valid_phone.test(phone)) {
-        currErrors["phone"] = "Please enter a valid phone number."
+        currErrors["phone"] = "Please enter a valid phone number.";
     }
-    return currErrors
+    return currErrors;
 }

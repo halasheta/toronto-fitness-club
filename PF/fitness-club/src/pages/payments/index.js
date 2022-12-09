@@ -115,6 +115,7 @@ const Payments = () => {
                     if (viewFuture){
                         getPayments("10/");
                     }
+                    setMakeNew(!makeNew);
                 }).catch(err => {
                     console.log(err);
                 })
@@ -136,6 +137,7 @@ const Payments = () => {
                     if (viewFuture){
                         getPayments("10/");
                     }
+                    setMakeNew(!makeNew);
                 }).catch(err => {
                     console.log(err);
                 })
