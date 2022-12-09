@@ -157,6 +157,13 @@ const ClassTypeTable = ({ perPage, page }) => {
                                             handleDelete(clss.id)}}
                                         color="inherit"
                                     />}
+                                {isAdmin &&
+                                    <Button id={`edit-button-${clss.id}`}
+                                            onClick={e => {
+                                                navigate(`/classes/${clss.class_model}/edit//`);}
+                                            }>
+                                        EDIT</Button>
+                                }
 
 
                             </TableCell>
