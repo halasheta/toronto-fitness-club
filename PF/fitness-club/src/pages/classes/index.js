@@ -65,7 +65,8 @@ const Classes = () => {
         <>
             <h1> Classes by Occurrence </h1>
             <Button variant={"outlined"} onClick={handleOpen}>FILTER</Button>
-            <Button variant={"outlined"} onClick={e => setFilter({})}>CLEAR FILTER</Button>
+            <Button variant={"outlined"} onClick={e => {setFilter({})
+                setApplied(true);}}>CLEAR FILTER</Button>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Filter by...</DialogTitle>
                 <DialogContent>
@@ -78,6 +79,11 @@ const Classes = () => {
                                onChange={e => setFilter({
                                    ...filter,
                                    coach__icontains: e.target.value})}/>
+
+                    <TextField autoFocus id="keywords" label="Keywords" variant="standard"
+                               onChange={e => setFilter({
+                                   ...filter,
+                                   keywords__icontains: e.target.value})}/>
 
                     <TextField autoFocus id="start-time-lte" type="time"
                                label="Start time before..." variant="standard"

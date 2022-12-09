@@ -18,6 +18,7 @@ import {GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import {useNavigate} from "react-router-dom";
+import dayjs from "dayjs";
 
 const ClassesTable = ({ perPage, page }) => {
     const { setClasses, classes } = useContext(ClassesAPIContext);
@@ -160,8 +161,8 @@ const ClassesTable = ({ perPage, page }) => {
                     <TableCell>{ clss.studio.name }</TableCell>
                     <TableCell>{ clss.keywords }</TableCell>
                     <TableCell>{ clss.capacity }</TableCell>
-                    <TableCell>{ clss.start_time }</TableCell>
-                    <TableCell>{ clss.end_time }</TableCell>
+                    <TableCell>{ dayjs(clss.start_time).format("DD/MM/YY hh:mm")  }</TableCell>
+                    <TableCell>{ dayjs(clss.end_time).format("DD/MM/YY hh:mm") }</TableCell>
                     <TableCell>
                         <Button id={`enrol-button-${clss.id}`}
                                 disabled={userClasses.indexOf(clss.id) !== -1}

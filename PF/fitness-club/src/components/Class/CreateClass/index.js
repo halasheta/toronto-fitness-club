@@ -31,6 +31,7 @@ const CreateClass = () => {
     const [errors, setErrors] = useState({});
 
     const requestBody = () => {
+        console.log(id);
         return JSON.stringify({
             studio: id,
             name: name,
@@ -141,7 +142,7 @@ const CreateClass = () => {
 
     return(
         <>
-            {/*{ isAdmin ? <>*/}
+            { isAdmin ? <>
             <h1>Create a Class</h1>
             <form>
                 <TextField id="name" label="Name" variant="outlined"
@@ -223,9 +224,9 @@ const CreateClass = () => {
 
                 <Button id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
             </form>
-            {/*    </>*/}
-            {/*    : <Status404/>*/}
-            {/*}*/}
+                </>
+                : <Status404/>
+            }
         </>
     );
 }
