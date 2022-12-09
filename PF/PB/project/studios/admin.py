@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Studio, StudioImage, StudioAmenity
+from .models import Studio, StudioAmenity
 
 
 class StudioAdmin(admin.ModelAdmin):
@@ -8,14 +8,6 @@ class StudioAdmin(admin.ModelAdmin):
     """
     model = Studio
     list_display = ("name", "address", "longitude", "latitude", "postal_code", "phone")
-
-
-class StudioImageAdmin(admin.ModelAdmin):
-    """
-        ModelAdmin class for the model StudioImage.
-    """
-    model = StudioImage
-    list_display = ("image",)
 
 
 class StudioAmenityAdmin(admin.ModelAdmin):
@@ -27,5 +19,4 @@ class StudioAmenityAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Studio, StudioAdmin)
-admin.site.register(StudioImage, StudioImageAdmin)
 admin.site.register(StudioAmenity, StudioAmenityAdmin)

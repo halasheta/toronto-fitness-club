@@ -1,16 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Studio, StudioImage, StudioAmenity
-
-
-class StudioImageSerializer(serializers.ModelSerializer):
-    """
-        Serializer class for the StudioImage model.
-    """
-    class Meta:
-        model = StudioImage
-        fields = ["image"]
+from .models import Studio, StudioAmenity
 
 
 class StudioAmenitySerializer(serializers.ModelSerializer):
@@ -30,9 +21,8 @@ class StudioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Studio
         fields = ["id", "name", "address", "longitude", "latitude", "postal_code", "phone",
-                  "amenities", "images"]
+                  "amenities"]
 
-    images = StudioImageSerializer(many=True, required=False)
     amenities = StudioAmenitySerializer(many=True, required=False)
 
     def validate(self, attrs):
@@ -44,11 +34,7 @@ class StudioSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     def create(self, validated_data):
-        img_data, amenities = None, None
-        try:
-            img_data = validated_data.pop('images')
-        except KeyError:
-            pass
+        amenities = None, None
 
         try:
             amenities = validated_data.pop('amenities')
@@ -57,9 +43,6 @@ class StudioSerializer(serializers.ModelSerializer):
 
         studio = Studio.objects.create(**validated_data)
 
-        if img_data is not None:
-            for img in img_data:
-                StudioImage.objects.create(studio=studio, **img)
 
         if amenities is not None:
             for amenity in amenities:
@@ -71,21 +54,12 @@ class StudioSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
 
         try:
-            img_data = validated_data.pop('images')
-        except KeyError:
-            pass
-
-        try:
             amenities = validated_data.pop('amenities')
         except KeyError:
             pass
 
-        StudioImage.objects.filter(studio=instance).delete()
         StudioAmenity.objects.filter(studio=instance).delete()
 
-        if img_data is not None:
-            for img in img_data:
-                StudioImage.objects.create(studio=instance, **img)
 
         if amenities is not None:
             for amenity in amenities:
