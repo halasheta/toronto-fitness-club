@@ -75,20 +75,23 @@ const ClassTypePage = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Filter by...</DialogTitle>
                 <DialogContent>
-                    <TextField autoFocus id="name" label="Name" variant="standard"
+                    <TextField autoFocus id="name" label="Name" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   name__icontains: e.target.value})}/>
+                                   name__icontains: e.target.value})}
+                               sx={{ width : 300 }}/>
 
-                    <TextField autoFocus id="coach" label="Coach" variant="standard"
+                    <TextField autoFocus id="coach" label="Coach" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   coach__icontains: e.target.value})}/>
+                                   coach__icontains: e.target.value})}
+                               sx={{ width : 300 }}/>
 
-                    <TextField autoFocus id="keywords" label="Keywords" variant="standard"
+                    <TextField autoFocus id="keywords" label="Keywords" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   keywords__icontains: e.target.value})}/>
+                                   keywords__icontains: e.target.value})}
+                               sx={{ width : 300 }}/>
 
 
                 </DialogContent>
