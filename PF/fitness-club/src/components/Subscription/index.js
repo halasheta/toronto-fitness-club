@@ -1,4 +1,6 @@
 import React, {useContext, useState} from 'react';
+
+
 import {
     Autocomplete,
     Box,
@@ -84,7 +86,6 @@ const Subscription = () => {
         setPrice(event.target.value);
     };
 
-    // TODO: fix dollar sign https://bytutorial.com/blogs/css3/how-to-add-a-currency-sign-inside-a-textbox-field
     return (
         <Box sx={{ minWidth: 120 }}>
             <FormControl sx={{ minWidth: 120 }}  helperText={errors.duration}>
@@ -120,7 +121,7 @@ const Subscription = () => {
                 </TextField>
                 <br/>
             </FormControl>
-            <Button id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
+            <Button className="Button" id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
         </Box>
     );
 }

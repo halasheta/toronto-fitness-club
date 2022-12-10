@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Button, TextField} from "@mui/material"
 import {Link, useNavigate} from "react-router-dom";
+import "./signup.css"
 
 
 // display file name
@@ -73,21 +74,24 @@ const SignUp = () => {
     }
 
     return (
-        <>
+        <div className="signup-page">
             <h1>Sign Up</h1>
             <form>
                 <TextField id="first_name" label="First Name" variant="outlined" required onChange={e => setFirst(e.target.value)}
                            error={errors.first !== undefined} helperText={errors.first}/>
                 <TextField id="last_name" label="Last Name" variant="outlined" required onChange={e => setLast(e.target.value)}
                            error={errors.last !== undefined} helperText={errors.last}/>
+                <br/>
                 <TextField id="email" label="Email" variant="outlined" type="email" required onChange={e => setEmail(e.target.value)}
                            error={errors.email !== undefined} helperText={errors.email}/>
                 <TextField id="phone" label="Phone" variant="outlined" required onChange={e => setPhone(e.target.value)}
                            error={errors.phone !== undefined} helperText={errors.phone} type="number"/>
+                <br/>
                 <TextField id="password" label="Password" type="password" variant="outlined" required onChange={e => setPassword1(e.target.value)}
                            error={errors.password1 !== undefined} helperText={errors.password1}/>
                 <TextField id="password2" label="Confirm Password" variant="outlined" type="password" required  onChange={e => setPassword2(e.target.value)}
                            error={errors.password2 !== undefined} helperText={errors.password2}/>
+                <br/>
                 <input
                     accept="image/*"
                     style={{ display: 'none' }}
@@ -96,18 +100,19 @@ const SignUp = () => {
                     onChange={uploadAvatar}
                 />
                 <label htmlFor="avatar-button-file">
-                    <Button variant="contained" component="span">
+                    <Button className="Button" variant="contained" component="span">
                         Upload Avatar
                     </Button>
                 </label>
 
-                <Button id="submit-button" variant="contained" onClick={submitReq}>Sign Up</Button>
+                <br/>
+                <Button className="Button" id="submit-button" variant="contained" onClick={submitReq}>Sign Up</Button>
             </form>
 
             <br/>
             <Link to="/login">Already have an account? <u>Log in here!</u></Link>
 
-        </>
+        </div>
 
     )
 }

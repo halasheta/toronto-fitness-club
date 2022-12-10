@@ -3,6 +3,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button } from "@mui/material";
 import UserAPIContext from "../../contexts/UserAPIContext";
 
+import './login.css';
+ 
+
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -56,7 +59,7 @@ const Login = () => {
         })
     }
 
-    return <>
+    return <div className="login-page">
 
         <h1>Log In</h1>
         <form>
@@ -67,11 +70,11 @@ const Login = () => {
             onChange={e => setPassword(e.target.value)} error={!validLogin}
                        helperText={!validLogin ? 'Invalid email or password.' : ' '}/>
             <br/>
-            <Button id="login-button" variant="contained" onClick={submitReq}>Log in</Button>
+            <Button className="Button" id="login-button" variant="contained" onClick={submitReq}>Log in</Button>
         </form>
         <br/>
         <Link to="/signup">Don't have an account? <u>Sign up here!</u></Link>
-    </>
+    </div>
 }
 
 export default Login;

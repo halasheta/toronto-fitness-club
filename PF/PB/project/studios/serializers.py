@@ -34,7 +34,7 @@ class StudioSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     def create(self, validated_data):
-        amenities = None, None
+        amenities = None
 
         try:
             amenities = validated_data.pop('amenities')
@@ -42,7 +42,6 @@ class StudioSerializer(serializers.ModelSerializer):
             pass
 
         studio = Studio.objects.create(**validated_data)
-
 
         if amenities is not None:
             for amenity in amenities:
@@ -52,14 +51,13 @@ class StudioSerializer(serializers.ModelSerializer):
         return studio
 
     def update(self, instance, validated_data):
+        amenities = None
 
         try:
             amenities = validated_data.pop('amenities')
+            StudioAmenity.objects.filter(studio=instance).delete()
         except KeyError:
             pass
-
-        StudioAmenity.objects.filter(studio=instance).delete()
-
 
         if amenities is not None:
             for amenity in amenities:

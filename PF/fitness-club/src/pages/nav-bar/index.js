@@ -3,6 +3,7 @@ import {Outlet, useNavigate, Link} from "react-router-dom";
 import {NavLink, Navbar, NavbarBrand, Nav, NavDropdown, NavItem} from "react-bootstrap";
 import {LinkContainer} from 'react-router-bootstrap';
 import {tokenHandle} from "../login";
+ 
 
 
 const Layout = () => {
@@ -34,19 +35,20 @@ const Layout = () => {
                 <Nav className="ml-auto">
                     <LinkContainer to="/subscriptions"><NavLink>Subscriptions</NavLink></LinkContainer>
 
-                    <NavDropdown title="Studios" id="nav-dropdown-logged-in">
-                        <NavDropdown.Item as={Link} to="/studios"> View All Studios</NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to="/studios/map">Studios near me</NavDropdown.Item>
-                    </NavDropdown>
 
-                    <NavDropdown title="Classes" id="nav-dropdown-logged-in">
+                    <NavDropdown title="Classes" id="nav-dropdown-logged-in" flip alignRight>
                         <NavDropdown.Item as={Link} to="/classes"> View Classes by Occurrence</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/classes/types/"> View Classes by Type</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/classes/schedule">Class Schedule</NavDropdown.Item>
                     </NavDropdown>
 
+                    <NavDropdown title="Studios" id="nav-dropdown-logged-in" flip align="right">
+                        <NavDropdown.Item as={Link} to="/studios"> View All Studios</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/studios/map">Studios near me</NavDropdown.Item>
+                    </NavDropdown>
+
                     {loggedIn &&
-                        <NavDropdown title="Accounts" id="nav-dropdown-logged-in">
+                        <NavDropdown title="Accounts" id="nav-dropdown-logged-in"  flip alignRight>
                         <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/payments">Payments</NavDropdown.Item>
                         <NavDropdown.Divider />
@@ -54,7 +56,7 @@ const Layout = () => {
                     </NavDropdown>}
 
                     {!loggedIn &&
-                        <NavDropdown title="Accounts" id="nav-dropdown-not-logged-in">
+                        <NavDropdown title="Accounts" id="nav-dropdown-not-logged-in" flip alignRight>
                             <NavDropdown.Item as={Link} to="/login">Log In</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/signup">Sign Up</NavDropdown.Item>
                         </NavDropdown>}

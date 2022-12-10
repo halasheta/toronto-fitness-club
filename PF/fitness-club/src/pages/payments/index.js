@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import {ButtonGroup, Button, TextField} from "@mui/material";
 import {tokenHandle} from "../login";
+ 
 
 
 const Payments = () => {
@@ -246,7 +247,7 @@ const Payments = () => {
                 </div>
             }
 
-            <Button
+            <Button className="Button"
                 variant="outlined"
                 onClick={toggleMake}>New Payment Method
             </Button>
@@ -257,15 +258,15 @@ const Payments = () => {
                            error={!validNumber} helperText={validNumber ? "" : "Card number is invalid."}/>
                 <TextField id="filled-number" label="Security Code"  type="Number"  variant="outlined" onChange={codeChange}
                            error={!validCode} helperText={validCode ? "" : "Security code is invalid."}/>
-                <Button variant="contained" onClick={paymentMethod}>Save </Button>
+                <Button className="Button" variant="contained" onClick={paymentMethod}>Save </Button>
             </div>}
 
             <br/>
 
             <h4>Payment History</h4>
-            <ButtonGroup variant="contained">
-                <Button disabled={!viewFuture} onClick={toggleView}>Past Only</Button>
-                <Button disabled={viewFuture} onClick={toggleView}>Past & Future</Button>
+            <ButtonGroup className="Button"Group variant="contained">
+                <Button className="Button" disabled={!viewFuture} onClick={toggleView}>Past Only</Button>
+                <Button className="Button" disabled={viewFuture} onClick={toggleView}>Past & Future</Button>
             </ButtonGroup>
             <div>
                 {(payments == null || Object.entries(payments.results).length === 0) &&
@@ -294,9 +295,9 @@ const Payments = () => {
 
                 {payments != null &&
                     <div>
-                        <Button onClick={paginate} id="page-prev" name="sub" variant="contained" disabled={previousPage == null}>{"<"}</Button>
+                        <Button className="Button" onClick={paginate} id="page-prev" name="sub" variant="contained" disabled={previousPage == null}>{"<"}</Button>
                         <p id="page-num">{pageNum}</p>
-                        <Button onClick={paginate} id="page-next" name="add" variant="contained" disabled={nextPage == null}>{">"}</Button>
+                        <Button className="Button" onClick={paginate} id="page-next" name="add" variant="contained" disabled={nextPage == null}>{">"}</Button>
                     </div>}
             </div>
         </>

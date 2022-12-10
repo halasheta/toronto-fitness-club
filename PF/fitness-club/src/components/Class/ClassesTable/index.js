@@ -19,6 +19,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import {useNavigate} from "react-router-dom";
 import dayjs from "dayjs";
+ 
 
 const ClassesTable = ({ perPage, page }) => {
     const { setClasses, classes } = useContext(ClassesAPIContext);
@@ -164,7 +165,7 @@ const ClassesTable = ({ perPage, page }) => {
                     <TableCell>{ dayjs(clss.start_time).format("DD/MM/YY hh:mm")  }</TableCell>
                     <TableCell>{ dayjs(clss.end_time).format("DD/MM/YY hh:mm") }</TableCell>
                     <TableCell>
-                        <Button id={`enrol-button-${clss.id}`}
+                        <Button className="Button" id={`enrol-button-${clss.id}`}
                                 disabled={userClasses.indexOf(clss.id) !== -1}
                                 onClick={e => {
                                         setOpen(true);
@@ -182,7 +183,7 @@ const ClassesTable = ({ perPage, page }) => {
                                     <FormControlLabel value="class" control={<Radio />}
                                                       label="This and all future occurrences" />
                                 </RadioGroup>
-                                <Button type={"submit"} variant={"contained"}
+                                <Button className="Button" type={"submit"} variant={"contained"}
                                 onClick={handleSubmit}>SUBMIT</Button>
                             </DialogContent>
                         </Dialog>
@@ -196,7 +197,7 @@ const ClassesTable = ({ perPage, page }) => {
                             />
                         }
                         {isAdmin &&
-                            <Button id={`edit-button-${clss.id}`}
+                            <Button className="Button" id={`edit-button-${clss.id}`}
                                     onClick={e => {
                                         navigate(`/classes/${clss.class_model}/edit//`);}
                                     }>

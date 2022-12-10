@@ -1,4 +1,6 @@
 import operator
+from datetime import timedelta
+
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
@@ -10,8 +12,8 @@ from rest_framework.response import Response
 
 from classes.models import ClassOccurrence, Class
 from classes.serializers import ClassOccurrenceSerializer
-from .serializers import StudioSerializer
-from .models import Studio
+from .serializers import StudioAmenitySerializer, StudioSerializer
+from .models import Studio, StudioAmenity
 
 
 # Admin classes
@@ -61,7 +63,7 @@ class DeleteStudio(DestroyAPIView):
         # Delete all future class occurrences in this studio
         ClassOccurrence.objects \
             .filter(studio=obj.pk) \
-            .filter(start_time__gte=timezone.now()).delete()
+            .filter(start_time__gte=(timezone.now() - timedelta(hours=5))).delete()
 
         # Delete all class models in this studio
         Class.objects.filter(studio=obj.pk).delete()
@@ -114,7 +116,7 @@ class ClassesSchedule(ListAPIView):
 
     def get_queryset(self):
         return ClassOccurrence.objects.filter(studio=self.kwargs["id"]) \
-            .filter(start_time__gte=timezone.now())
+            .filter(start_time__gte=(timezone.now() - timedelta(hours=5)))
 
 
 class SearchStudios(ListAPIView):
@@ -135,3 +137,15 @@ class SearchStudios(ListAPIView):
 
     def get_queryset(self):
         return Studio.objects.all()
+
+
+class AllAmenities(ListAPIView):
+    """
+        Allows users to filter the studios list by name, amenity type,
+        amenity quantity, class name and the coach of a class.
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = StudioAmenitySerializer
+
+    def get_queryset(self):
+        return StudioAmenity.objects.all()

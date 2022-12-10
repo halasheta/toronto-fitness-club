@@ -4,10 +4,10 @@ import {useNavigate} from "react-router-dom";
 import {Box, Button, IconButton, Modal, Typography} from "@mui/material";
 import UserAPIContext from "../../contexts/UserAPIContext";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import "./index.css"
 
 const Subscriptions = () => {
     let navigate = useNavigate();
-    let open = false;
     const [subscriptions, setSubscriptions] = useState({results: {}});
     const [modalHeader, setModalHeader] = useState("Success");
     const [modalMessage, setModalMessage] = useState("You have been successfully subscribed.");
@@ -167,13 +167,16 @@ const Subscriptions = () => {
     }, []);
 
     return (
-        <>
-            <h1>Subscriptions</h1>
-            {isAdmin && <Button
-                variant="outlined"
-                onClick={createSubscription}>
-                +
-            </Button>}
+        <div className="page">
+            <div className="title">
+                <h1>Subscriptions</h1>
+                {isAdmin && <Button className="Button"
+                                    variant="outlined"
+                                    onClick={createSubscription}>
+                    +
+                </Button>}
+            </div>
+
 
             <Modal
                 open={modalOpen}
@@ -190,18 +193,18 @@ const Subscriptions = () => {
                     </Typography>
                 </Box>
             </Modal>
-            <div>
+            <div className="subscriptions">
                 {Object.entries(subscriptions.results).map(([prop, value]) => {
                     return (
                         <>
                             <div>
                                 <div className='subscription' key={prop}>
-                                    <h2>{value.duration}</h2>
+                                    <h2><b>{value.duration}</b></h2>
                                     <h2>{"$" + String(value.price)}</h2>
-                                    <Button id="subscribe-button" name={value.pk} variant={String(value.pk) === subscription ? "contained" : "outlined"} onClick={subscribe} >{String(value.pk) === subscription ? "Unsubscribe" : "Subscribe"}</Button>
+                                    <Button className="Button" id="subscribe-button" name={value.pk} variant={String(value.pk) === subscription ? "contained" : "outlined"} onClick={subscribe} >{String(value.pk) === subscription ? "Unsubscribe" : "Subscribe"}</Button>
                                     {isAdmin &&
                                         <div>
-                                            <Button variant="outlined"
+                                            <Button className="Button" variant="outlined"
                                             onClick={editSubscription} name={value.pk}>
                                             edit
                                             </Button>
@@ -220,7 +223,7 @@ const Subscriptions = () => {
                     })
                 }
             </div>
-        </>
+        </div>
     )
 }
 

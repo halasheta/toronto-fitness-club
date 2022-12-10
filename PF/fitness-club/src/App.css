@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200;500;700&display=swap');
+
 .App {
   text-align: center;
   align-items: center;
@@ -23,11 +25,11 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #4a515e;
 }
 
 .App-link {
-  color: #61dafb;
+  color: #ff712c;
 }
 
 @keyframes App-logo-spin {
@@ -37,4 +39,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+* {
+  font-size: 100%;
+  font-family: 'Mulish', sans-serif;
 }

@@ -7,6 +7,7 @@ import UserAPIContext from "../../../contexts/UserAPIContext";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Status404 from "../../Common/Errors/Status404";
+ 
 
 const EditStudio = () => {
     let navigate = useNavigate();
@@ -49,16 +50,7 @@ const EditStudio = () => {
 
     const apiKey = "9SkGRa52CMqNXGZI4xjATR8cogEMAruY";
 
-    const requestBody = () => {
-        // return JSON.stringify({
-        //     name: name,
-        //     address: address,
-        //     postal_code: postalCode,
-        //     longitude: long,
-        //     latitude: lat,
-        //     phone: phone,
-        //     amenities: amenities
-        // })
+    const imageBody = () => {
         const form_data = new FormData();
         form_data.append('name', name);
         form_data.append('address', address);
@@ -66,28 +58,37 @@ const EditStudio = () => {
         form_data.append('latitude', lat);
         form_data.append('postal_code', postalCode);
         form_data.append('phone', phone);
-        // form_data.append("amenities", amenities);
 
-        // for (let i = 0; i < amenities.length; i++) {
-        //     form_data.append(`amenities[${i}]`, amenities[i]);
-        // }
         if (image1New !== null){
-            form_data.append('image1', image1New)
+            form_data.append('image1', image1New);
         }
         if (image2New !== null){
-            form_data.append('image2', image2New)
+            form_data.append('image2', image2New);
         }
         if (image3New !== null){
-            form_data.append('image3', image3New)
+            form_data.append('image3', image3New);
         }
         if (image4New !== null){
-            form_data.append('image4', image4New)
+            form_data.append('image4', image4New);
         }
         if (image5New !== null){
-            form_data.append('image5', image5New)
+            form_data.append('image5', image5New);
         }
 
         return form_data;
+    }
+
+
+    const requestBody = () => {
+        return JSON.stringify({
+            name: name,
+            address: address,
+            postal_code: postalCode,
+            longitude: long,
+            latitude: lat,
+            phone: phone,
+            amenities: amenities
+        })
     }
 
     const submitReq = () => {
@@ -106,19 +107,37 @@ const EditStudio = () => {
                         body: requestBody()
                     })
                         .then(r => {
-                            if (r.ok) {
-                                navigate(`/studios/${id}/profile/`);
-                            } else {
-                                return r.json();
+                            if (!r.ok) {
+                                return Promise.reject(r);
                             }
+                            fetch(`http://localhost:8000/studios/${id}/edit/`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                                },
+                                body: imageBody()
+                            })
+                                .then(r => {
+                                    if (!r.ok) {
+                                        return Promise.reject(r);
+                                    }
+                                    navigate(`/studios/${id}/profile/`);
+                                })
+                                .catch(r => {
+                                    console.log(r);
+                                    let res = r.valueOf();
+                                    if (res !== {}){
+                                        setErrors(res);
+                                    }
+                                })
                         })
-                        .then(r => {
+                        .catch(r => {
+                            console.log(r)
                             let res = r.valueOf();
                             if (res !== {}){
                                 setErrors(res);
                             }
                         })
-                        .catch(err => console.log(err))
                 }
             })
 
@@ -207,7 +226,6 @@ const EditStudio = () => {
                     .then(r => r.json())
                     .then(json => {
                         setStudio(json);
-
                         setName(json.name);
                         setPostalCode(json.postal_code);
                         setPhone(json.phone);
@@ -217,7 +235,6 @@ const EditStudio = () => {
                         setImage3(json.image3);
                         setImage4(json.image4);
                         setImage5(json.image5);
-
 
 
                         if (json.amenities !== undefined) {
@@ -363,7 +380,7 @@ const EditStudio = () => {
                                        InputProps={{ inputProps: { min: 0 } }}
                                        onChange={e => setQuantity(e.target.value)}/>
                             <br/>
-                            <Button id="button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
+                            <Button className="Button" id="button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
                         </div>
 
 
@@ -375,28 +392,28 @@ const EditStudio = () => {
                         <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-1"
                                                         type="file" name="image1" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-1">
-                                <Button variant="contained" component="span"> Choose Image </Button>
+                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label> </div>
                         {image1 != null && <img alt='new-img-1' src={image1} width="100"/>}
 
                         <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-2"
                                      type="file" name="image2" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-2">
-                                <Button variant="contained" component="span"> Choose Image </Button>
+                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label> </div>
                         {image2 != null && <img alt='new-img-2' src={image2} width="100"/>}
 
                         <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-3"
                                      type="file" name="image3" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-3">
-                                <Button variant="contained" component="span"> Choose Image </Button>
+                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label> </div>
                         {image3 != null && <img alt='new-img-3' src={image3} width="100"/>}
 
                         <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-4"
                                      type="file" name="image4" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-4">
-                                <Button variant="contained" component="span"> Choose Image </Button>
+                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label> </div>
                         {image4 != null && <img alt='new-img-4' src={image4} width="100"/>}
 
@@ -404,14 +421,14 @@ const EditStudio = () => {
                         <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-5"
                                      type="file" name="image5" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-5">
-                                <Button variant="contained" component="span"> Choose Image </Button>
+                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label> </div>
                         {image5 != null && <img alt='new-img-5' src={image5} width="100"/>}
                         <br/>
 
                         <br/>
 
-                        <Button id="submit-button" variant="outlined" onClick={submitReq}>SUBMIT</Button>
+                        <Button className="Button" id="submit-button" variant="outlined" onClick={submitReq}>SUBMIT</Button>
                     </form>
                 </>
                 : <Status404/>
@@ -446,9 +463,9 @@ export default EditStudio;
 {/*                       }}*/}
 {/*                       onChange={e => setQuantity(e.target.value)}/>*/}
 {/*            <br/>*/}
-{/*            <Button id={`amenity-delete-button-${i}`} variant="outlined"*/}
+{/*            <Button className="Button" id={`amenity-delete-button-${i}`} variant="outlined"*/}
 {/*                    onClick={updateAmenities}>REMOVE</Button>*/}
-{/*            <Button id={`amenity-button-${i}`} variant="outlined"*/}
+{/*            <Button className="Button" id={`amenity-button-${i}`} variant="outlined"*/}
 {/*                    onClick={updateAmenities}>SUBMIT CHANGE</Button>*/}
 {/*            <br/>*/}
 {/*        </>*/}

@@ -4,6 +4,7 @@ import tt from '@tomtom-international/web-sdk-maps';
 import {Autocomplete, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField} from "@mui/material";
 import {tokenHandle} from "../../../pages/login";
 import {useNavigate} from "react-router-dom";
+import "./style.css";
 
 
 const StudioMap = () => {
@@ -116,6 +117,7 @@ const StudioMap = () => {
 
     return (
         <>
+            <div className="map-page">
         <h3>Find studios near you</h3>
         <br/>
         <FormControl>
@@ -155,6 +157,7 @@ const StudioMap = () => {
         <br/>
         <div style={{ height: 500, width: 500 }}
              ref={mapElement} id={"map"}></div>
+            </div>
         </>
 
     )

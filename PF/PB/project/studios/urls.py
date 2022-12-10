@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import CreateStudio, EditStudio, DeleteStudio, ListStudios,\
+from .views import AllAmenities, CreateStudio, EditStudio, DeleteStudio, \
+    ListStudios, \
     ViewStudioProfile, SearchStudios, ClassesSchedule
 
 app_name = "studios"
@@ -13,4 +14,5 @@ urlpatterns = [
     path("<int:id>/schedule", ClassesSchedule.as_view()),
     path("all/", ListStudios.as_view()),
     path("search/", SearchStudios.as_view()),
+    path("amenities/", AllAmenities.as_view()),
 ]

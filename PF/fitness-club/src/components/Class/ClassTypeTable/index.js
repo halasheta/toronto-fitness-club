@@ -19,6 +19,7 @@ import {NavDropdown, NavLink} from "react-bootstrap";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {GridActionsCellItem} from "@mui/x-data-grid";
+ 
 
 const ClassTypeTable = ({ perPage, page }) => {
     const { setClasses, classes } = useContext(ClassesAPIContext);
@@ -140,10 +141,10 @@ const ClassTypeTable = ({ perPage, page }) => {
                             <TableCell>{ clss.capacity }</TableCell>
                             <TableCell>{ dayjs(clss.start_date).format("DD/MM/YYYY") }</TableCell>
                             <TableCell>{ clss.start_time }</TableCell>
-                            <TableCell>{ clss.end_time }</TableCell>
                             <TableCell>{ dayjs(clss.end_recurrence ).format("DD/MM/YYYY") }</TableCell>
+                            <TableCell>{ clss.end_time }</TableCell>
                             <TableCell>
-                                <Button id={`enrol-button-${clss.id}`}
+                                <Button className="Button" id={`enrol-button-${clss.id}`}
                                         disabled={classTypes.indexOf(clss.id) !== -1}
                                         onClick={() => {
                                             handleSubmit(clss.id);
@@ -158,9 +159,9 @@ const ClassTypeTable = ({ perPage, page }) => {
                                         color="inherit"
                                     />}
                                 {isAdmin &&
-                                    <Button id={`edit-button-${clss.id}`}
+                                    <Button className="Button" id={`edit-button-${clss.id}`}
                                             onClick={e => {
-                                                navigate(`/classes/${clss.class_model}/edit//`);}
+                                                navigate(`/classes/${clss.id}/edit//`);}
                                             }>
                                         EDIT</Button>
                                 }

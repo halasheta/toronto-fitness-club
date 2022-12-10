@@ -1,6 +1,10 @@
-.map-page {
+.login-page {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.Button{
+    color: #ff712c
 }

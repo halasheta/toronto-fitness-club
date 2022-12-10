@@ -5,6 +5,7 @@ import StudiosAPIContext from "../../contexts/StudiosAPIContext";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
 import UserAPIContext from "../../contexts/UserAPIContext";
 import {tokenHandle} from "../login";
+ 
 
 const Studios = () => {
     const perPage = 5;
@@ -67,16 +68,21 @@ const Studios = () => {
 
     return (
         <>
+            <div className="class-page">
             <h1> Studios </h1>
-            { isAdmin &&
-            <Button
-                variant="outlined"
-                onClick={createStudios}>
-                +
-            </Button>
-            }
-            <Button variant={"outlined"} onClick={handleOpen}>FILTER</Button>
-            <Button variant={"outlined"} onClick={e => setFilter({})}>CLEAR FILTER</Button>
+            </div>
+            <div className="filter-buttons">
+                { isAdmin &&
+                <Button className="Button"
+                    variant="outlined"
+                    onClick={createStudios}>
+                    +
+                </Button>
+                }
+                <div className="fill-remaining-space"></div>
+                    <Button className="Button" variant={"outlined"} onClick={handleOpen}>FILTER</Button>
+                    <Button className="Button" variant={"outlined"} onClick={e => setFilter({})}>CLEAR FILTER</Button>
+            </div>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Filter by...</DialogTitle>
                 <DialogContent>
@@ -114,7 +120,7 @@ const Studios = () => {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => {
+                    <Button className="Button" onClick={() => {
                     handleClose();
                     setApplied(true);}
                     }>APPLY</Button>
@@ -122,7 +128,8 @@ const Studios = () => {
 
             </Dialog>
             <StudiosTable perPage={perPage} page={page}></StudiosTable>
-            <Button id={'prev-button'}
+            <div className="nav-buttons">
+            <Button className="Button" id={'prev-button'}
                 variant={"contained"}
                 onClick={() => {
                     setPage(Math.max(1, page - 1));
@@ -131,8 +138,8 @@ const Studios = () => {
                 }} disabled={page === 1}>
                 {`<`}
             </Button>
-            <Button disabled={true}>{page}</Button>
-            <Button id={'next-button'}
+            <Button className="Button" disabled={true}>{page}</Button>
+            <Button className="Button" id={'next-button'}
                 variant={"contained"}
                 onClick={() => {
                     setPage(page + 1);
@@ -141,6 +148,7 @@ const Studios = () => {
                 }} disabled={offset + perPage >= total}>
                 {`>`}
             </Button>
+            </div>
 
 
 

@@ -11,7 +11,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import User
 from subscriptions.models import Subscription
 from .models import Class, ClassOccurrence
-from .serializers import ClassSerializer, ClassOccurrenceSerializer
+from .serializers import ClassSerializer, ClassOccurrenceSerializer, \
+    EditClassSerializer
 
 
 def create_class_occurrences(instance, start_date):
@@ -35,6 +36,8 @@ def create_class_occurrences(instance, start_date):
                                              start_time=start,
                                              end_time=end)
         occ.save()
+        if instance.frequency == 0:
+            return
         curr = curr + timedelta(days=instance.frequency)
 
 
@@ -105,7 +108,7 @@ class EditClass(RetrieveAPIView, UpdateAPIView):
         if all_flag is not None:
             partial = kwargs.pop('partial', False)
 
-            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer = EditClassSerializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
 
@@ -148,7 +151,6 @@ class EditClass(RetrieveAPIView, UpdateAPIView):
 
             create_class_occurrences(instance, last_date)
             instance.save()
-            print("REACHED***************")
             return Response(serializer.data)
 
 
@@ -212,7 +214,7 @@ class EnrolClass(GenericAPIView):
         if occ_id is not None:
             occ = ClassOccurrence.objects.get(id=occ_id)
 
-            if occ.start_time > timezone.now() and occ.attendees.count() < occ.capacity:
+            if occ.start_time > timezone.now() - timedelta(hours=5) and occ.attendees.count() < occ.capacity:
                 occ.attendees.add(user)
                 return Response(status=status.HTTP_200_OK)
             return Response({'message': 'Could not enroll because of capacity constraints'},
@@ -223,7 +225,7 @@ class EnrolClass(GenericAPIView):
         if class_id is not None:
             qs = ClassOccurrence.objects \
                 .filter(class_model=class_id) \
-                .filter(start_time__gte=timezone.now())
+                .filter(start_time__gte=(timezone.now() - timedelta(hours=5)))
 
             for obj in qs:
                 if obj.attendees.count() < obj.capacity:
@@ -246,14 +248,14 @@ class DropClass(GenericAPIView):
         occ_id = request.query_params.get('occurrence')
         if occ_id is not None:
             occ = ClassOccurrence.objects.get(id=occ_id)
-            if occ.start_time > timezone.now():
+            if occ.start_time > timezone.now() - timedelta(hours=5):
                 occ.attendees.remove(User.objects.get(id=self.request.user.id))
                 return Response(status=status.HTTP_200_OK)
 
         # All future instances of a class
         class_id = request.query_params.get('class')
         if class_id is not None:
-            qs = ClassOccurrence.objects.filter(class_model=class_id).filter(start_time__gte=timezone.now())
+            qs = ClassOccurrence.objects.filter(class_model=class_id).filter(start_time__gte=(timezone.now() - timedelta(hours=5)))
             for obj in qs:
                 if self.request.user in obj.attendees.all():
                     ClassOccurrence.objects.get(id=obj.id).attendees.remove(
@@ -292,7 +294,7 @@ class SearchClasses(ListAPIView):
     }
 
     def get_queryset(self):
-        return ClassOccurrence.objects.filter(start_time__gte=timezone.now()).order_by('start_time__year', 'start_time__month', 'start_time__day', 'start_time__hour',
+        return ClassOccurrence.objects.filter(start_time__gte=(timezone.now() - timedelta(hours=5))).order_by('start_time__year', 'start_time__month', 'start_time__day', 'start_time__hour',
                                                                                        'start_time__minute')
 
 

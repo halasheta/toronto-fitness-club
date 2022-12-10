@@ -1,4 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
+
+
 import {
     Box,
     Button,
@@ -149,7 +151,7 @@ const EditSubscription = () => {
                 </TextField>
                 <br/>
             </FormControl>
-            <Button id="edit-button" variant="outlined" onClick={submitReq}>EDIT</Button>
+            <Button className="Button" id="edit-button" variant="outlined" onClick={submitReq}>EDIT</Button>
         </Box>
         </>
     );

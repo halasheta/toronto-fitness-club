@@ -21,6 +21,8 @@ import {
     TimelineSeparator
 } from "@mui/lab";
 import $ from "jquery";
+import "./index.css"
+ 
 
 const ClassSchedule = () => {
     const [classes, setClasses] = useState({});
@@ -213,12 +215,12 @@ const ClassSchedule = () => {
     }, []);
 
     return (
-        <>
+        <div className="schedule-page">
             <h2>Class Schedule</h2>
-            <div>
-                <Button onClick={paginate} id="page-prev" name="sub" variant="contained">{"<"}</Button>
-                <p id="current-month">{viewKey}</p>
-                <Button onClick={paginate} id="page-next" name="add" variant="contained">{">"}</Button>
+            <div className="page-buttons">
+                <Button className="Button" onClick={paginate} id="page-prev" name="sub" variant="contained">{"<"}</Button>
+                <Button className="Button" disabled={true}>{viewKey}</Button>
+                <Button className="Button" onClick={paginate} id="page-next" name="add" variant="contained">{">"}</Button>
             </div>
             {(currMonthClasses != null && Object.entries(currMonthClasses).length === 0) &&
                 <p> You have no classes scheduled this month. </p>
@@ -326,12 +328,12 @@ const ClassSchedule = () => {
                                           label="This and all future occurrences" />
 
                     </RadioGroup>
-                    <Button type={"submit"} variant={"contained"}
+                    <Button className="Button" type={"submit"} variant={"contained"}
                             onClick={handleSubmit}>SUBMIT</Button>
                 </DialogContent>
             </Dialog>
 
-        </>
+        </div>
     )
 }
 // call update Studio for each one?

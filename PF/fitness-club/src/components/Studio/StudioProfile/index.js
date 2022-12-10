@@ -5,6 +5,7 @@ import UserAPIContext from "../../../contexts/UserAPIContext";
 import {tokenHandle} from "../../../pages/login";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+ 
 
 const StudioProfile = () => {
     let navigate = useNavigate();
@@ -36,6 +37,14 @@ const StudioProfile = () => {
                 }
             })
             .catch(err => console.log(err))
+    }
+
+    const parsePhone = (phone) => {
+        phone = String(phone);
+        let first = phone.substring(0,3)
+        let mid = phone.substring(3,6)
+        let last = phone.substring(6)
+        return `(${first}) ${mid}-${last}`
     }
 
 
@@ -76,28 +85,34 @@ const StudioProfile = () => {
             <h2> { studio.name }</h2>
             { isAdmin &&
                 <>
-                    <Button id="edit-button" variant="outlined" onClick={redirectEdit}>EDIT</Button>
-                    <Button id="class-button" variant="outlined" onClick={redirectClass}>ADD CLASS</Button>
+                    <Button className="Button" id="edit-button" variant="outlined" onClick={redirectEdit}>EDIT</Button>
+                    <Button className="Button" id="class-button" variant="outlined" onClick={redirectClass}>ADD CLASS</Button>
                 </>
              }
-            {studio.image1 !== undefined && studio.image1 != null &&
-                <img alt='profile' src={studio.image1} width="250"/>
-            }
-            {studio.image2 !== undefined  && studio.image2 != null &&
-                <img alt='profile' src={studio.image2} width="250"/>
-            }
-            {studio.image3 !== undefined && studio.image3 != null &&
-                <img alt='profile' src={studio.image3} width="250"/>
-            }
-            {studio.image4 !== undefined && studio.image4 != null &&
-                <img alt='profile' src={studio.image4} width="250"/>
-            }
-            {studio.image5 !== undefined && studio.image5 != null &&
-                <img alt='profile' src={studio.image5} width="250"/>
-            }
+            <br/>
+            <ImageList
+                sx={{ width: 500, height: 450 }} cols={2} rowHeight={164}
+            >
+                {studio.image1 !== undefined && studio.image1 != null &&
+                    <ImageListItem><img alt='profile' src={studio.image1}/></ImageListItem>
+                }
+                {studio.image2 !== undefined  && studio.image2 != null &&
+                    <ImageListItem><img alt='profile' src={studio.image2} /></ImageListItem>
+                }
+                {studio.image3 !== undefined && studio.image3 != null &&
+                    <ImageListItem><img alt='profile' src={studio.image3} /></ImageListItem>
+                }
+                {studio.image4 !== undefined && studio.image4 != null &&
+                    <ImageListItem><img alt='profile' src={studio.image4} /></ImageListItem>
+                }
+                {studio.image5 !== undefined && studio.image5 != null &&
+                    <ImageListItem><img alt='profile' src={studio.image5}/></ImageListItem>
+                }
+            </ImageList>
+            <br/>
             <p> Address: { studio.address }</p>
             <p> Postal Code: { studio.postal_code }</p>
-            <p> Phone: { studio.phone }</p>
+            <p> Phone: { parsePhone(studio.phone) }</p>
 
             <h3>Amenities</h3>
             { studio.amenities !== undefined &&
@@ -115,7 +130,7 @@ const StudioProfile = () => {
 
             <br/>
             { isAdmin &&
-                <Button id="delete-button" variant="outlined" onClick={submitDel}>DELETE</Button>
+                <Button className="Button" id="delete-button" variant="outlined" onClick={submitDel}>DELETE</Button>
              }
         </>
     )

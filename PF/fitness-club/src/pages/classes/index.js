@@ -5,6 +5,8 @@ import UserAPIContext from "../../contexts/UserAPIContext";
 import ClassesAPIContext from "../../contexts/ClassesAPIContext";
 import ClassesTable from "../../components/Class/ClassesTable";
 import {tokenHandle} from "../login";
+import "./classes.css"
+ 
 
 const Classes = () => {
     const perPage = 5;
@@ -63,10 +65,13 @@ const Classes = () => {
 
     return (
         <>
+        <div className="class-page">
             <h1> Classes by Occurrence </h1>
-            <Button variant={"outlined"} onClick={handleOpen}>FILTER</Button>
-            <Button variant={"outlined"} onClick={e => {setFilter({})
-                setApplied(true);}}>CLEAR FILTER</Button>
+        </div>
+            <div className="filter-buttons"><Button className="Button" variant={"outlined"} onClick={handleOpen}>FILTER</Button>
+                <Button className="Button" variant={"outlined"} onClick={e => {setFilter({})
+                    setApplied(true);}}>CLEAR FILTER</Button></div>
+        <div className="class-page">
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Filter by...</DialogTitle>
                 <DialogContent>
@@ -123,7 +128,7 @@ const Classes = () => {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => {
+                    <Button className="Button" onClick={() => {
                         handleClose();
                         setApplied(true);}
                     }>APPLY</Button>
@@ -131,28 +136,27 @@ const Classes = () => {
 
             </Dialog>
             <ClassesTable perPage={perPage} page={page}></ClassesTable>
-            <Button id={'prev-button'}
-                    variant={"contained"}
-                    onClick={() => {
-                        setPage(Math.max(1, page - 1));
-                        setApplied(true);
-                        setOffset(offset => offset - perPage);
-                    }} disabled={page === 1}>
+            <div className="nav-buttons"><Button className="Button" id={'prev-button'}
+                                                 variant={"contained"}
+                                                 onClick={() => {
+                                                     setPage(Math.max(1, page - 1));
+                                                     setApplied(true);
+                                                     setOffset(offset => offset - perPage);
+                                                 }} disabled={page === 1}>
                 {`<`}
             </Button>
-            <Button disabled={true}>{page}</Button>
-            <Button id={'next-button'}
-                    variant={"contained"}
-                    onClick={() => {
-                        setPage(page + 1);
-                        setApplied(true);
-                        setOffset(offset => offset + perPage);
-                    }} disabled={offset + perPage >= total}>
-                {`>`}
-            </Button>
+                <Button className="Button" disabled={true}>{page}</Button>
+                <Button className="Button" id={'next-button'}
+                        variant={"contained"}
+                        onClick={() => {
+                            setPage(page + 1);
+                            setApplied(true);
+                            setOffset(offset => offset + perPage);
+                        }} disabled={offset + perPage >= total}>
+                    {`>`}
+                </Button></div>
 
-
-
+        </div>
         </>
     )
 }

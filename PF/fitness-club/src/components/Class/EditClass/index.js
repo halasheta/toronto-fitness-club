@@ -10,6 +10,8 @@ import {DesktopDatePicker} from "@mui/x-date-pickers";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import dayjs from "dayjs";
 
+ 
+
 const EditClass = () => {
     let navigate = useNavigate();
     const { id } = useParams();
@@ -27,8 +29,8 @@ const EditClass = () => {
     const [ endRecurrence, setEndRecurrence ]  = useState(dayjs().add(-4, 'hour'));
     const [startDate, setStartDate]  = useState(dayjs().add(1, 'hour'));
     const [occurrences, setOccurrences] = useState([]);
-    const [ occurrenceOrAll, setOccurrenceOrAll ] = useState("");
-    const [ occurrenceOrAllText, setOccurrenceOrAllText ] = useState("");
+    const [ occurrenceOrAll, setOccurrenceOrAll ] = useState("all");
+    const [ occurrenceOrAllText, setOccurrenceOrAllText ] = useState("All");
     const [occurrencesMap, setOccurrencesMap] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -102,7 +104,7 @@ const EditClass = () => {
             start_time: startTime,
             end_time: endTime,
             frequency: frequency,
-            end_recurrence: endRecurrence.toISOString(),
+            end_recurrence: (endRecurrence.add(23, "h")).toISOString(),
             start_date: startDate.toISOString()
         })
     }
@@ -276,7 +278,7 @@ const EditClass = () => {
 
 
 
-                <Button id="create-button" variant="outlined" onClick={submitReq}>EDIT</Button>
+                <Button className="Button" id="create-button" variant="outlined" onClick={submitReq}>EDIT</Button>
             </form>
             {/*    </>*/}
             {/*    : <Status404/>*/}

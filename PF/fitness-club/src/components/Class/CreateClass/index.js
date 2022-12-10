@@ -8,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Status404 from "../../Common/Errors/Status404";
 import {DesktopDatePicker} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+ 
 
 const CreateClass = () => {
     const { isAdmin } = useContext(UserAPIContext);
@@ -42,7 +43,7 @@ const CreateClass = () => {
             start_time: startTime,
             end_time: endTime,
             frequency: frequency,
-            end_recurrence: endRecurrence.toISOString(),
+            end_recurrence: (endRecurrence.add(23, "h")).toISOString(),
             start_date: startDate.toISOString()
         })
     }
@@ -222,7 +223,7 @@ const CreateClass = () => {
 
 
 
-                <Button id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
+                <Button className="Button" id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
             </form>
                 </>
                 : <Status404/>

@@ -1,0 +1,22 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar {
+    border-radius: 50%;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}

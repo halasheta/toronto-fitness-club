@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {tokenHandle} from "../login";
 import {validateEditable} from "../signup";
 import UserAPIContext from "../../contexts/UserAPIContext";
+import "./index.css"
 
 const Profile = () => {
     const [first, setFirst] = useState('');
@@ -113,32 +114,40 @@ const Profile = () => {
         getData();
     }, []);
 
-    return <>
-        <img alt='profile' src={avatar} width="250"/><input
-        accept="image/*"
-        style={{ display: 'none' }}
-        id="avatar-button-file"
-        type="file"
-        onChange={uploadAvatar}/>
-        <label htmlFor="avatar-button-file">
-            <Button variant="contained" component="span">
-                Choose Avatar
-            </Button>
-        </label>
-        {newAvatar !== "" && <img alt='new-profile' src={newAvatarLink} width="100"/>}
-        <form>
-        <TextField id="first_name" label="First Name" variant="outlined" required onChange={e => setFirst(e.target.value)}
-            error={errors.first !== undefined} helperText={errors.first} value={first}/>
-        <TextField id="last_name" label="Last Name" variant="outlined" required onChange={e => setLast(e.target.value)}
-                   error={errors.last !== undefined} helperText={errors.last} value={last}/>
-        <TextField id="email" label="Email" variant="outlined" type="email" required onChange={e => setEmail(e.target.value)}
-                   error={errors.email !== undefined} helperText={errors.email} value={email}/>
-        <TextField id="phone" label="Phone (Numbers only)" variant="outlined" required onChange={e => setPhone(e.target.value)}
-                   error={errors.phone !== undefined} helperText={errors.phone} value={phone}/>
-        <Button id="toggle-edit-button" variant="contained" onClick={updateData}>Save Changes</Button>
-        </form>
-        <br/>
-    </>
+    return <div className="page">
+        <h1>Profile</h1>
+        <div className="grid">
+            <div className="avatar-section">
+                <img alt='profile' className="avatar" src={avatar} width="250"/><input
+                accept="image/*"
+                style={{ display: 'none' }}
+                id="avatar-button-file"
+                type="file"
+                onChange={uploadAvatar}/>
+                <label htmlFor="avatar-button-file">
+                    <Button className="Button" variant="contained" component="span">
+                        Choose Avatar
+                    </Button>
+                </label>
+                {newAvatar !== "" && <img alt='new-profile' src={newAvatarLink} width="100"/>}
+            </div>
+
+            <form>
+                <TextField id="first_name" label="First Name" variant="outlined" required onChange={e => setFirst(e.target.value)}
+                           error={errors.first !== undefined} helperText={errors.first} value={first}/>
+                <TextField id="last_name" label="Last Name" variant="outlined" required onChange={e => setLast(e.target.value)}
+                           error={errors.last !== undefined} helperText={errors.last} value={last}/>
+                <TextField id="email" label="Email" variant="outlined" type="email" required onChange={e => setEmail(e.target.value)}
+                           error={errors.email !== undefined} helperText={errors.email} value={email}/>
+                <TextField id="phone" label="Phone (Numbers only)" variant="outlined" required onChange={e => setPhone(e.target.value)}
+                           error={errors.phone !== undefined} helperText={errors.phone} value={phone}/>
+                <br/>
+                <Button className="Button" id="toggle-edit-button" variant="contained" onClick={updateData}>Save Changes</Button>
+            </form>
+            <br/>
+        </div>
+
+    </div>
 
 
 
