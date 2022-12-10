@@ -3,6 +3,7 @@ import {Outlet, useNavigate, Link} from "react-router-dom";
 import {NavLink, Navbar, NavbarBrand, Nav, NavDropdown, NavItem} from "react-bootstrap";
 import {LinkContainer} from 'react-router-bootstrap';
 import {tokenHandle} from "../login";
+import "./nav-bar.css"
  
 
 
@@ -37,28 +38,28 @@ const Layout = () => {
 
 
                     <NavDropdown title="Classes" id="nav-dropdown-logged-in" flip alignRight>
-                        <NavDropdown.Item as={Link} to="/classes"> View Classes by Occurrence</NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to="/classes/types/"> View Classes by Type</NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to="/classes/schedule">Class Schedule</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/classes" className="dropdown-item"> View Classes by Occurrence</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/classes/types/" className="dropdown-item"> View Classes by Type</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/classes/schedule" className="dropdown-item">Class Schedule</NavDropdown.Item>
                     </NavDropdown>
 
                     <NavDropdown title="Studios" id="nav-dropdown-logged-in" flip align="right">
-                        <NavDropdown.Item as={Link} to="/studios"> View All Studios</NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to="/studios/map">Studios near me</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/studios" className="dropdown-item"> View All Studios</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/studios/map" className="dropdown-item">Studios near me</NavDropdown.Item>
                     </NavDropdown>
 
                     {loggedIn &&
                         <NavDropdown title="Accounts" id="nav-dropdown-logged-in"  flip alignRight>
-                        <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to="/payments">Payments</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/profile" className="dropdown-item">Profile</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/payments" className="dropdown-item">Payments</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item onClick={logOut}>Log Out</NavDropdown.Item>
+                        <NavDropdown.Item onClick={logOut} className="dropdown-item">Log Out</NavDropdown.Item>
                     </NavDropdown>}
 
                     {!loggedIn &&
                         <NavDropdown title="Accounts" id="nav-dropdown-not-logged-in" flip alignRight>
-                            <NavDropdown.Item as={Link} to="/login">Log In</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/signup">Sign Up</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/login" className="dropdown-item">Log In</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/signup" className="dropdown-item">Sign Up</NavDropdown.Item>
                         </NavDropdown>}
 
                 </Nav>
