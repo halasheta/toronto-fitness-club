@@ -9,7 +9,8 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DesktopDatePicker} from "@mui/x-date-pickers";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import dayjs from "dayjs";
-
+import './style.css';
+import Status404 from "../../Common/Errors/Status404";
  
 
 const EditClass = () => {
@@ -173,47 +174,56 @@ const EditClass = () => {
 
     return (
         <>
-            {/*{ isAdmin ? <>*/}
+            <div className={'edit-class-page'}>
+            { isAdmin ? <>
             <h1>Edit a Class</h1>
             <form>
                 <TextField id="name" label="Name" variant="outlined"
                            required onChange={e => setName(e.target.value)} value={name}
-                           error={errors.name !== undefined} helperText={errors.name}/>
+                           error={errors.name !== undefined} helperText={errors.name}
+                           sx={{ width: 400 }}/>
 
                 <br/>
 
                 <TextField id="coach" label="Coach" variant="outlined" value={coach}
                            required onChange={e => setCoach(e.target.value) }
+                           sx={{ width: 400 }}
                            error={errors.coach !== undefined} helperText={errors.coach}/>
                 <br/>
 
                 <TextField id="description" label="Description" variant="outlined" value={description}
                            required onChange={e => setDescription(e.target.value)} multiline
+                           sx={{ width: 400 }}
                            error={errors.description !== undefined} helperText={errors.description}/>
                 <br/>
 
                 <TextField id="keywords" label="Keywords (separate with comma)" variant="outlined"
                            required onChange={e => setKeywords(e.target.value)} multiline  value={keywords}
+                           sx={{ width: 400 }}
                            error={errors.keywords !== undefined} helperText={errors.keywords}/>
                 <br/>
 
                 <TextField type="number" id="capacity" label="Capacity" variant="outlined"
                            required onChange={e => setCapacity(parseInt(e.target.value))}  value={capacity}
+                           sx={{ width: 400 }}
                            error={errors.capacity !== undefined} helperText={errors.capacity}/>
                 <br/>
 
 
                 <TextField type="time" id="start-time" label="Start Time" variant="outlined"
                            required onChange={e => setStartTime(e.target.value)}  value={startTime}
+                           sx={{ width: 400 }}
                            error={errors.start_time !== undefined} helperText={errors.start_time}/>
                 <br/>
 
                 <TextField type="time" id="end-time" label="End Time" variant="outlined"
                            required onChange={e => setEndTime(e.target.value)}  value={endTime}
+                           sx={{ width: 400 }}
                            error={errors.end_time !== undefined} helperText={errors.end_time}/>
                 <br/>
 
                 <TextField
+                    sx={{ width: 400 }}
                     id="select-frequency"
                     value={frequencyText}
                     label="Frequency"
@@ -239,7 +249,7 @@ const EditClass = () => {
                             setStartDate(newValue);
                         }}
                         error={errors.start_date !== undefined} helperText={errors.start_date}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} sx={{ width: 400 }} />}
                     />
                     <br/>
                     <DesktopDatePicker
@@ -250,12 +260,13 @@ const EditClass = () => {
                             setEndRecurrence(newValue);
                         }}
                         error={errors.end_recurrence !== undefined} helperText={errors.end_recurrence}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} sx={{ width: 400 }} />}
                     />
                 </LocalizationProvider>
-
+                <br/>
                 <TextField
                     id="select-occurrence"
+                    sx={{ width: 400 }}
                     value={occurrenceOrAllText}
                     label="Occurrence"
                     variant="outlined"
@@ -268,6 +279,7 @@ const EditClass = () => {
                     error={errors.occurrence !== undefined} helperText={errors.occurrence}
                     select
                 >
+
                     <MenuItem value="All">All</MenuItem>
                     {occurrences != null && occurrences.map((occurrence) => {
                         return (
@@ -276,13 +288,15 @@ const EditClass = () => {
                     })}
                 </TextField>
 
-
+                <br/>
 
                 <Button className="Button" id="create-button" variant="outlined" onClick={submitReq}>EDIT</Button>
             </form>
-            {/*    </>*/}
-            {/*    : <Status404/>*/}
-            {/*}*/}
+                </>
+                : <Status404/>
+            }
+            </div>
+
         </>
     );
 }

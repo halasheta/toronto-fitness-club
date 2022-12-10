@@ -7,7 +7,7 @@ import UserAPIContext from "../../../contexts/UserAPIContext";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Status404 from "../../Common/Errors/Status404";
- 
+import './style.css';
 
 const EditStudio = () => {
     let navigate = useNavigate();
@@ -281,6 +281,7 @@ const EditStudio = () => {
 
     return(
         <>
+            <div className={"edit-page"}>
             { isAdmin ? <>
                     <h1>Edit Studio</h1>
                     <form>
@@ -288,6 +289,7 @@ const EditStudio = () => {
                                    required onChange={e => setName(e.target.value)}
                                    value={name}
                                    error={errors.name !== undefined} helperText={errors.name}
+                                   sx={{ width: 400 }}
                                    InputLabelProps={{
                                        shrink: true,
                                    }}/>
@@ -295,6 +297,7 @@ const EditStudio = () => {
                         <br/>
                         <TextField id="prev-address" label="Previous Address" variant="outlined"
                                    value={studio.address} editable="false"
+                                   sx={{ width: 400 }}
                                    InputLabelProps={{
                                        shrink: true,
                                    }}/>
@@ -311,7 +314,7 @@ const EditStudio = () => {
                                 <TextField {...params} id="address" label={"New Address"}
                                          />}
 
-                            sx={{ width: 200 }}
+                            sx={{ width: 400 }}
 
                             input={inputValue}
                             value={value || null}
@@ -327,6 +330,7 @@ const EditStudio = () => {
                                    required onChange={e => setPostalCode(e.target.value)}
                                    value={postalCode}
                                    error={errors.postal_code !== undefined} helperText={errors.postal_code}
+                                   sx={{ width: 400 }}
                                    InputLabelProps={{
                                        shrink: true,
                                    }}/>
@@ -336,6 +340,7 @@ const EditStudio = () => {
                                    required onChange={e => setPhone(e.target.value)}
                                    value={phone}
                                    error={errors.phone !== undefined} helperText={errors.phone}
+                                   sx={{ width: 400 }}
                                    InputLabelProps={{
                                        shrink: true,
                                    }}/>
@@ -374,10 +379,12 @@ const EditStudio = () => {
                         <div id="add-amenities">
                             <br/>
                             <TextField id='amenity-type' label="Type" variant="outlined"
-                                       onChange={e => setType(e.target.value)}/>
+                                       onChange={e => setType(e.target.value)}
+                                       sx={{ width: 200 }}/>
 
                             <TextField id='amenity-qty' type="number" variant="outlined" label={"Quantity"}
                                        InputProps={{ inputProps: { min: 0 } }}
+                                       sx={{ width: 200 }}
                                        onChange={e => setQuantity(e.target.value)}/>
                             <br/>
                             <Button className="Button" id="button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
@@ -389,41 +396,51 @@ const EditStudio = () => {
                         <br/>
 
                         <h3>Images</h3>
-                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-1"
+                        <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-1"
                                                         type="file" name="image1" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-1">
                                 <Button className="Button" variant="contained" component="span"> Choose Image </Button>
-                            </label> </div>
-                        {image1 != null && <img alt='new-img-1' src={image1} width="100"/>}
+                            </label>
+                            {image1 != null && <img alt='new-img-1' src={image1} width="200"/>}
+                        </div>
 
-                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-2"
+
+                        <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-2"
                                      type="file" name="image2" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-2">
                                 <Button className="Button" variant="contained" component="span"> Choose Image </Button>
-                            </label> </div>
-                        {image2 != null && <img alt='new-img-2' src={image2} width="100"/>}
+                            </label>
+                            {image2 != null && <img alt='new-img-2' src={image2} width="200"/>}
+                        </div>
 
-                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-3"
+
+                        <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-3"
                                      type="file" name="image3" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-3">
                                 <Button className="Button" variant="contained" component="span"> Choose Image </Button>
-                            </label> </div>
-                        {image3 != null && <img alt='new-img-3' src={image3} width="100"/>}
+                            </label>
+                            {image3 != null && <img alt='new-img-3' src={image3} width="200"/>}
+                        </div>
 
-                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-4"
+
+                        <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-4"
                                      type="file" name="image4" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-4">
                                 <Button className="Button" variant="contained" component="span"> Choose Image </Button>
-                            </label> </div>
-                        {image4 != null && <img alt='new-img-4' src={image4} width="100"/>}
+                            </label>
+                            {image4 != null && <img alt='new-img-4' src={image4} width="200"/>}
+                        </div>
 
 
-                        <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-5"
+
+                        <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-5"
                                      type="file" name="image5" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-5">
                                 <Button className="Button" variant="contained" component="span"> Choose Image </Button>
-                            </label> </div>
-                        {image5 != null && <img alt='new-img-5' src={image5} width="100"/>}
+                            </label>
+                            {image5 != null && <img alt='new-img-5' src={image5} width="200"/>}
+                        </div>
+
                         <br/>
 
                         <br/>
@@ -433,6 +450,7 @@ const EditStudio = () => {
                 </>
                 : <Status404/>
             }
+            </div>
         </>
         );
 }

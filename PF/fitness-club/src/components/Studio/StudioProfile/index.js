@@ -4,8 +4,7 @@ import {Button, Grid, ImageList, ImageListItem, Paper} from "@mui/material";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import {tokenHandle} from "../../../pages/login";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
- 
+import './style.css';
 
 const StudioProfile = () => {
     let navigate = useNavigate();
@@ -82,6 +81,7 @@ const StudioProfile = () => {
 
     return(
         <>
+            <div className={"profile-page"}>
             <h2> { studio.name }</h2>
             { isAdmin &&
                 <>
@@ -132,7 +132,9 @@ const StudioProfile = () => {
             { isAdmin &&
                 <Button className="Button" id="delete-button" variant="outlined" onClick={submitDel}>DELETE</Button>
              }
+            </div>
         </>
+
     )
 
 }

@@ -8,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Status404 from "../../Common/Errors/Status404";
 import {DesktopDatePicker} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import './style.css';
  
 
 const CreateClass = () => {
@@ -143,49 +144,58 @@ const CreateClass = () => {
 
     return(
         <>
+            <div className={"create-class-page"}>
             { isAdmin ? <>
             <h1>Create a Class</h1>
             <form>
                 <TextField id="name" label="Name" variant="outlined"
                            required onChange={e => setName(e.target.value)}
+                           sx={{ width: 400 }}
                            error={errors.name !== undefined} helperText={errors.name}/>
 
                 <br/>
 
                 <TextField id="coach" label="Coach" variant="outlined"
                            required onChange={e => setCoach(e.target.value)}
+                           sx={{ width: 400 }}
                            error={errors.coach !== undefined} helperText={errors.coach}/>
                 <br/>
 
                 <TextField id="description" label="Description" variant="outlined"
                            required onChange={e => setDescription(e.target.value)} multiline
+                           sx={{ width: 400 }}
                            error={errors.description !== undefined} helperText={errors.description}/>
                 <br/>
 
                 <TextField id="keywords" label="Keywords (separate with comma)" variant="outlined"
                                   required onChange={e => setKeywords(e.target.value)} multiline
+                           sx={{ width: 400 }}
                                   error={errors.keywords !== undefined} helperText={errors.keywords}/>
                 <br/>
 
                 <TextField type="number" id="capacity" label="Capacity" variant="outlined"
                            required onChange={e => setCapacity(parseInt(e.target.value))}
+                           sx={{ width: 400 }}
                            error={errors.capacity !== undefined} helperText={errors.capacity}/>
                 <br/>
 
 
                 <TextField type="time" id="start-time" label="Start Time" variant="outlined"
                            required onChange={e => setStartTime(e.target.value)}
+                           sx={{ width: 400 }}
                            error={errors.start_time !== undefined} helperText={errors.start_time}/>
                 <br/>
 
                 <TextField type="time" id="end-time" label="End Time" variant="outlined"
                            required onChange={e => setEndTime(e.target.value)}
+                           sx={{ width: 400 }}
                            error={errors.end_time !== undefined} helperText={errors.end_time}/>
                 <br/>
 
                 <TextField
                     id="select-frequency"
                     value={frequencyText}
+                    sx={{ width: 400 }}
                     label="Frequency"
                     variant="outlined"
                     onChange={frequencyChange}
@@ -199,6 +209,7 @@ const CreateClass = () => {
                 <br/>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DesktopDatePicker
+
                         label="Start Date" required
                         inputFormat="DD/MM/YYYY"
                         value={startDate}
@@ -206,7 +217,7 @@ const CreateClass = () => {
                             setStartDate(newValue);
                         }}
                         error={errors.start_date !== undefined} helperText={errors.start_date}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} sx={{ width: 400 }}/>}
                     />
                     <br/>
                     <DesktopDatePicker
@@ -217,10 +228,11 @@ const CreateClass = () => {
                             setEndRecurrence(newValue);
                         }}
                         error={errors.end_recurrence !== undefined} helperText={errors.end_recurrence}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} sx={{ width: 400 }}/>}
                     />
                 </LocalizationProvider>
 
+                <br/>
 
 
                 <Button className="Button" id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
@@ -228,6 +240,7 @@ const CreateClass = () => {
                 </>
                 : <Status404/>
             }
+            </div>
         </>
     );
 }
