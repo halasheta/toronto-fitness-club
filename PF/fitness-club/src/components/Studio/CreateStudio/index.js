@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import $ from 'jquery';
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import Status404 from "../../Common/Errors/Status404";
- 
+import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import './style.css';
 
 const CreateStudio = () => {
     let navigate = useNavigate();
@@ -25,6 +27,7 @@ const CreateStudio = () => {
     const [errors, setErrors] = useState({});
 
     const [amenities, setAmenities] = useState([]);
+    const [rows, setRows] = useState([]);
     const [type, setType] = useState('');
     const [quantity, setQuantity] = useState(0);
 
@@ -184,7 +187,23 @@ const CreateStudio = () => {
             setAmenities(amenities => [...amenities, amty]);
             $('#amenity-type').val('');
             $('#amenity-qty').val('');
+
+            if (rows.indexOf({...amty, id: rows.length}) === -1) {
+                setRows(rows => [...rows, {...amty, id: rows.length}]);
+            }
+
         }
+    }
+
+    const processRowUpdate = (newRow) => {
+        const updatedRow = { ...newRow, isNew: false };
+
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+        return updatedRow;
+    }
+    const handleDeleteClick = (id) => () => {
+        setRows(rows.filter((row) => row.id !== id));
+        amenities.splice(id, 1);
     }
 
     const uploadImage = (e) => {
@@ -205,6 +224,7 @@ const CreateStudio = () => {
 
      return(
         <>
+            <div className={"create-page"}>
             { isAdmin ? <>
                     <h1>Add a Studio</h1>
                     <form>
@@ -257,6 +277,32 @@ const CreateStudio = () => {
                             <Button className="Button" id="create-button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
                         </div>
 
+                        <div id="amenities" style={{ height: 300, width: 400 }}>
+                            <DataGrid
+                                columns={[
+                                    {field: 'type', headerName: 'Type', width: 200, editable: true},
+                                    {field: 'quantity', headerName: 'Quantity', type: 'number', editable: true},
+                                    {field: 'action', headerName: 'Action', type: 'actions',
+                                        getActions: ({ id }) => {
+                                            return [<GridActionsCellItem
+                                                icon={<DeleteIcon />}
+                                                label="Delete"
+                                                onClick={handleDeleteClick(id)}
+                                                color="inherit"
+                                            />]
+                                        }}
+
+                                ]}
+
+                                rows={rows}
+
+                                editMode={"row"}
+
+                                processRowUpdate={processRowUpdate}
+                                experimentalFeatures={{ newEditingApi: true }}
+                            />
+                        </div>
+
                         <br/>
 
                         {numUpload >= 1 && <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-1"
@@ -305,6 +351,7 @@ const CreateStudio = () => {
                 </>
                 : <Status404/>
             }
+            </div>
         </>
         );
 }
