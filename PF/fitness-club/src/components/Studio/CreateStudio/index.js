@@ -8,6 +8,8 @@ import Status404 from "../../Common/Errors/Status404";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import './style.css';
+import {theme} from "../../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
 
 const CreateStudio = () => {
     let navigate = useNavigate();
@@ -224,6 +226,7 @@ const CreateStudio = () => {
 
      return(
         <>
+            <ThemeProvider theme={theme}>
             <div className={"create-page"}>
             { isAdmin ? <>
                     <h1>Add a Studio</h1>
@@ -274,7 +277,7 @@ const CreateStudio = () => {
                                        InputProps={{ inputProps: { min: 0 } }}
                                        onChange={e => setQuantity(e.target.value)}/>
                             <br/>
-                            <Button className="Button" id="create-button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
+                            <Button color="primary" className="Button" id="create-button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
                         </div>
 
                         <div id="amenities" style={{ height: 300, width: 400 }}>
@@ -308,21 +311,21 @@ const CreateStudio = () => {
                         {numUpload >= 1 && <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-1"
                                                          type="file" name="one" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-1">
-                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                                <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label> </div>}
                         {images["one"] !== undefined && <img alt='new-img-1' src={imagePreviews.one} width="100"/>}
 
                         {numUpload >= 2 && <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-2"
                                                          type="file" name="two" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-2">
-                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                                <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label> </div>}
                         {images["two"] !== undefined && <img alt='new-img-2' src={imagePreviews.two} width="100"/>}
 
                         {numUpload >= 3 && <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file3"
                             type="file" name="three" onChange={uploadImage}/>
                         <label htmlFor="img-button-file3">
-                            <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                            <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                         </label> </div>}
 
                         {images["three"] !== undefined && <img alt='new-img-3' src={imagePreviews.three} width="100"/>}
@@ -330,28 +333,31 @@ const CreateStudio = () => {
                         {numUpload >= 4 && <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file4"
                                                          type="file" name="four" onChange={uploadImage}/>
                             <label htmlFor="img-button-file4">
-                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                                <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label> </div>}
                         {images["four"] !== undefined && <img alt='new-img-4' src={imagePreviews.four} width="100"/>}
 
                         {numUpload >= 5 && <div> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file5"
                                                          type="file" name="five" onChange={uploadImage}/>
                             <label htmlFor="img-button-file5">
-                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                                <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label> </div>}
                         {images["five"] !== undefined && <img alt='new-img-5' src={imagePreviews.five} width="100"/>}
 
-                        <Button className="Button" variant={"text"} onClick={showMore} disabled={numUpload >= 5}>Add another image</Button>
+                        <Button color="primary" className="Button" variant={"text"} onClick={showMore} disabled={numUpload >= 5}>Add another image</Button>
                         <br/>
 
                         <br/>
 
-                        <Button className="Button" id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
+                        <Button color="primary" className="Button" id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
                     </form>
+
                 </>
+
                 : <Status404/>
             }
             </div>
+            </ThemeProvider>
         </>
         );
 }

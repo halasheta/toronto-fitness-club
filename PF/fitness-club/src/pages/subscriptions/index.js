@@ -5,6 +5,8 @@ import {Box, Button, IconButton, Modal, Typography} from "@mui/material";
 import UserAPIContext from "../../contexts/UserAPIContext";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import "./index.css"
+import {theme} from "../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
 
 const Subscriptions = () => {
     let navigate = useNavigate();
@@ -167,6 +169,7 @@ const Subscriptions = () => {
     }, []);
 
     return (
+        <ThemeProvider theme={theme}>
         <div className="page">
             <div className="title">
                 <h1>Subscriptions</h1>
@@ -201,14 +204,14 @@ const Subscriptions = () => {
                                 <div className='subscription' key={prop}>
                                     <h2><b>{value.duration}</b></h2>
                                     <h2>{"$" + String(value.price)}</h2>
-                                    <Button className="Button" id="subscribe-button" name={value.pk} variant={String(value.pk) === subscription ? "contained" : "outlined"} onClick={subscribe} >{String(value.pk) === subscription ? "Unsubscribe" : "Subscribe"}</Button>
+                                    <Button color="primary" className="Button" id="subscribe-button" name={value.pk} variant={String(value.pk) === subscription ? "contained" : "outlined"} onClick={subscribe} >{String(value.pk) === subscription ? "Unsubscribe" : "Subscribe"}</Button>
                                     {isAdmin &&
                                         <div>
-                                            <Button className="Button" variant="outlined"
+                                            <Button color="primary" className="Button" variant="outlined"
                                             onClick={editSubscription} name={value.pk}>
                                             edit
                                             </Button>
-                                            <IconButton
+                                            <IconButton color="primary"
                                                         onClick={() => {
                                                             deleteSubscription(value.pk)
                                                         }}>
@@ -224,6 +227,7 @@ const Subscriptions = () => {
                 }
             </div>
         </div>
+        </ThemeProvider>
     )
 }
 

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-
+import { orange } from '@mui/material/colors';
 
 import {
     Box,
@@ -151,7 +151,7 @@ const EditSubscription = () => {
                 </TextField>
                 <br/>
             </FormControl>
-            <Button className="Button" id="edit-button" variant="outlined" onClick={submitReq}>EDIT</Button>
+            <Button color={"primary"} className="Button" id="edit-button" variant="outlined" onClick={submitReq}>EDIT</Button>
         </Box>
         </>
     );

@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import {ButtonGroup, Button, TextField} from "@mui/material";
 import {tokenHandle} from "../login";
- 
+import "./payments.css"
+import {theme} from "../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
 
 
 const Payments = () => {
@@ -114,7 +116,7 @@ const Payments = () => {
                     console.log(data);
                     setCardNumber(data.credit_number);
                     if (viewFuture){
-                        getPayments("10/");
+                        getPayments("5/");
                     }
                     setMakeNew(!makeNew);
                 }).catch(err => {
@@ -136,7 +138,7 @@ const Payments = () => {
                     console.log(data);
                     setCardNumber(data.credit_number);
                     if (viewFuture){
-                        getPayments("10/");
+                        getPayments("5/");
                     }
                     setMakeNew(!makeNew);
                 }).catch(err => {
@@ -172,7 +174,7 @@ const Payments = () => {
     const toggleView = () => {
         let query = "";
         if (!viewFuture){
-            query = "50/?limit=10";
+            query = "50/?limit=5";
         }
 
         getPayments(query);
@@ -232,6 +234,8 @@ const Payments = () => {
 
     return (
         <>
+            <ThemeProvider theme={theme}>
+            <div className="payments-page">
             <h1>Payments</h1>
 
             { cardNumber != null &&
@@ -247,7 +251,7 @@ const Payments = () => {
                 </div>
             }
 
-            <Button className="Button"
+            <Button color="primary" className="Button"
                 variant="outlined"
                 onClick={toggleMake}>New Payment Method
             </Button>
@@ -265,8 +269,8 @@ const Payments = () => {
 
             <h4>Payment History</h4>
             <ButtonGroup className="Button"Group variant="contained">
-                <Button className="Button" disabled={!viewFuture} onClick={toggleView}>Past Only</Button>
-                <Button className="Button" disabled={viewFuture} onClick={toggleView}>Past & Future</Button>
+                <Button color="primary" className="Button" disabled={!viewFuture} onClick={toggleView}>Past Only</Button>
+                <Button color="primary" className="Button" disabled={viewFuture} onClick={toggleView}>Past & Future</Button>
             </ButtonGroup>
             <div>
                 {(payments == null || Object.entries(payments.results).length === 0) &&
@@ -278,13 +282,13 @@ const Payments = () => {
                         <>
                             <div>
                                 <div className='payment' key={prop}>
-                                    {value.charged &&
-                                        <p><b>Charged</b></p>
-                                    }
                                     <div>
                                         <p><b>Date: </b>{value.date.substring(0,10) + " " + value.date.substring(11,16)}</p>
                                         <p><b>Amount: </b>${value.amount}</p>
                                         <p><b>Card: </b>{censorCard(value.credit_number)}</p>
+                                        {value.charged &&
+                                            <p><b>CHARGED</b></p>
+                                        }
                                     </div>
                                     <hr/>
                                 </div>
@@ -295,11 +299,13 @@ const Payments = () => {
 
                 {payments != null &&
                     <div>
-                        <Button className="Button" onClick={paginate} id="page-prev" name="sub" variant="contained" disabled={previousPage == null}>{"<"}</Button>
-                        <p id="page-num">{pageNum}</p>
-                        <Button className="Button" onClick={paginate} id="page-next" name="add" variant="contained" disabled={nextPage == null}>{">"}</Button>
+                        <Button color="primary" className="Button" onClick={paginate} id="page-prev" name="sub" variant="contained" disabled={previousPage == null}>{"<"}</Button>
+                        <Button disabled>{pageNum}</Button>
+                        <Button color="primary" className="Button" onClick={paginate} id="page-next" name="add" variant="contained" disabled={nextPage == null}>{">"}</Button>
                     </div>}
             </div>
+            </div>
+            </ThemeProvider>
         </>
     )
 }

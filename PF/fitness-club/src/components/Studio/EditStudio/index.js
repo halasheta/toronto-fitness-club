@@ -8,6 +8,8 @@ import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Status404 from "../../Common/Errors/Status404";
 import './style.css';
+import {theme} from "../../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
 
 const EditStudio = () => {
     let navigate = useNavigate();
@@ -281,6 +283,7 @@ const EditStudio = () => {
 
     return(
         <>
+            <ThemeProvider theme={theme}>
             <div className={"edit-page"}>
             { isAdmin ? <>
                     <h1>Edit Studio</h1>
@@ -387,7 +390,7 @@ const EditStudio = () => {
                                        sx={{ width: 200 }}
                                        onChange={e => setQuantity(e.target.value)}/>
                             <br/>
-                            <Button className="Button" id="button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
+                            <Button color="primary" className="Button" id="button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
                         </div>
 
 
@@ -399,7 +402,7 @@ const EditStudio = () => {
                         <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-1"
                                                         type="file" name="image1" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-1">
-                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                                <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label>
                             {image1 != null && <img alt='new-img-1' src={image1} width="200"/>}
                         </div>
@@ -408,7 +411,7 @@ const EditStudio = () => {
                         <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-2"
                                      type="file" name="image2" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-2">
-                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                                <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label>
                             {image2 != null && <img alt='new-img-2' src={image2} width="200"/>}
                         </div>
@@ -417,7 +420,7 @@ const EditStudio = () => {
                         <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-3"
                                      type="file" name="image3" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-3">
-                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                                <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label>
                             {image3 != null && <img alt='new-img-3' src={image3} width="200"/>}
                         </div>
@@ -426,7 +429,7 @@ const EditStudio = () => {
                         <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-4"
                                      type="file" name="image4" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-4">
-                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                                <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label>
                             {image4 != null && <img alt='new-img-4' src={image4} width="200"/>}
                         </div>
@@ -436,7 +439,7 @@ const EditStudio = () => {
                         <div className={'image-preview'}> <input accept="image/*"  style={{ display: 'none' }} id="img-button-file-5"
                                      type="file" name="image5" onChange={uploadImage}/>
                             <label htmlFor="img-button-file-5">
-                                <Button className="Button" variant="contained" component="span"> Choose Image </Button>
+                                <Button color="primary" className="Button" variant="contained" component="span"> Choose Image </Button>
                             </label>
                             {image5 != null && <img alt='new-img-5' src={image5} width="200"/>}
                         </div>
@@ -445,12 +448,13 @@ const EditStudio = () => {
 
                         <br/>
 
-                        <Button className="Button" id="submit-button" variant="outlined" onClick={submitReq}>SUBMIT</Button>
+                        <Button color="primary" className="Button" id="submit-button" variant="outlined" onClick={submitReq}>SUBMIT</Button>
                     </form>
                 </>
                 : <Status404/>
             }
             </div>
+            </ThemeProvider>
         </>
         );
 }

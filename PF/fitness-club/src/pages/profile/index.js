@@ -5,6 +5,8 @@ import {tokenHandle} from "../login";
 import {validateEditable} from "../signup";
 import UserAPIContext from "../../contexts/UserAPIContext";
 import "./index.css"
+import {theme} from "../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
 
 const Profile = () => {
     const [first, setFirst] = useState('');
@@ -114,7 +116,8 @@ const Profile = () => {
         getData();
     }, []);
 
-    return <div className="page">
+    return <ThemeProvider theme={theme}>
+    <div className="page">
         <h1>Profile</h1>
         <div className="grid">
             <div className="avatar-section">
@@ -125,7 +128,7 @@ const Profile = () => {
                 type="file"
                 onChange={uploadAvatar}/>
                 <label htmlFor="avatar-button-file">
-                    <Button className="Button" variant="contained" component="span">
+                    <Button color="primary" className="Button" variant="filled" component="span">
                         Choose Avatar
                     </Button>
                 </label>
@@ -142,12 +145,13 @@ const Profile = () => {
                 <TextField id="phone" label="Phone (Numbers only)" variant="outlined" required onChange={e => setPhone(e.target.value)}
                            error={errors.phone !== undefined} helperText={errors.phone} value={phone}/>
                 <br/>
-                <Button className="Button" id="toggle-edit-button" variant="contained" onClick={updateData}>Save Changes</Button>
+                <Button color="primary" className="Button" id="toggle-edit-button" variant="contained" onClick={updateData}>Save Changes</Button>
             </form>
             <br/>
         </div>
 
     </div>
+    </ThemeProvider>
 
 
 

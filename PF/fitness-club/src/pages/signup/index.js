@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {Button, TextField} from "@mui/material"
 import {Link, useNavigate} from "react-router-dom";
 import "./signup.css"
+import {theme} from "../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
 
 
 // display file name
@@ -74,6 +76,7 @@ const SignUp = () => {
     }
 
     return (
+        <ThemeProvider theme={theme}>
         <div className="signup-page">
             <h1>Sign Up</h1>
             <form>
@@ -100,19 +103,20 @@ const SignUp = () => {
                     onChange={uploadAvatar}
                 />
                 <label htmlFor="avatar-button-file">
-                    <Button className="Button" variant="contained" component="span">
+                    <Button color="primary" className="Button" variant="outlined" component="span">
                         Upload Avatar
                     </Button>
                 </label>
 
                 <br/>
-                <Button className="Button" id="submit-button" variant="contained" onClick={submitReq}>Sign Up</Button>
+                <Button color="primary" className="Button" id="submit-button" variant="contained" onClick={submitReq}>Sign Up</Button>
             </form>
 
             <br/>
-            <Link to="/login">Already have an account? <u>Log in here!</u></Link>
+            <Link color="primary" to="/login">Already have an account? <u>Log in here!</u></Link>
 
         </div>
+        </ThemeProvider>
 
     )
 }

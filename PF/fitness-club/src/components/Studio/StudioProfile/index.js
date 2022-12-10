@@ -5,6 +5,8 @@ import UserAPIContext from "../../../contexts/UserAPIContext";
 import {tokenHandle} from "../../../pages/login";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import './style.css';
+import {theme} from "../../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
 
 const StudioProfile = () => {
     let navigate = useNavigate();
@@ -81,12 +83,13 @@ const StudioProfile = () => {
 
     return(
         <>
+            <ThemeProvider theme={theme}>
             <div className={"profile-page"}>
             <h2> { studio.name }</h2>
             { isAdmin &&
                 <>
-                    <Button className="Button" id="edit-button" variant="outlined" onClick={redirectEdit}>EDIT</Button>
-                    <Button className="Button" id="class-button" variant="outlined" onClick={redirectClass}>ADD CLASS</Button>
+                    <Button color="primary" className="Button" id="edit-button" variant="outlined" onClick={redirectEdit}>EDIT</Button>
+                    <Button color="primary" className="Button" id="class-button" variant="outlined" onClick={redirectClass}>ADD CLASS</Button>
                 </>
              }
             <br/>
@@ -130,9 +133,10 @@ const StudioProfile = () => {
 
             <br/>
             { isAdmin &&
-                <Button className="Button" id="delete-button" variant="outlined" onClick={submitDel}>DELETE</Button>
+                <Button color="primary" className="Button" id="delete-button" variant="outlined" onClick={submitDel}>DELETE</Button>
              }
             </div>
+            </ThemeProvider>
         </>
 
     )

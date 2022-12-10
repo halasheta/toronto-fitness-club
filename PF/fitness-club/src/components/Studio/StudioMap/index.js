@@ -5,6 +5,8 @@ import {Autocomplete, FormControl, FormControlLabel, FormLabel, Radio, RadioGrou
 import {tokenHandle} from "../../../pages/login";
 import {useNavigate} from "react-router-dom";
 import "./style.css";
+import {theme} from "../../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
 
 
 const StudioMap = () => {
@@ -117,13 +119,14 @@ const StudioMap = () => {
 
     return (
         <>
+            <ThemeProvider theme={theme}>
             <div className="map-page">
         <h3>Find studios near you</h3>
         <br/>
         <FormControl>
             <FormLabel>Display the closest...</FormLabel>
-            <RadioGroup
-                row
+            <RadioGroup color="primary"
+                        row
                 onChange={e => setRadioValue(e.target.value)}>
                 <FormControlLabel value="5" control={<Radio/>}
                                   label="5 studios"/>
@@ -158,6 +161,7 @@ const StudioMap = () => {
         <div style={{ height: 500, width: 500 }}
              ref={mapElement} id={"map"}></div>
             </div>
+            </ThemeProvider>
         </>
 
     )

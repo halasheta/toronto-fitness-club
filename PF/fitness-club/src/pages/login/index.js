@@ -4,6 +4,8 @@ import { TextField, Button } from "@mui/material";
 import UserAPIContext from "../../contexts/UserAPIContext";
 
 import './login.css';
+import {theme} from "../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
  
 
 const Login = () => {
@@ -59,7 +61,9 @@ const Login = () => {
         })
     }
 
-    return <div className="login-page">
+    return (
+        <ThemeProvider theme={theme}>
+        <div className="login-page">
 
         <h1>Log In</h1>
         <form>
@@ -70,11 +74,12 @@ const Login = () => {
             onChange={e => setPassword(e.target.value)} error={!validLogin}
                        helperText={!validLogin ? 'Invalid email or password.' : ' '}/>
             <br/>
-            <Button className="Button" id="login-button" variant="contained" onClick={submitReq}>Log in</Button>
+            <Button color="primary" className="Button" id="login-button" variant="contained" onClick={submitReq}>Log in</Button>
         </form>
         <br/>
-        <Link to="/signup">Don't have an account? <u>Sign up here!</u></Link>
+        <Link color="primary" to="/signup">Don't have an account? <u>Sign up here!</u></Link>
     </div>
+        </ThemeProvider>)
 }
 
 export default Login;

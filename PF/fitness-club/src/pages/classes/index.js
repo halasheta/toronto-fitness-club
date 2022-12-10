@@ -6,6 +6,8 @@ import ClassesAPIContext from "../../contexts/ClassesAPIContext";
 import ClassesTable from "../../components/Class/ClassesTable";
 import {tokenHandle} from "../login";
 import "./classes.css"
+import {theme} from "../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
  
 
 const Classes = () => {
@@ -65,11 +67,12 @@ const Classes = () => {
 
     return (
         <>
+            <ThemeProvider theme={theme}>
         <div className="class-page">
             <h1> Classes by Occurrence </h1>
         </div>
-            <div className="filter-buttons"><Button className="Button" variant={"outlined"} onClick={handleOpen}>FILTER</Button>
-                <Button className="Button" variant={"outlined"} onClick={e => {setFilter({})
+            <div className="filter-buttons"><Button color="primary" className="Button" variant={"outlined"} onClick={handleOpen}>FILTER</Button>
+                <Button color="primary" className="Button" variant={"outlined"} onClick={e => {setFilter({})
                     setApplied(true);}}>CLEAR FILTER</Button></div>
         <div className="class-page">
             <Dialog open={open} onClose={handleClose}>
@@ -155,7 +158,7 @@ const Classes = () => {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button className="Button" onClick={() => {
+                    <Button color="primary" className="Button" onClick={() => {
                         handleClose();
                         setApplied(true);}
                     }>APPLY</Button>
@@ -163,7 +166,7 @@ const Classes = () => {
 
             </Dialog>
             <ClassesTable perPage={perPage} page={page}></ClassesTable>
-            <div className="nav-buttons"><Button className="Button" id={'prev-button'}
+            <div className="nav-buttons"><Button color="primary" className="Button" id={'prev-button'}
                                                  variant={"contained"}
                                                  onClick={() => {
                                                      setPage(Math.max(1, page - 1));
@@ -172,8 +175,8 @@ const Classes = () => {
                                                  }} disabled={page === 1}>
                 {`<`}
             </Button>
-                <Button className="Button" disabled={true}>{page}</Button>
-                <Button className="Button" id={'next-button'}
+                <Button color="primary" className="Button" disabled={true}>{page}</Button>
+                <Button color="primary" className="Button" id={'next-button'}
                         variant={"contained"}
                         onClick={() => {
                             setPage(page + 1);
@@ -184,6 +187,7 @@ const Classes = () => {
                 </Button></div>
 
         </div>
+            </ThemeProvider>
         </>
     )
 }

@@ -1,19 +1,34 @@
 import * as React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const theme = createTheme({
+export const theme = createTheme({
     palette: {
         primary: {
-            light: '#6d6d6d',
-            main: '#424242',
-            dark: '#1b1b1b',
-            contrastText: '#fff',
-        },
-        secondary: {
             light: '#ff9d3f',
-            main: '#f57c00',
+            main: '#ea7600',
             dark: '#bb4d00',
             contrastText: '#1b1b1b',
         },
     },
+    //
+    // typography: {
+    //     // fontFamily: [
+    //     //     '-apple-system',
+    //     //     'BlinkMacSystemFont',
+    //     //     '"Segoe UI"',
+    //     //     'Roboto',
+    //     //     '"Helvetica Neue"',
+    //     //     'Arial',
+    //     //     'sans-serif',
+    //     //     '"Apple Color Emoji"',
+    //     //     '"Segoe UI Emoji"',
+    //     //     '"Segoe UI Symbol"',
+    //     // ].join(','),
+    //     primary: {
+    //         light: '#ff9d3f',
+    //         main: '#ea7600',
+    //         dark: '#bb4d00',
+    //         contrastText: '#1b1b1b',
+    //     }
+    // },
 });
