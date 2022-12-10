@@ -86,37 +86,43 @@ const Studios = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Filter by...</DialogTitle>
                 <DialogContent>
-                    <TextField autoFocus id="name" label="Name" variant="standard"
+                    <TextField autoFocus id="name" label="Name" variant="outlined"
                                onChange={e => setFilter({
                                 ...filter,
-                                name__icontains: e.target.value})}/>
+                                name__icontains: e.target.value})}
+                               sx={{ width : 300 }}/>
 
-                    <TextField autoFocus id="amenity-type" label="Amenity type" variant="standard"
+                    <TextField autoFocus id="amenity-type" label="Amenity type" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   amenities__type__exact: e.target.value})}/>
+                                   amenities__type__exact: e.target.value})}
+                               sx={{ width : 300 }}/>
 
                     <TextField autoFocus id="amenity-quantity" type="number"
-                               label="Exact amenity quantity" variant="standard"
+                               label="Exact amenity quantity" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   amenities__quantity__exact: e.target.value})}/>
+                                   amenities__quantity__exact: e.target.value})}
+                               sx={{ width : 300 }}/>
 
                     <TextField autoFocus id="amenity-quantity-gte" type="number"
-                               label="Amenity quantity greater than or equal to.." variant="standard"
+                               label="Amenity quantity greater than or equal to.." variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   amenities__quantity__gte: e.target.value})}/>
+                                   amenities__quantity__gte: e.target.value})}
+                               sx={{ width : 300 }}/>
 
-                    <TextField autoFocus id="class-name" label="Class Name" variant="standard"
+                    <TextField autoFocus id="class-name" label="Class Name" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   classes__name__icontains: e.target.value})}/>
+                                   classes__name__icontains: e.target.value})}
+                               sx={{ width : 300 }}/>
 
-                    <TextField autoFocus id="class-coach" label="Class Coach" variant="standard"
+                    <TextField autoFocus id="class-coach" label="Class Coach" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   classes__coach__icontains: e.target.value})}/>
+                                   classes__coach__icontains: e.target.value})}
+                               sx={{ width : 300 }}/>
 
                 </DialogContent>
                 <DialogActions>

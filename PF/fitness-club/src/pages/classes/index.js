@@ -75,56 +75,83 @@ const Classes = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Filter by...</DialogTitle>
                 <DialogContent>
-                    <TextField autoFocus id="name" label="Name" variant="standard"
+                    <TextField autoFocus id="name" label="Name" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   name__icontains: e.target.value})}/>
+                                   name__icontains: e.target.value})}
+                                sx={{ width : 300 }}/>
 
-                    <TextField autoFocus id="coach" label="Coach" variant="standard"
+                    <TextField autoFocus id="coach" label="Coach" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   coach__icontains: e.target.value})}/>
+                                   coach__icontains: e.target.value})}
+                               sx={{ width : 300 }}/>
 
-                    <TextField autoFocus id="keywords" label="Keywords" variant="standard"
+                    <TextField autoFocus id="keywords" label="Keywords" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   keywords__icontains: e.target.value})}/>
+                                   keywords__icontains: e.target.value})}
+                               sx={{ width : 300 }}/>
 
                     <TextField autoFocus id="start-time-lte" type="time"
-                               label="Start time before..." variant="standard"
+                               label="Start time before..." variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   start_time__lte: e.target.value})}/>
+                                   start_time__lte: e.target.value})}
+                               sx={{ width : 300 }}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}/>
 
                     <TextField autoFocus id="start-time" type="time"
-                               label="Exact Start Time" variant="standard"
+                               label="Exact Start Time" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   start_time__exact: e.target.value})}/>
+                                   start_time__exact: e.target.value})}
+                               sx={{ width : 300 }}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}/>
 
                     <TextField autoFocus id="start-time-gte" type="time"
-                               label="Start time after..." variant="standard"
+                               label="Start time after..." variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   start_time__gte: e.target.value})}/>
+                                   start_time__gte: e.target.value})}
+                               sx={{ width : 300 }}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}/>
 
                     <TextField autoFocus id="end-time-lte" type="time"
-                               label="End time before..." variant="standard"
+                               label="End time before..." variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   end_time__lte: e.target.value})}/>
+                                   end_time__lte: e.target.value})}
+                               sx={{ width : 300 }}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}/>
 
                     <TextField autoFocus id="end-time" type="time"
-                               label="Exact End Time" variant="standard"
+                               label="Exact End Time" variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   end_time__exact: e.target.value})}/>
+                                   end_time__exact: e.target.value})}
+                               sx={{ width : 300 }}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}/>
 
                     <TextField autoFocus id="end-time-gte" type="time"
-                               label="End time after..." variant="standard"
+                               label="End time after..." variant="outlined"
                                onChange={e => setFilter({
                                    ...filter,
-                                   end_time__gte: e.target.value})}/>
+                                   end_time__gte: e.target.value})}
+                               sx={{ width : 300 }}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}/>
 
                 </DialogContent>
                 <DialogActions>
