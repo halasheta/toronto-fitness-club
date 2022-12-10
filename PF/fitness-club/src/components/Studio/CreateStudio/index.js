@@ -50,21 +50,22 @@ const CreateStudio = () => {
         form_data.append('latitude', lat);
         form_data.append('postal_code', postalCode);
         form_data.append('phone', phone);
-        if (images["1"] !== ""){
+        if (images["one"] !== undefined){
             form_data.append('image1', images["one"])
         }
-        if (images["2"] !== ""){
-            form_data.append('image1', images["two"])
+        if (images["two"] !== undefined){
+            form_data.append('image2', images["two"])
         }
-        if (images["3"] !== ""){
-            form_data.append('image1', images["three"])
+        if (images["three"] !== undefined){
+            form_data.append('image3', images["three"])
         }
-        if (images["4"] !== ""){
-            form_data.append('image1', images["four"])
+        if (images["four"] !== undefined){
+            form_data.append('image4', images["four"])
         }
-        if (images["5"] !== ""){
-            form_data.append('image1', images["five"])
+        if (images["five"] !== undefined){
+            form_data.append('image5', images["five"])
         }
+
 
         return form_data;
     }
@@ -217,7 +218,7 @@ const CreateStudio = () => {
 
         setImagePreviews(updatedLinks);
         setImages(updatedImages);
-        setNumUpload(numUpload + .5);
+        setNumUpload(numUpload + .1);
     }
 
     const showMore = () => {
@@ -233,6 +234,7 @@ const CreateStudio = () => {
                     <form>
                         <TextField id="name" label="Name" variant="outlined"
                                    required onChange={e => setName(e.target.value)}
+                                   sx={{ width: 400 }}
                                    error={errors.name !== undefined} helperText={errors.name}/>
 
                         <br/>
@@ -244,7 +246,7 @@ const CreateStudio = () => {
                             }
 
                             renderInput={ (params) =>
-                                <TextField {...params} id="address" label={"Address"}/>}
+                                <TextField {...params} id="address" label={"Address"} sx={{ width: 400 }} />}
                             sx={{ width: 200 }}
 
                             input={inputValue}
@@ -258,11 +260,13 @@ const CreateStudio = () => {
 
                         <TextField id="postal_code" label="Postal Code" variant="outlined" value={postalCode}
                                    required onChange={e => setPostalCode(e.target.value)}
+                                   sx={{ width: 400 }}
                                    error={errors.postal_code !== undefined} helperText={errors.postal_code}/>
                         <br/>
 
                         <TextField id="phone" label="Phone Number" variant="outlined"
                                    required onChange={e => setPhone(e.target.value)}
+                                   sx={{ width: 400 }}
                                    error={errors.phone !== undefined} helperText={errors.phone}/>
 
                         <br/>
@@ -271,10 +275,12 @@ const CreateStudio = () => {
                             Amenities
                             <br/>
                             <TextField id='amenity-type' label="Type" variant="outlined"
-                                       onChange={e => setType(e.target.value)}/>
+                                       onChange={e => setType(e.target.value)}
+                                       sx={{ width: 200 }}/>
 
                             <TextField id='amenity-qty' type="number" variant="outlined" label={"Quantity"}
                                        InputProps={{ inputProps: { min: 0 } }}
+                                       sx={{ width: 200 }}
                                        onChange={e => setQuantity(e.target.value)}/>
                             <br/>
                             <Button color="primary" className="Button" id="create-button" variant="outlined" onClick={addAmenity}>ADD AMENITY</Button>
