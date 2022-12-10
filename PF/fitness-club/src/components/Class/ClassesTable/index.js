@@ -19,6 +19,8 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import {useNavigate} from "react-router-dom";
 import dayjs from "dayjs";
+import {theme} from "../../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
  
 
 const ClassesTable = ({ perPage, page }) => {
@@ -120,6 +122,7 @@ const ClassesTable = ({ perPage, page }) => {
 
     return (
         <>
+            <ThemeProvider theme={theme}>
             <Modal
                 open={modalOpen}
                 onClose={closeModal}
@@ -165,7 +168,7 @@ const ClassesTable = ({ perPage, page }) => {
                     <TableCell>{ dayjs(clss.start_time).format("DD/MM/YY hh:mm")  }</TableCell>
                     <TableCell>{ dayjs(clss.end_time).format("DD/MM/YY hh:mm") }</TableCell>
                     <TableCell>
-                        <Button className="Button" id={`enrol-button-${clss.id}`}
+                        <Button color={"primary"} className="Button" id={`enrol-button-${clss.id}`}
                                 disabled={userClasses.indexOf(clss.id) !== -1}
                                 onClick={e => {
                                         setOpen(true);
@@ -175,15 +178,15 @@ const ClassesTable = ({ perPage, page }) => {
                         <Dialog open={open} onClose={handleClose}>
                             <DialogTitle>Enrol in...</DialogTitle>
                             <DialogContent>
-                                <RadioGroup
-                                    defaultValue="occurrence"
+                                <RadioGroup color={"primary"}
+                                            defaultValue="occurrence"
                                 onChange={e => setValue(e.target.value)}>
                                     <FormControlLabel value="occurrence" control={<Radio />}
                                                       label="This class only" />
                                     <FormControlLabel value="class" control={<Radio />}
                                                       label="This and all future occurrences" />
                                 </RadioGroup>
-                                <Button className="Button" type={"submit"} variant={"contained"}
+                                <Button color={"primary"} className="Button" type={"submit"} variant={"contained"}
                                 onClick={handleSubmit}>SUBMIT</Button>
                             </DialogContent>
                         </Dialog>
@@ -197,7 +200,7 @@ const ClassesTable = ({ perPage, page }) => {
                             />
                         }
                         {isAdmin &&
-                            <Button className="Button" id={`edit-button-${clss.id}`}
+                            <Button color={"primary"} className="Button" id={`edit-button-${clss.id}`}
                                     onClick={e => {
                                         navigate(`/classes/${clss.class_model}/edit//`);}
                                     }>
@@ -211,7 +214,9 @@ const ClassesTable = ({ perPage, page }) => {
         </TableBody>
             </Table>
         </TableContainer>
+            </ThemeProvider>
         </>
+
     )
 }
 

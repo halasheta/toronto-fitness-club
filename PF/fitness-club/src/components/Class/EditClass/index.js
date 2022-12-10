@@ -11,6 +11,8 @@ import UserAPIContext from "../../../contexts/UserAPIContext";
 import dayjs from "dayjs";
 import './style.css';
 import Status404 from "../../Common/Errors/Status404";
+import {theme} from "../../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
  
 
 const EditClass = () => {
@@ -174,6 +176,7 @@ const EditClass = () => {
 
     return (
         <>
+            <ThemeProvider theme={theme}>
             <div className={'edit-class-page'}>
             { isAdmin ? <>
             <h1>Edit a Class</h1>
@@ -290,13 +293,13 @@ const EditClass = () => {
 
                 <br/>
 
-                <Button className="Button" id="create-button" variant="outlined" onClick={submitReq}>EDIT</Button>
+                <Button color={"primary"} className="Button" id="create-button" variant="outlined" onClick={submitReq}>EDIT</Button>
             </form>
                 </>
                 : <Status404/>
             }
             </div>
-
+            </ThemeProvider>
         </>
     );
 }

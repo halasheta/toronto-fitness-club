@@ -22,6 +22,8 @@ import {
 } from "@mui/lab";
 import $ from "jquery";
 import "./index.css"
+import {theme} from "../../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
  
 
 const ClassSchedule = () => {
@@ -215,12 +217,13 @@ const ClassSchedule = () => {
     }, []);
 
     return (
+        <ThemeProvider theme={theme}>
         <div className="schedule-page">
             <h2>Class Schedule</h2>
             <div className="page-buttons">
-                <Button className="Button" onClick={paginate} id="page-prev" name="sub" variant="contained">{"<"}</Button>
-                <Button className="Button" disabled={true}>{viewKey}</Button>
-                <Button className="Button" onClick={paginate} id="page-next" name="add" variant="contained">{">"}</Button>
+                <Button color={"primary"} className="Button" onClick={paginate} id="page-prev" name="sub" variant="contained">{"<"}</Button>
+                <Button color={"primary"} className="Button" disabled={true}>{viewKey}</Button>
+                <Button color={"primary"} className="Button" onClick={paginate} id="page-next" name="add" variant="contained">{">"}</Button>
             </div>
             {(currMonthClasses != null && Object.entries(currMonthClasses).length === 0) &&
                 <p> You have no classes scheduled this month. </p>
@@ -320,20 +323,21 @@ const ClassSchedule = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Drop ...</DialogTitle>
                 <DialogContent>
-                    <RadioGroup
-                        onChange={e => setChoice(e.target.value)}>
+                    <RadioGroup color={"primary"}
+                                onChange={e => setChoice(e.target.value)}>
                         <FormControlLabel value="occurrence" control={<Radio />}
                                           label="This class only" />
                         <FormControlLabel value="class" control={<Radio />}
                                           label="This and all future occurrences" />
 
                     </RadioGroup>
-                    <Button className="Button" type={"submit"} variant={"contained"}
+                    <Button color={"primary"}  className="Button" type={"submit"} variant={"contained"}
                             onClick={handleSubmit}>SUBMIT</Button>
                 </DialogContent>
             </Dialog>
 
         </div>
+        </ThemeProvider>
     )
 }
 // call update Studio for each one?

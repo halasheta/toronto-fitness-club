@@ -14,6 +14,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import $ from 'jquery';
 import UserAPIContext from "../../contexts/UserAPIContext";
 import Status404 from "../Common/Errors/Status404";
+import {ThemeProvider} from "@mui/material/styles";
+import {theme} from "../../themes/main";
 
 const EditSubscription = () => {
     let navigate = useNavigate();
@@ -41,7 +43,6 @@ const EditSubscription = () => {
             tokenHandle()
                 .then(success => {
                     if (!success) {
-                        // TODO: deal with unauthorized access (when a (non-admin) tries to access it)
                         localStorage.setItem("lastPage", "/subscriptions/" + String(id) + "/edit/")
                         navigate("/login");
                     } else {
@@ -114,11 +115,13 @@ const EditSubscription = () => {
     }, [])
 
     return (
-        <>
+        <> { isAdmin ?
+            <ThemeProvider theme={theme}>
+                <div className="page">
         <h1>Edit Subscription</h1>
-        <Box sx={{ minWidth: 120 }}>
+                    <div>
             <FormControl sx={{ minWidth: 120 }}  helperText={errors.duration}>
-                <TextField
+                <TextField sx={{ width: 400 }}
                     id="select-duration"
                     value={duration}
                     label="Duration"
@@ -135,7 +138,7 @@ const EditSubscription = () => {
                 </TextField>
             </FormControl>
             <br/>
-            <FormControl sx={{ minWidth: 120 }}  >
+            <FormControl sx={{ width: 400 }}  >
                 <TextField
                            id="filled-number"
                            label="Price"
@@ -151,8 +154,12 @@ const EditSubscription = () => {
                 </TextField>
                 <br/>
             </FormControl>
+                    <br/>
             <Button color={"primary"} className="Button" id="edit-button" variant="outlined" onClick={submitReq}>EDIT</Button>
-        </Box>
+                    </div>
+                    </div>
+            </ThemeProvider> : <Status404/>}
+
         </>
     );
 }

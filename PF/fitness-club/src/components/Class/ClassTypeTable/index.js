@@ -19,6 +19,8 @@ import {NavDropdown, NavLink} from "react-bootstrap";
 import UserAPIContext from "../../../contexts/UserAPIContext";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {GridActionsCellItem} from "@mui/x-data-grid";
+import {theme} from "../../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
  
 
 const ClassTypeTable = ({ perPage, page }) => {
@@ -90,6 +92,7 @@ const ClassTypeTable = ({ perPage, page }) => {
 
     return (
         <>
+            <ThemeProvider theme={theme}>
         <Modal
             open={modalOpen}
             onClose={closeModal}
@@ -128,7 +131,7 @@ const ClassTypeTable = ({ perPage, page }) => {
                         <TableRow key={clss.id}>
                             <TableCell>{ (page - 1) * perPage + index + 1 }</TableCell>
                             <TableCell>
-                                <Link to={"/classes/"+ clss.id + "/edit"}
+                                <Link style={{color: '#ea7600'}} to={"/classes/"+ clss.id + "/edit"}
                                       underline={"hover"}>
                                     { clss.name }
                                 </Link>
@@ -144,7 +147,7 @@ const ClassTypeTable = ({ perPage, page }) => {
                             <TableCell>{ dayjs(clss.end_recurrence ).format("DD/MM/YYYY") }</TableCell>
                             <TableCell>{ clss.end_time }</TableCell>
                             <TableCell>
-                                <Button className="Button" id={`enrol-button-${clss.id}`}
+                                <Button color={"primary"} className="Button" id={`enrol-button-${clss.id}`}
                                         disabled={classTypes.indexOf(clss.id) !== -1}
                                         onClick={() => {
                                             handleSubmit(clss.id);
@@ -159,7 +162,7 @@ const ClassTypeTable = ({ perPage, page }) => {
                                         color="inherit"
                                     />}
                                 {isAdmin &&
-                                    <Button className="Button" id={`edit-button-${clss.id}`}
+                                    <Button color={"primary"} className="Button" id={`edit-button-${clss.id}`}
                                             onClick={e => {
                                                 navigate(`/classes/${clss.id}/edit//`);}
                                             }>
@@ -174,6 +177,7 @@ const ClassTypeTable = ({ perPage, page }) => {
                 </TableBody>
             </Table>
         </TableContainer>
+            </ThemeProvider>
         </>
     )
 }

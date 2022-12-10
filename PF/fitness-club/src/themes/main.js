@@ -9,7 +9,18 @@ export const theme = createTheme({
             dark: '#bb4d00',
             contrastText: '#1b1b1b',
         },
+        action: {
+            active: '#ea7600',
+            activeOpacity: 1,
+            hover: '#bb4d00',
+            hoverOpacity: 0.7,
+            focus: '#bb4d00',
+            focusOpacity: 1,
+            selected: '#ea7600',
+            selectedOpacity: 1
+        },
     },
+
     //
     // typography: {
     //     // fontFamily: [

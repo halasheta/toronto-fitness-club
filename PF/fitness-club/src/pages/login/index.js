@@ -77,7 +77,7 @@ const Login = () => {
             <Button color="primary" className="Button" id="login-button" variant="contained" onClick={submitReq}>Log in</Button>
         </form>
         <br/>
-        <Link color="primary" to="/signup">Don't have an account? <u>Sign up here!</u></Link>
+        <Link style={{color: '#ea7600'}} to="/signup">Don't have an account? <u>Sign up here!</u></Link>
     </div>
         </ThemeProvider>)
 }

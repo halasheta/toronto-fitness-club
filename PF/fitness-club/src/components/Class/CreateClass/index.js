@@ -9,6 +9,8 @@ import Status404 from "../../Common/Errors/Status404";
 import {DesktopDatePicker} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import './style.css';
+import {theme} from "../../../themes/main";
+import {ThemeProvider} from "@mui/material/styles";
  
 
 const CreateClass = () => {
@@ -144,6 +146,7 @@ const CreateClass = () => {
 
     return(
         <>
+            <ThemeProvider theme={theme}>
             <div className={"create-class-page"}>
             { isAdmin ? <>
             <h1>Create a Class</h1>
@@ -235,12 +238,13 @@ const CreateClass = () => {
                 <br/>
 
 
-                <Button className="Button" id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
+                <Button color={"primary"} className="Button" id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
             </form>
                 </>
                 : <Status404/>
             }
             </div>
+            </ThemeProvider>
         </>
     );
 }

@@ -18,6 +18,8 @@ import { useNavigate } from "react-router-dom";
 import $ from 'jquery';
 import UserAPIContext from "../../contexts/UserAPIContext";
 import Status404 from "../Common/Errors/Status404";
+import {ThemeProvider} from "@mui/material/styles";
+import {theme} from "../../themes/main";
 
 const Subscription = () => {
     let navigate = useNavigate();
@@ -87,42 +89,54 @@ const Subscription = () => {
     };
 
     return (
-        <Box sx={{ minWidth: 120 }}>
-            <FormControl sx={{ minWidth: 120 }}  helperText={errors.duration}>
-                <TextField
-                    id="select-duration"
-                    value={duration}
-                    label="Duration"
-                    onChange={durationChange}
-                    error={errors.duration !== undefined}
-                    select
-                >
-                    <MenuItem value={"ANNUAL"}>Annual</MenuItem>
-                    <MenuItem value={"BIANNUAL"}>Biannual</MenuItem>
-                    <MenuItem value={"MONTHLY"}>Monthly</MenuItem>
-                    <MenuItem value={"BIWEEKLY"}>Biweekly</MenuItem>
-                    <MenuItem value={"WEEKLY"}>Weekly</MenuItem>
-                    <MenuItem value={"DAILY"}>Daily</MenuItem>
-                </TextField>
-            </FormControl>
-            <br/>
-            <FormControl sx={{ minWidth: 120 }}  >
-                <TextField startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                           id="filled-number"
-                           label="Price"
-                           type="Number"
-                           variant="outlined"
-                           onChange={priceChange}
-                           InputProps={{
-                               startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                           }}
-                           error={errors.price !== undefined}
-                           helperText={errors.price}>
-                </TextField>
+        <>{ isAdmin ?     <ThemeProvider theme={theme}>
+        <div className="page">
+            <h1>Create a subscription</h1>
+            <div>
+                <FormControl sx={{minWidth: 120}} helperText={errors.duration}>
+                    <TextField sx={{ width: 400 }}
+                        id="select-duration"
+                        value={duration}
+                        label="Duration"
+                        onChange={durationChange}
+                        error={errors.duration !== undefined}
+                        select
+                    >
+                        <MenuItem value={"ANNUAL"}>Annual</MenuItem>
+                        <MenuItem value={"BIANNUAL"}>Biannual</MenuItem>
+                        <MenuItem value={"MONTHLY"}>Monthly</MenuItem>
+                        <MenuItem value={"BIWEEKLY"}>Biweekly</MenuItem>
+                        <MenuItem value={"WEEKLY"}>Weekly</MenuItem>
+                        <MenuItem value={"DAILY"}>Daily</MenuItem>
+                    </TextField>
+                </FormControl>
                 <br/>
-            </FormControl>
-            <Button className="Button" id="create-button" variant="outlined" onClick={submitReq}>CREATE</Button>
-        </Box>
+
+                <FormControl sx={{ width: 400 }}>
+                    <TextField startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                               id="filled-number"
+                               label="Price"
+                               type="Number"
+                               variant="outlined"
+                               onChange={priceChange}
+                               InputProps={{
+                                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                               }}
+                               error={errors.price !== undefined}
+                               helperText={errors.price}>
+                    </TextField>
+                    <br/>
+                </FormControl>
+                <br/>
+                <Button color={"primary"} className="Button" id="create-button" variant="outlined"
+                        onClick={submitReq}>CREATE</Button>
+            </div>
+        </div>
+    </ThemeProvider>
+            : <Status404/>}
+    </>
+
+
     );
 }
 

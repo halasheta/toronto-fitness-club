@@ -113,7 +113,7 @@ const SignUp = () => {
             </form>
 
             <br/>
-            <Link color="primary" to="/login">Already have an account? <u>Log in here!</u></Link>
+            <Link style={{color: '#ea7600'}} to="/login">Already have an account? <u>Log in here!</u></Link>
 
         </div>
         </ThemeProvider>
