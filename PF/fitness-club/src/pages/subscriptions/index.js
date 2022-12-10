@@ -1,8 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {tokenHandle} from "../login";
 import {useNavigate} from "react-router-dom";
-import {Box, Button, Modal, Typography} from "@mui/material";
+import {Box, Button, IconButton, Modal, Typography} from "@mui/material";
 import UserAPIContext from "../../contexts/UserAPIContext";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 const Subscriptions = () => {
     let navigate = useNavigate();
@@ -10,10 +11,16 @@ const Subscriptions = () => {
     const [subscriptions, setSubscriptions] = useState({results: {}});
     const [modalHeader, setModalHeader] = useState("Success");
     const [modalMessage, setModalMessage] = useState("You have been successfully subscribed.");
+    const [redirect, setRedirect] = useState(false);
 
     const [modalOpen, setModalOpen] = useState(false);
     const openModal = () => setModalOpen(true);
-    const closeModal = () => setModalOpen(false);
+    const closeModal = () => {
+        setModalOpen(false);
+        if (redirect){
+            navigate("/payments/");
+        }
+    };
 
     const { isAdmin, subscription, setSubscription} = useContext(UserAPIContext);
 
@@ -109,7 +116,8 @@ const Subscriptions = () => {
                         }).catch(err => {
                             if (err.status === 400){
                                 setModalHeader("Error");
-                                setModalMessage("You do not have an existing payment method saved.")
+                                setModalMessage("You do not have an existing payment method saved. Please make a new payment method.");
+                                setRedirect(true);
                                 openModal();
                             }
                             // check if 400 because then redirect them to make a payment method
@@ -124,6 +132,34 @@ const Subscriptions = () => {
 
     const createSubscription = () => {
         navigate('/subscriptions/add');
+    }
+
+    const editSubscription = (e) => {
+        navigate('/subscriptions/' + String(e.target.name) + "/edit/");
+    }
+
+    const deleteSubscription = (id) => {
+        tokenHandle().then(success => {
+                if (!success){
+                    localStorage.setItem("lastPage", "/subscriptions")
+                    navigate("/login");
+                } else {
+                    fetch("http://localhost:8000/subscriptions/"+ id + "/delete/", {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                        }
+                    }) .then(response => {
+                        if (!response.ok){
+                            return Promise.reject(response);
+                        }
+                        getData();
+                    }).catch(err => {
+                        console.log(err);
+                    })
+                }
+            }
+        )
     }
 
     useEffect(() => {
@@ -163,6 +199,20 @@ const Subscriptions = () => {
                                     <h2>{value.duration}</h2>
                                     <h2>{"$" + String(value.price)}</h2>
                                     <Button id="subscribe-button" name={value.pk} variant={String(value.pk) === subscription ? "contained" : "outlined"} onClick={subscribe} >{String(value.pk) === subscription ? "Unsubscribe" : "Subscribe"}</Button>
+                                    {isAdmin &&
+                                        <div>
+                                            <Button variant="outlined"
+                                            onClick={editSubscription} name={value.pk}>
+                                            edit
+                                            </Button>
+                                            <IconButton
+                                                        onClick={() => {
+                                                            deleteSubscription(value.pk)
+                                                        }}>
+                                                <DeleteIcon name={value.pk}/>
+                                            </IconButton>
+                                        </div>
+                                        }
                                 </div>
                             </div>
                         </>

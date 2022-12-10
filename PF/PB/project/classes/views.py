@@ -286,12 +286,14 @@ class SearchClasses(ListAPIView):
     filterset_fields = {
         'name': ['icontains'],
         'coach': ['icontains'],
+        'keywords': ['icontains'],
         'start_time': ['gte', 'lte', 'exact'],
         'end_time': ['gte', 'lte', 'exact']
     }
 
     def get_queryset(self):
-        return ClassOccurrence.objects.filter(start_time__gte=timezone.now())
+        return ClassOccurrence.objects.filter(start_time__gte=timezone.now()).order_by('start_time__year', 'start_time__month', 'start_time__day', 'start_time__hour',
+                                                                                       'start_time__minute')
 
 
 class SearchClassInstances(ListAPIView):
@@ -308,4 +310,4 @@ class SearchClassInstances(ListAPIView):
     }
 
     def get_queryset(self):
-        return Class.objects.filter(end_time__gte=timezone.now())
+        return Class.objects.all()

@@ -8,14 +8,12 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    Button,
-    Dialog,
-    DialogTitle, DialogContent, RadioGroup, FormControlLabel, Radio
+    Button, Box, Typography, Modal
 } from "@mui/material";
 import $ from 'jquery';
 import ClassesAPIContext from "../../../contexts/ClassesAPIContext";
 import dayjs from "dayjs";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {LinkContainer} from "react-router-bootstrap";
 import {NavDropdown, NavLink} from "react-bootstrap";
 import UserAPIContext from "../../../contexts/UserAPIContext";
@@ -25,13 +23,30 @@ import {GridActionsCellItem} from "@mui/x-data-grid";
 const ClassTypeTable = ({ perPage, page }) => {
     const { setClasses, classes } = useContext(ClassesAPIContext);
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState('');
     const { isAdmin } = useContext(UserAPIContext);
+    const [modalHeader, setModalHeader] = useState("Success");
+    const [modalMessage, setModalMessage] = useState("You have been successfully subscribed.");
+    const navigate = useNavigate();
+    const {classTypes, setClassTypes} = useContext(UserAPIContext);
 
+    const [modalOpen, setModalOpen] = useState(false);
+    const openModal = () => setModalOpen(true);
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate("/subscriptions");
+    };
 
-    const handleClose = () => {
-        setOpen(false);
-    }
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
 
     const handleDelete = (id) => {
         setClasses((prev) => prev.filter((c) => c.id !== id));
@@ -58,16 +73,37 @@ const ClassTypeTable = ({ perPage, page }) => {
                 if (!r.ok){
                     return Promise.reject(r);
                 }
+                let updated = classTypes;
+                updated.push(id);
+                setClassTypes(updated);
+                $("#"+`enrol-button-${id}`).attr("disabled", true);
             })
             .catch(err => {
-                console.log("User has no active subscription.");
+                setModalHeader("Error");
+                setModalMessage("User has no active subscription. Please choose a subscription plan.");
+                openModal();
             })
 
-        $(`enrol-button-${id}`).attr("disabled", true);
-        handleClose();
+
     }
 
     return (
+        <>
+        <Modal
+            open={modalOpen}
+            onClose={closeModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    {modalHeader}
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    {modalMessage}
+                </Typography>
+            </Box>
+        </Modal>
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -108,24 +144,11 @@ const ClassTypeTable = ({ perPage, page }) => {
                             <TableCell>{ dayjs(clss.end_recurrence ).format("DD/MM/YYYY") }</TableCell>
                             <TableCell>
                                 <Button id={`enrol-button-${clss.id}`}
+                                        disabled={classTypes.indexOf(clss.id) !== -1}
                                         onClick={() => {
                                             handleSubmit(clss.id);
                                         }}>
                                     ENROL</Button>
-                                {/*<Dialog open={open} onClose={handleClose}>*/}
-                                {/*    <DialogTitle>Enrol in...</DialogTitle>*/}
-                                {/*    <DialogContent>*/}
-                                {/*        <RadioGroup*/}
-                                {/*            onChange={e => setValue(e.target.value)}>*/}
-                                {/*            <FormControlLabel value="occurrence" control={<Radio />}*/}
-                                {/*                              label="This class only" />*/}
-                                {/*            <FormControlLabel value="class" control={<Radio />}*/}
-                                {/*                              label="This and all future occurrences" />*/}
-                                {/*        </RadioGroup>*/}
-                                {/*        <Button type={"submit"} variant={"contained"}*/}
-                                {/*                onClick={handleSubmit}>SUBMIT</Button>*/}
-                                {/*    </DialogContent>*/}
-                                {/*</Dialog>*/}
                                 {isAdmin &&
                                     <GridActionsCellItem
                                         icon={<DeleteIcon />}
@@ -134,12 +157,13 @@ const ClassTypeTable = ({ perPage, page }) => {
                                             handleDelete(clss.id)}}
                                         color="inherit"
                                     />}
-                                    {/*// <DeleteIconButton*/}
-                                    {/*// id={`delete-button-${clss.id}`}*/}
-                                    {/*// onClick={e => {*/}
-                                    {/*//     setCurrClass(clss);*/}
-                                    {/*//     handleDelete(index);*/}
-                                    {/*// }}/>}*/}
+                                {isAdmin &&
+                                    <Button id={`edit-button-${clss.id}`}
+                                            onClick={e => {
+                                                navigate(`/classes/${clss.class_model}/edit//`);}
+                                            }>
+                                        EDIT</Button>
+                                }
 
 
                             </TableCell>
@@ -149,6 +173,7 @@ const ClassTypeTable = ({ perPage, page }) => {
                 </TableBody>
             </Table>
         </TableContainer>
+        </>
     )
 }
 

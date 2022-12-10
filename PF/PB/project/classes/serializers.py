@@ -12,13 +12,12 @@ class ClassOccurrenceSerializer(serializers.ModelSerializer):
     """
         Serializer class for the ClassOccurrence model.
     """
-    studio = StudioSerializer(read_only=True)
+    studio = StudioSerializer()
 
     class Meta:
         model = ClassOccurrence
         fields = ['id', 'name', 'coach', 'description', 'keywords', 'capacity', 'start_time', 'end_time',
                   'class_model', 'attendees', 'studio']
-        read_only_fields = ['class_model', 'studio']
 
 
 class ClassSerializer(serializers.ModelSerializer):
@@ -26,13 +25,13 @@ class ClassSerializer(serializers.ModelSerializer):
         Serializer class for the Class model.
     """
     frequency = serializers.IntegerField(required=True)
-    occurrences = ClassOccurrenceSerializer(read_only=True, many=True)
+    occurrences = ClassOccurrenceSerializer(many=True, required=False)
 
     class Meta:
         model = Class
         fields = ['id', 'name', 'coach', 'description', 'keywords', 'capacity', 'studio',
                   'start_date', 'start_time', 'end_time', 'frequency', 'end_recurrence', 'occurrences']
-        read_only_fields = ['occurrences', 'studio']
+
 
     def validate(self, attrs):
         try:

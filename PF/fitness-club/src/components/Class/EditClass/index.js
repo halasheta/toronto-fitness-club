@@ -93,7 +93,7 @@ const EditClass = () => {
 
     const requestBody = () => {
         return JSON.stringify({
-            studio: id,
+            // studio: id,
             name: name,
             coach: coach,
             description: description,

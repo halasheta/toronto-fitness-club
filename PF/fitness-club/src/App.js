@@ -23,6 +23,7 @@ import ClassesAPIContext, {useClassesAPIContext} from "./contexts/ClassesAPICont
 import ClassSchedule from "./components/Class/ClassSchedule";
 import EditClass from "./components/Class/EditClass";
 import ClassTypePage from "./pages/ClassTypePage";
+import EditSubscription from "./components/Subscription/EditSubscription";
 
 function App() {
     const studios = (
@@ -69,6 +70,7 @@ function App() {
                       {/* subscriptions paths */}
                       <Route path="subscriptions/" element={<Subscriptions/>}/>
                       <Route path="subscriptions/add" element={<Subscription/>}/>
+                      <Route path="subscriptions/:id/edit/" element={<EditSubscription/>}/>
 
                       {/* accounts paths */}
                       <Route path="profile/" element={<Profile/>}/>
